@@ -1,18 +1,17 @@
-require File.expand_path('../environment', __FILE__)
+require File.expand_path('../environments/api', __FILE__)
 
 module API
 end
 
 require 'app/api/base'
 
-Dir["#{File.dirname(__FILE__)}/app/models/extensions/**/*.rb"].each {|f| require f}
-Dir["#{File.dirname(__FILE__)}/app/models/**/*.rb"].each {|f| require f}
-Dir["#{File.dirname(__FILE__)}/app/**/*.rb"].each {|f| require f}
+Dir[File.expand_path("../../app/models/*.rb", __FILE__)].each {|f| require f}
+Dir[File.expand_path("../../app/api/*.rb", __FILE__)].each {|f| require f}
 
-ActiveRecord::Base.instance_eval do
-  include ActiveModel::MassAssignmentSecurity
-  attr_accessible []
-end
+# ActiveRecord::Base.instance_eval do
+#   include ActiveModel::MassAssignmentSecurity
+#   attr_accessible []
+# end
 
 
 class API::Root < Grape::API

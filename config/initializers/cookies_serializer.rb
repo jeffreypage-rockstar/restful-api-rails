@@ -1,3 +1,4 @@
 # Be sure to restart your server when you modify this file.
-
-Rails.application.config.action_dispatch.cookies_serializer = :json
+if Rails.application.config.action_dispatch
+  Rails.application.config.action_dispatch.cookies_serializer = :json
+end

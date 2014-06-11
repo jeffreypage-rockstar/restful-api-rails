@@ -1,3 +1,7 @@
-require File.expand_path('../application', __FILE__)
+# This file is used by Rack-based servers to start the application.
 
-run ApplicationServer
+require ::File.expand_path('../config/environment',  __FILE__)
+run Rails.application
+
+# require File.expand_path('../application', __FILE__)
+# run ApplicationServer

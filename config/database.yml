@@ -1,15 +1,30 @@
+# PostgreSQL. Versions 8.2 and up are supported.
 development:
-  adapter: postgresql
-  encoding: utf-8
-  database: grape_api_development
-  pool: 5
-  username: grape
-  password: password
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: hyper_development
+  pool:     5
+  username: hyper
+  password: nohaymonedas
+  template: template0
 
-test: &test
-  adapter: postgresql
-  encoding: utf-8
-  database: grape_api_test
-  pool: 5
-  username: grape
-  password: password
+test:
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: hyper_test
+  pool:     5
+  username: hyper
+  password: nohaymonedas
+  template: template0
+
+production:
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: hyper_production
+  pool:     5
+  username: hyper
+  password: nohaymonedas
+  template: template0

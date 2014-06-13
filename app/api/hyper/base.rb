@@ -5,6 +5,17 @@ module Hyper
       subclass.instance_eval do
         version 'v1', using: :accept_version_header
         format :json
+        
+        helpers do
+          def current_user
+            # @current_user ||= User.where(:access_token => params[:token]).first
+            @current_user ||= User.where(:id => headers['X-User-Id']).first
+          end
+
+          def authenticate!
+            error!('401 Unauthenticated', 401) unless current_user
+          end
+        end
 
         rescue_from ActiveRecord::RecordNotFound do |e|
           message = e.message.gsub(/\s*\[.*\Z/, '')

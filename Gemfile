@@ -18,6 +18,7 @@ end
 group :admin do
   gem 'rails', '4.1.1'
   gem 'thin'
+  gem 'puma'
   gem 'sprockets', '~> 2.11.0'
   gem 'sass-rails', '~> 4.0.3'
   gem 'uglifier', '>= 1.3.0'
@@ -33,17 +34,13 @@ group :development do
   gem 'quiet_assets'
   gem 'rails_layout'
   gem 'spring'
-  gem 'racksh'
+  gem 'foreman'
 end
 
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'dotenv-rails'
-end
-
-group :production do
-  gem 'puma'
 end
 
 group :test do

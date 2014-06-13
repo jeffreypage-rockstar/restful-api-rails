@@ -20,7 +20,6 @@ module Hyper
         end
 
         rescue_from ActiveRecord::RecordInvalid do |e|
-          record = e.record
           message = e.message.downcase.capitalize
           Rack::Response.new(
             [{

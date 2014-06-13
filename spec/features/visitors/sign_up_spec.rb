@@ -10,7 +10,8 @@ feature 'Sign Up', :devise do
   #   Then I see a successful sign up message
   scenario 'visitor can sign up with valid email address and password' do
     sign_up_with('test@example.com', 'please123', 'please123')
-    expect(page).to have_content 'Please open the link to activate your account.'
+    msg = 'Please open the link to activate your account.'
+    expect(page).to have_content msg
   end
 
   # Scenario: Visitor cannot sign up with invalid email address
@@ -37,7 +38,7 @@ feature 'Sign Up', :devise do
   #   Then I see a 'too short password' message
   scenario 'visitor cannot sign up with a short password' do
     sign_up_with('test@example.com', 'please', 'please')
-    expect(page).to have_content "Password is too short"
+    expect(page).to have_content 'Password is too short'
   end
 
   # Scenario: Visitor cannot sign up without password confirmation

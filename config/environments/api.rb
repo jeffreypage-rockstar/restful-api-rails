@@ -10,6 +10,9 @@ require 'boot'
 Bundler.require :default, :api
 require 'erb'
 
+require 'dotenv'
+Dotenv.load
+
 module Application
   include ActiveSupport::Configurable
   
@@ -27,7 +30,7 @@ end
 Application.configure do |config|
   config.root       = File.dirname(__FILE__)
   config.env        = ActiveSupport::StringInquirer.new(env.to_s)
-  config.base_path  = "http://localhost:9292"
+  # config.base_path  = "http://localhost:9292"
   config.filter_parameters = []
 end
 

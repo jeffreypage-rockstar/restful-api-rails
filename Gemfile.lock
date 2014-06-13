@@ -65,6 +65,11 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    dotenv (0.11.1)
+      dotenv-deployment (~> 0.0.2)
+    dotenv-deployment (0.0.2)
+    dotenv-rails (0.11.1)
+      dotenv (= 0.11.1)
     em-synchrony (1.0.3)
       eventmachine (>= 1.0.0.beta.1)
     em-websocket (0.3.8)
@@ -234,6 +239,8 @@ DEPENDENCIES
   capybara
   database_cleaner
   devise
+  dotenv
+  dotenv-rails
   encode_with_alphabet
   factory_girl_rails
   goliath

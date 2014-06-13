@@ -15,11 +15,11 @@ Dotenv.load
 
 module Application
   include ActiveSupport::Configurable
-  
+
   def self.secrets
     @secrets ||= begin
       secrets = ActiveSupport::OrderedOptions.new
-      all_secrets = YAML.load(ERB.new(File.read("config/secrets.yml")).result)
+      all_secrets = YAML.load(ERB.new(File.read('config/secrets.yml')).result)
       env_secrets = all_secrets[Application.config.env]
       secrets.merge!(env_secrets.symbolize_keys) if env_secrets
       secrets
@@ -37,10 +37,11 @@ end
 Rails.application ||= Application
 
 # database config
-db_config = YAML.load(ERB.new(File.read("config/database.yml")).result)[Application.config.env]
+all_db_config = YAML.load(ERB.new(File.read('config/database.yml')).result)
+db_config = all_db_config[Application.config.env]
 ActiveRecord::Base.default_timezone = :utc
 ActiveRecord::Base.establish_connection(db_config)
 
-Dir[File.expand_path("../../initializers/*.rb", __FILE__)].each do |f|
+Dir[File.expand_path('../../initializers/*.rb', __FILE__)].each do |f|
   require f
 end

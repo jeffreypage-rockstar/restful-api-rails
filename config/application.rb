@@ -4,7 +4,7 @@ require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(*(Rails.groups+[:admin]))
+Bundler.require(*(Rails.groups + [:admin]))
 
 module Hyper
   class Application < Rails::Application
@@ -19,7 +19,7 @@ module Hyper
         request_specs: false
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
-    
+
     config.paths.add 'app/api', glob: '**/*.rb'
     config.autoload_paths += Dir["#{Rails.root}/app/api/*"]
 

@@ -3,6 +3,7 @@ ruby "2.1.2"
 
 gem 'rack'
 gem 'grape'
+gem 'grape-active_model_serializers'
 gem 'encode_with_alphabet'
 gem 'devise'
 gem 'pundit'

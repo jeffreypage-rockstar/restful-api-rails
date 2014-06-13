@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   enum role: [:user]
   after_initialize :set_default_role, if: :new_record?
+  
+  validates :username, uniqueness: true, allow_blank: true
 
   def set_default_role
     self.role ||= :user

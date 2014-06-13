@@ -14,6 +14,8 @@ GEM
       activesupport (= 4.1.1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+    active_model_serializers (0.8.1)
+      activemodel (>= 3.0)
     activemodel (4.1.1)
       activesupport (= 4.1.1)
       builder (~> 3.1)
@@ -109,6 +111,9 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
+    grape-active_model_serializers (1.0.1)
+      active_model_serializers (>= 0.8.1)
+      grape (~> 0.3)
     hashie (3.0.0)
     hike (1.2.3)
     http_parser.rb (0.6.0.beta.2)
@@ -246,6 +251,7 @@ DEPENDENCIES
   foreman
   goliath
   grape
+  grape-active_model_serializers
   hub
   jquery-rails
   pg

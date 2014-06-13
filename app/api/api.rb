@@ -9,4 +9,3 @@ class API < Grape::API
   mount Hyper::Base
   mount Hyper::Status
 end
-

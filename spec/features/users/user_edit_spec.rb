@@ -17,12 +17,14 @@ feature 'User edit', :devise do
   #   Then I see an account updated message
   scenario 'user changes email address' do
     user = FactoryGirl.create(:user)
-    login_as(user, :scope => :user)
+    login_as(user, scope: :user)
     visit edit_user_registration_path(user)
-    fill_in 'Email', :with => 'newemail@example.com'
-    fill_in 'Current password', :with => user.password
+    fill_in 'Email', with: 'newemail@example.com'
+    fill_in 'Current password', with: user.password
     click_button 'Update'
-    expect(page).to have_content 'You updated your account successfully, but we need to verify your new email address.'
+    msg = 'You updated your account successfully,'\
+          ' but we need to verify your new email address.'
+    expect(page).to have_content msg
   end
 
   # Scenario: User cannot edit another user's profile
@@ -31,8 +33,10 @@ feature 'User edit', :devise do
   #   Then I see my own 'edit profile' page
   scenario "user cannot cannot edit another user's profile", :me do
     me = FactoryGirl.create(:user)
-    other = FactoryGirl.create(:user, email: 'other@example.com', username: 'otheruser')
-    login_as(me, :scope => :user)
+    other = FactoryGirl.create(
+      :user, email: 'other@example.com', username: 'otheruser'
+    )
+    login_as(me, scope: :user)
     visit edit_user_registration_path(other)
     expect(page).to have_content 'Edit User'
     expect(page).to have_field('Email', with: me.email)

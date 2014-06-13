@@ -6,3 +6,4 @@ module Hyper
     end
   end
 end
+

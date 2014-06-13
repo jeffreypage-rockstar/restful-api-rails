@@ -37,3 +37,4 @@ module Hyper
     default_format :json
   end
 end
+

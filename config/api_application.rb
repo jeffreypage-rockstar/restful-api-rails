@@ -1,30 +1,9 @@
 require File.expand_path('../environments/api', __FILE__)
 
-module API
-end
-
-require 'app/api/base'
-
 Dir[File.expand_path("../../app/models/*.rb", __FILE__)].each {|f| require f}
-Dir[File.expand_path("../../app/api/*.rb", __FILE__)].each {|f| require f}
+Dir[File.expand_path("../../app/api/hyper/*.rb", __FILE__)].each {|f| require f}
 
-# ActiveRecord::Base.instance_eval do
-#   include ActiveModel::MassAssignmentSecurity
-#   attr_accessible []
-# end
-
-
-class API::Root < Grape::API
-  format :json
-
-  before do
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Request-Method'] = '*'
-  end
-
-  mount API::Base
-  mount API::Status
-end
+require "app/api/api"
 
 ApplicationServer = Rack::Builder.new {
   use Rack::Static, :urls => [
@@ -34,6 +13,6 @@ ApplicationServer = Rack::Builder.new {
   ], :root => "public", index: 'index.html'
 
   map "/" do
-    run API::Root
+    run API
   end
 }

@@ -31,7 +31,7 @@ Application.configure do |config|
   config.filter_parameters = []
 end
 
-Rails.application = Application
+Rails.application ||= Application
 
 # database config
 db_config = YAML.load(ERB.new(File.read("config/database.yml")).result)[Application.config.env]

@@ -18,3 +18,14 @@ test:
   username: hyper
   password: nohaymonedas
   template: template0
+  
+staging:
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: hyper_development
+  pool:     5
+  username: hyper
+  password: nohaymonedas
+  template: template0
+  

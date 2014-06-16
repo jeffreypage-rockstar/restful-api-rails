@@ -7,6 +7,7 @@ gem 'encode_with_alphabet'
 gem 'devise'
 gem 'pundit'
 gem 'pg'
+gem 'foreman'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'
@@ -34,7 +35,6 @@ group :development do
   gem 'quiet_assets'
   gem 'rails_layout'
   gem 'spring'
-  gem 'foreman'
 end
 
 group :development, :test do

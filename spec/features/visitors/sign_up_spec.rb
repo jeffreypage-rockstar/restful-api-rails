@@ -10,7 +10,7 @@ feature 'Sign Up', :devise do
   #   Then I see a successful sign up message
   scenario 'visitor can sign up with valid email address and password' do
     sign_up_with('test@example.com', 'please123', 'please123')
-    msg = 'Please open the link to activate your account.'
+    msg = 'Welcome! You have signed up successfully.'
     expect(page).to have_content msg
   end
 

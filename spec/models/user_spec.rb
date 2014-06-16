@@ -50,5 +50,22 @@ describe User do
       expect(user.errors[:password_confirmation].first).to match("match")
     end
   end
+  
+  describe "#sign_in_from_device!" do
+    let(:user){ create(:user) }
+    let(:req){ Hashie::Mash.new(remote_ip: "127.0.0.1") }
+    
+    it "creates a new device, updating tackable fields" do
+      expect(user.devices.count).to eql 0
+      expect(user.current_sign_in_ip).to be_blank
+      
+      user.sign_in_from_device!(req, nil, device_type: "android")
+      
+      device = user.devices.recent.first
+      expect(device.device_type).to eql "android"
+      
+      expect(user.current_sign_in_ip).to eql("127.0.0.1")
+    end
+  end
 
 end

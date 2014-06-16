@@ -23,18 +23,18 @@ describe Hyper::Account do
   end
   
   describe 'GET /api/user' do
-    
     it 'requires authentication' do
       get '/api/user'
       expect(response.status).to eql 401 #authentication
     end
     
     it 'returns the current user data' do
-      user = create(:user)
-      get '/api/user', nil, {'x-user-id' => user.id}
+      device = create(:device)
+      http_login device.id, device.access_token
+      get '/api/user', nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['user']['id']).to eql(user.id)
+      expect(r['user']['id']).to eql(device.user_id)
     end
   end
 end

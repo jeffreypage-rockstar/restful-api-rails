@@ -25,10 +25,7 @@ You need a .env file in project root folder with some variables assigned. Ask a 
 
 Hyper applications use postgres database to store data. Add the `hyper` user to postgres with db create permission and run:
 
-    $ rake db:create:all
-    $ rake db:migrate
-    $ rake db:seed
-    
+    $ rake db:setup
 
 ### run the application
 

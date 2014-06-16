@@ -9,6 +9,7 @@ class API < Grape::API
 
   mount Hyper::Status
   mount Hyper::Login
+  mount Hyper::Auth
   mount Hyper::Account
   mount Hyper::Devices
 end

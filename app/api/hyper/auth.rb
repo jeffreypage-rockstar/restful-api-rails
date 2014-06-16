@@ -3,7 +3,7 @@ module Hyper
     # POST /auth/email-verification
     desc 'Post to verify the current user email'
     params do
-      requires :confirmation_token, type: String, desc: "E-mail confirmation token."
+      requires :confirmation_token, type: String, desc: 'E-mail confirmation token.'
     end
     post '/auth/email-verification' do
       authenticate!

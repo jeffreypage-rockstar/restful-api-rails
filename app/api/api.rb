@@ -1,7 +1,7 @@
 class API < Grape::API
-  format    :json
+  format :json
   formatter :json, Grape::Formatter::ActiveModelSerializers
-  
+
   before do
     header['Access-Control-Allow-Origin'] = '*'
     header['Access-Control-Request-Method'] = '*'

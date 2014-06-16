@@ -1,12 +1,11 @@
 module Hyper
   class Base < Grape::API
-    
     def self.inherited(subclass)
       super
       subclass.instance_eval do
         version 'v1', using: :accept_version_header
         format :json
-        
+
         helpers do
           def auth_credentials
             credentials = { id: '0', access_token: '0' }
@@ -22,7 +21,7 @@ module Hyper
 
             credentials
           end
-          
+
           def current_user
             @current_user ||= begin
               Device.where(auth_credentials).includes(:user).first.try(:user)
@@ -32,11 +31,11 @@ module Hyper
           def authenticate!
             auth_error! unless current_user
           end
-          
+
           def auth_error!
             error!('401 Unauthenticated', 401)
           end
-          
+
         end
 
         rescue_from ActiveRecord::RecordNotFound do |e|

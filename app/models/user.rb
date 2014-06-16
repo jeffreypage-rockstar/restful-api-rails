@@ -5,9 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   enum role: [:user]
   after_initialize :set_default_role, if: :new_record?
-  
+
   validates :username, uniqueness: true, allow_blank: true
-  
+
   has_many :devices
 
   def set_default_role
@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   def admin?
     true
   end
-  
+
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)
     device = devices.find(device_id) if device_id

@@ -3,10 +3,10 @@ module Hyper
     # POST /login
     desc 'Post to authenticate a user in a device'
     params do
-      requires :email, type: String, desc: "User email."
-      requires :password, type: String, desc: "User password."
-      optional :device_id, type: Integer, desc: "Current device id. If blank, a new device entry will be generated."
-      optional :device_type, type: String, desc: "Current device type."
+      requires :email, type: String, desc: 'User email.'
+      requires :password, type: String, desc: 'User password.'
+      optional :device_id, type: Integer, desc: 'Current device id. If blank, a new device entry will be generated.'
+      optional :device_type, type: String, desc: 'Current device type.'
     end
     post '/login' do
       user = User.find_for_database_authentication(email: params[:email])

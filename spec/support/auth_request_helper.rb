@@ -6,10 +6,11 @@ module AuthRequestHelper
   #
   def http_login(user, pw)
     @env ||= {}
-    @env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user,pw)
+    @env['HTTP_AUTHORIZATION'] =
+      ActionController::HttpAuthentication::Basic.encode_credentials(user, pw)
   end
 end
 
 RSpec.configure do |config|
-  config.include AuthRequestHelper, :type => :request
+  config.include AuthRequestHelper, type: :request
 end

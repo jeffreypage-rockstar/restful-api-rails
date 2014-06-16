@@ -40,7 +40,6 @@ describe Hyper::Login do
 
     it 'does not authenticate an invalid user' do
       post '/api/login', email: user.email, password: '123testme1'
-      r = JSON.parse(response.body)
       expect(response.status).to eql 401
     end
   end

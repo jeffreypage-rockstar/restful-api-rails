@@ -1,11 +1,13 @@
 describe User do
   describe '.create' do
 
-    let(:attrs) { { 
-      email: 'valid@example.com',
-      password: '123testing',
-      password_confirmation: '123testing'
-    } }
+    let(:attrs) do
+      {
+        email: 'valid@example.com',
+        password: '123testing',
+        password_confirmation: '123testing'
+      }
+    end
 
     it 'creates a valid user' do
       expect(User.new(attrs)).to be_valid

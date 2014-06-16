@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   after_initialize :set_default_role, if: :new_record?
   
   validates :username, uniqueness: true, allow_blank: true
+  
+  has_many :devices
 
   def set_default_role
     self.role ||= :user

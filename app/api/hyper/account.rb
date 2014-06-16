@@ -7,7 +7,8 @@ module Hyper
       params do
         requires :email, type: String, desc: 'User email.'
         requires :password, type: String, desc: 'User password.'
-        requires :password_confirmation, type: String, desc: 'User password confirmation.'
+        requires :password_confirmation, type: String,
+                 desc: 'User password confirmation.'
       end
       post do
         User.create!(

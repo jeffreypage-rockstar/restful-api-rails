@@ -5,7 +5,8 @@ describe Hyper::Account do
   describe 'POST /api/user' do
 
     it 'creates a new valid user, not confirmed' do
-      post '/api/user', email: 'user@example.com', password: '123testme', password_confirmation: '123testme'
+      post '/api/user', email: 'user@example.com',
+            password: '123testme', password_confirmation: '123testme'
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r['user']['email']).to eql 'user@example.com'
@@ -14,7 +15,8 @@ describe Hyper::Account do
     end
 
     it 'requires valid user param' do
-      post '/api/user', email: 'user@example.com', password: '123testme', password_confirmation: '123invalid'
+      post '/api/user', email: 'user@example.com',
+            password: '123testme', password_confirmation: '123invalid'
       r = JSON.parse(response.body)
       expect(response.status).to eql 403 # invalid
       expect(r['status_code']).to eql 'record_invalid'

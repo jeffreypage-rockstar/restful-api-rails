@@ -7,7 +7,8 @@ describe Hyper::Auth do
 
   describe 'POST /api/auth/email-verification' do
     before do
-      @raw_token, user.confirmation_token = Devise.token_generator.generate(User, :confirmation_token)
+      @raw_token, user.confirmation_token =
+        Devise.token_generator.generate(User, :confirmation_token)
       user.save
     end
 

@@ -22,7 +22,8 @@ Devise.setup do |config|
   require 'devise/orm/active_record'
 
   # ==> Devise Async
-  # Supported options: :resque, :sidekiq, :delayed_job, :queue_classic, :torquebox, :backburner
+  # Supported options: :resque, :sidekiq, :delayed_job, :queue_classic,
+  # :torquebox, :backburner
   Devise::Async.setup do |config|
     config.enabled = Rails.env.test? ? false : true
     config.backend = :sidekiq

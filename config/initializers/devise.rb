@@ -21,6 +21,16 @@ Devise.setup do |config|
   # available as additional gems.
   require 'devise/orm/active_record'
 
+  # ==> Devise Async
+  # Supported options: :resque, :sidekiq, :delayed_job, :queue_classic,
+  # :torquebox, :backburner
+  Devise::Async.setup do |config|
+    config.enabled = Rails.env.test? ? false : true
+    config.backend = :sidekiq
+    config.queue   = :default
+    # config.queue   = :my_custom_queue
+  end
+
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
   # just :email. You can configure it to use [:username, :subdomain], so for

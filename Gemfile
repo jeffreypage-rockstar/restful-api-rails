@@ -28,6 +28,7 @@ group :admin do
   gem 'uglifier', '>= 1.3.0'
   gem 'jquery-rails'
   gem 'bootstrap-sass'
+  gem 'bootstrap_form'
   gem 'sendgrid'
 end
 

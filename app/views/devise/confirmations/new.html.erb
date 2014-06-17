@@ -1,13 +1,10 @@
 <div class="authform">
-  <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, role: 'form' }) do |f| %>
+  <%= bootstrap_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, role: 'form' }) do |f| %>
     <h3>Resend confirmation</h3>
     <p>We'll resend your e-mail confirmation instructions.</p>
-    <%= devise_error_messages! %>
-    <div class="form-group">
-      <%= f.label :email %>
-      <%= f.email_field :email, autofocus: true, class: 'form-control' %>
-    </div>
-    <%= f.submit "Resend", :class => 'button right' %>
+    <%# devise_error_messages! %>
+    <%= f.email_field :email, autofocus: true %>
+    <%= f.submit "Resend", class: 'button right' %>
   <% end %>
-<%= render "devise/shared/links" %>
+  <%= render "devise/shared/links" %>
 </div>

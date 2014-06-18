@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :username, uniqueness: true, allow_blank: true
 
   has_many :devices
+  has_many :stacks
 
   def set_default_role
     self.role ||= :user

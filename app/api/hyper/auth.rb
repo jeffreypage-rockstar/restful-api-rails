@@ -14,5 +14,39 @@ module Hyper
       raise ActiveRecord::RecordInvalid.new(user) if user.errors.any?
       user
     end
+
+    # POST /auth/password-reset
+    desc 'Request a password reset, delivering the reset password token'
+    params do
+      requires :email,
+               type: String,
+               desc: 'Password reset token.'
+    end
+    post '/auth/password-reset' do
+      user = User.send_reset_password_instructions(email: params[:email])
+      raise ActiveRecord::RecordInvalid.new(user) if user.errors.any?
+      { status: 201, message: 'Reset password e-mail has been sent.' }
+    end
+
+    # PUT /auth/password-reset
+    desc 'Change the user\'s password'
+    params do
+      requires :reset_password_token,
+               type: String,
+               desc: 'Password reset token.'
+      requires :password, type: String, desc: 'New password'
+      requires :password_confirmation,
+               type: String,
+               desc: 'New password confirmation'
+    end
+    put '/auth/password-reset' do
+      user = User.reset_password_by_token(
+        reset_password_token: params[:reset_password_token],
+        password: params[:password],
+        password_confirmation: params[:password_confirmation]
+      )
+      raise ActiveRecord::RecordInvalid.new(user) if user.errors.any?
+      user
+    end
   end
 end

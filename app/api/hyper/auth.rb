@@ -24,8 +24,7 @@ module Hyper
     end
     post '/auth/password-reset' do
       user = User.send_reset_password_instructions(email: params[:email])
-      raise ActiveRecord::RecordInvalid.new(user) if user.errors.any?
-      { status: 201, message: 'Reset password e-mail has been sent.' }
+      validate_record!(user) && empty_body!
     end
 
     # PUT /auth/password-reset
@@ -45,8 +44,7 @@ module Hyper
         password: params[:password],
         password_confirmation: params[:password_confirmation]
       )
-      raise ActiveRecord::RecordInvalid.new(user) if user.errors.any?
-      user
+      validate_record!(user)
     end
   end
 end

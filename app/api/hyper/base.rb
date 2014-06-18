@@ -1,4 +1,6 @@
 module Hyper
+  class EmptyBodyException < StandardError; end
+
   class Base < Grape::API
     def self.inherited(subclass)
       super
@@ -36,6 +38,18 @@ module Hyper
             error!('401 Unauthenticated', 401)
           end
 
+          def validate_record!(record)
+            if record.errors.any?
+              raise ActiveRecord::RecordInvalid.new(record)
+            else
+              record
+            end
+          end
+
+          def empty_body!
+            raise EmptyBodyException
+          end
+
         end
 
         rescue_from ActiveRecord::RecordNotFound do |e|
@@ -62,6 +76,10 @@ module Hyper
             403,
             'Content-Type' => 'application/json'
           )
+        end
+
+        rescue_from EmptyBodyException do |_e|
+          Rack::Response.new([''], 204, 'Content-Type' => 'text/plain')
         end
       end
     end

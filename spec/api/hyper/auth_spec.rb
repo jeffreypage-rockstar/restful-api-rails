@@ -77,7 +77,7 @@ describe Hyper::Auth do
 
     it 'generates a password reset token for an existent email' do
       post '/api/auth/password-reset', email: user.email
-      expect(response.status).to eql 201
+      expect(response.status).to eql 204
       mail = ActionMailer::Base.deliveries.last
       expect(mail.subject).to match 'Reset password instructions'
       expect(mail.to).to eql [user.email]

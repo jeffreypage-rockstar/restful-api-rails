@@ -27,20 +27,13 @@ module Hyper
         paginate current_user.stacks.recent
       end
 
-      # GET /stacks/suggestions
-      desc 'Returns suggested stacks for current user'
-      get :suggestions do
-        authenticate!
-        Stack.where('random() < 0.01').limit(PAGE_SIZE)
-      end
-
-      # GET /stacks/related
-      desc 'Returns related stacks given a list of stacks, paginated'
+      # GET /stacks/trending
+      desc 'Returns trending stacks, paginated'
       paginate per_page: PAGE_SIZE
-      params do
-        requires :stacks, type: Array, desc: 'A list of stack ids.'
-      end
-      get :related do
+      get :trending do
+        # TODO: update this to return stacks ordered by points
+        # TODO: do not return stacks users created or is already following
+        # TODO: use the decay algorithm to return the sorted list
         authenticate!
         paginate Stack.where.not(user_id: current_user.id).recent
       end

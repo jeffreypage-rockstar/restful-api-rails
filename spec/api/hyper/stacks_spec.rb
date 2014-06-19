@@ -63,35 +63,18 @@ describe Hyper::Stacks do
     end
   end
 
-  # ======== GETTING SUGGESTIONS TO THE USER ==================
-  describe 'GET /api/stacks/suggestions' do
+  # ======== GETTING TRENDING STACKS ==================
+  describe 'GET /api/stacks/trending' do
     it 'requires authentication' do
-      get '/api/stacks/suggestions'
+      get '/api/stacks/trending', stacks: ['invalid']
       expect(response.status).to eql 401 # authentication
     end
 
-    it 'returns the stacks suggestions to the current user' do
-      # stack = create(:stack, user: device.user)
-      http_login device.id, device.access_token
-      get '/api/stacks/suggestions', nil, @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r).to be_empty
-    end
-  end
-
-  # ======== GETTING RELATED STACKS ==================
-  describe 'GET /api/stacks/related' do
-    it 'requires authentication' do
-      get '/api/stacks/related', stacks: ['invalid']
-      expect(response.status).to eql 401 # authentication
-    end
-
-    it 'returns the stacks related to the provided stacks list' do
-      stack = create(:stack, user: device.user)
+    it 'returns the trending stacks for the current user' do
+      create(:stack, user: device.user)
       other_stack = create(:stack)
       http_login device.id, device.access_token
-      get '/api/stacks/related', { stacks: [stack.id] }, @env
+      get '/api/stacks/trending', nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r['stacks'].size).to eql(1)

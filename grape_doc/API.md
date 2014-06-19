@@ -71,11 +71,11 @@
 
  - email (required) : User email.
 
+ - username (required) : User username.
+
  - password (required) : User password.
 
  - password_confirmation (required) : User password confirmation.
-
- - username : User username.
 
  - avatar_url : User avatar url
 

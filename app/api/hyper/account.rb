@@ -6,10 +6,10 @@ module Hyper
       desc 'Create a new user account'
       params do
         requires :email, type: String, desc: 'User email.'
+        requires :username, type: String, desc: 'User username.'
         requires :password, type: String, desc: 'User password.'
         requires :password_confirmation, type: String,
                                          desc: 'User password confirmation.'
-        optional :username, type: String, desc: 'User username.'
         optional :avatar_url, type: String, desc: 'User avatar url'
       end
       post do

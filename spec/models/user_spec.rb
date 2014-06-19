@@ -6,6 +6,7 @@ describe User do
     let(:attrs) do
       {
         email: 'valid@example.com',
+        username: 'username',
         password: '123testing',
         password_confirmation: '123testing'
       }
@@ -32,6 +33,12 @@ describe User do
       expect(other.errors[:email].first).to match('taken')
     end
 
+    it 'does not accepts username with special chars' do
+      user = User.new(attrs.merge(username: 'userName%'))
+      expect(user).to_not be_valid
+      expect(user.errors[:username].first).to match('invalid')
+    end
+
     it 'does not accepts duplicated username' do
       user = create(:user)
       other = User.new(attrs.merge(username: user.username))
@@ -39,12 +46,9 @@ describe User do
       expect(other.errors[:username].first).to match('taken')
     end
 
-    it 'accepts a blank username' do
-      user = create(:user, username: '')
-      expect(user).to be_valid
-
-      other = User.new(attrs.merge(username: ''))
-      expect(other).to be_valid
+    it 'requires a username' do
+      user = User.new(attrs.merge(username: ''))
+      expect(user).to_not be_valid
     end
 
     it 'requires a password' do

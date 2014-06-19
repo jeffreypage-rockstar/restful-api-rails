@@ -6,10 +6,14 @@ class User < ActiveRecord::Base
   enum role: [:user]
   after_initialize :set_default_role, if: :new_record?
 
-  validates :username, uniqueness: true, allow_blank: true
+  validates :username, presence: true,
+                       uniqueness: true,
+                       format: { with: /\A[a-z0-9_]*\z/ }
 
   has_many :devices
   has_many :stacks
+
+  before_validation :downcase_username
 
   def set_default_role
     self.role ||= :user
@@ -24,5 +28,11 @@ class User < ActiveRecord::Base
     device = devices.find(device_id) if device_id
     device ||= devices.create!(device_attrs)
     device.sign_in!
+  end
+
+  private
+
+  def downcase_username
+    self.username = username.to_s.downcase
   end
 end

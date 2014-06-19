@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :stack do
-    sequence(:name){|n| "Stack Title #{n}"}
+    sequence(:name) { |n| "Stack Title #{n}" }
     user
   end
 end

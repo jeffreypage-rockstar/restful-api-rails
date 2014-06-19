@@ -112,7 +112,8 @@ describe Hyper::Stacks do
       get '/api/stacks/names', { q: stack.name[0..2] }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['stacks'].size).to eql(1)
+      expect(r.size).to eql(1)
+      expect(r.first.keys).to eql(['id', 'name'])
     end
   end
 

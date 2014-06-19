@@ -50,7 +50,7 @@ module Hyper
       params do
         requires :q, type: String, desc: 'The query for stack name lookup.'
       end
-      get :names do
+      get :names, each_serializer: StackShortSerializer, root: false do
         authenticate!
         Stack.where('name ILIKE ?', "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
       end

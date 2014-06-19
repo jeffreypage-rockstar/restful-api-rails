@@ -7,7 +7,7 @@ module Hyper
       requires :password, type: String, desc: 'User password.'
       optional :device_id, type: Integer,
                            desc: 'Current device id. If blank, a new device'\
-                                 'entry is created.'
+                                 ' entry is created.'
       optional :device_type, type: String, desc: 'Current device type.'
     end
     post '/login' do

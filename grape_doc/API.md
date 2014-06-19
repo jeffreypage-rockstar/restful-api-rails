@@ -19,7 +19,7 @@
 
  - password (required) : User password.
 
- - device_id : Current device id. If blank, a new deviceentry is created.
+ - device_id : Current device id. If blank, a new device entry is created.
 
  - device_type : Current device type.
 
@@ -75,11 +75,36 @@
 
  - password_confirmation (required) : User password confirmation.
 
+ - username : User username.
+
+ - avatar_url : User avatar url
+
 
 
 #### GET /user
 
  Returns current user data
+
+
+
+#### PUT /user
+
+ Update current user data and settings
+
+**Parameters:** 
+
+
+ - email : User email.
+
+ - username : User username.
+
+ - avatar_url : User avatar url
+
+
+
+#### DELETE /user
+
+ Deletes the current user account
 
 
 

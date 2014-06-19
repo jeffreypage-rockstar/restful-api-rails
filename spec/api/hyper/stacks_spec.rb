@@ -48,6 +48,19 @@ describe Hyper::Stacks do
       expect(r['stacks'].size).to eql(1)
       expect(r['stacks'].first['user_id']).to eql(device.user_id)
     end
+    
+    it 'accepts pagination' do
+      (1..10).map{ stack = create(:stack, user: device.user) }
+      http_login device.id, device.access_token
+      get '/api/stacks', {:page => 2, :per_page => 3}, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r['stacks'].size).to eql(3)
+      #response headers
+      expect(response.header["Total"]).to eql("10")
+      next_link = 'api/stacks?page=3&per_page=3>; rel="next"'
+      expect(response.header["Link"]).to include(next_link)
+    end
   end
   
   # ======== GETTING SUGGESTIONS TO THE USER ==================
@@ -76,11 +89,13 @@ describe Hyper::Stacks do
 
     it 'returns the stacks related to the provided stacks list' do
       stack = create(:stack, user: device.user)
+      other_stack = create(:stack)
       http_login device.id, device.access_token
       get '/api/stacks/related', { stacks: [stack.id] }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r['stacks'].size).to eql(1)
+      expect(r['stacks'].first['id']).to eql other_stack.id
     end
   end
   

@@ -11,6 +11,8 @@ gem 'sidekiq'
 gem 'pundit'
 gem 'pg'
 gem 'foreman'
+gem 'will_paginate'
+gem 'api-pagination'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'

@@ -1,6 +1,9 @@
 module Hyper
   # api to create a user and/or get the current user data
   class Stacks < Base
+    PAGE_SIZE = 30
+    AUTOCOMPLETE_SIZE = 10
+    
     resource :stacks do
       # POST /stacks
       desc 'Create a new stack with current user as owner'
@@ -17,27 +20,29 @@ module Hyper
       end
 
       # GET /stacks
-      desc 'Returns current user stacks'
+      desc 'Returns current user stacks, paginated'
+      paginate per_page: PAGE_SIZE
       get do
         authenticate!
-        current_user.stacks.recent.limit(10)
+        paginate current_user.stacks.recent
       end
       
       # GET /stacks/suggestions
       desc 'Returns suggested stacks for current user'
       get :suggestions do
         authenticate!
-        Stack.where(id: [])
+        Stack.where("random() < 0.01").limit(PAGE_SIZE)
       end
       
       # GET /stacks/related
-      desc 'Returns related stacks given a list of stacks'
+      desc 'Returns related stacks given a list of stacks, paginated'
+      paginate per_page: PAGE_SIZE
       params do
         requires :stacks, type: Array, desc: "A list of stack ids."
       end
       get :related do
         authenticate!
-        Stack.where(id: params[:stacks])
+        paginate Stack.where.not(user_id: current_user.id).recent
       end
       
       # GET /stacks/names
@@ -47,7 +52,7 @@ module Hyper
       end
       get :names do
         authenticate!
-        Stack.where('name ILIKE ?', "#{params[:q]}%").limit(10)
+        Stack.where('name ILIKE ?', "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
       end
       
       # GET /stacks/:id

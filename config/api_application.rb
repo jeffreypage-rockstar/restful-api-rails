@@ -3,6 +3,9 @@ require File.expand_path('../environments/api', __FILE__)
 Dir[File.expand_path('../../app/models/*.rb', __FILE__)].each do |f|
   require f
 end
+Dir[File.expand_path('../../app/serializers/*.rb', __FILE__)].each do |f|
+  require f
+end
 
 require 'app/api/hyper/base'
 

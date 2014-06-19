@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616135102) do
+ActiveRecord::Schema.define(version: 20140618174430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
+  enable_extension 'uuid-ossp'
 
   create_table 'devices', force: true do |t|
     t.integer 'user_id',                    null: false
@@ -27,6 +28,16 @@ ActiveRecord::Schema.define(version: 20140616135102) do
 
   add_index 'devices', ['access_token'], name: 'index_devices_on_access_token', unique: true, using: :btree
   add_index 'devices', ['user_id'], name: 'index_devices_on_user_id', using: :btree
+
+  create_table 'stacks', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
+    t.string 'name',                       null: false
+    t.boolean 'protected',  default: false, null: false
+    t.integer 'user_id',                    null: false
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+  end
+
+  add_index 'stacks', ['name'], name: 'index_stacks_on_name', unique: true, using: :btree
 
   create_table 'users', force: true do |t|
     t.string 'email',                  default: '', null: false

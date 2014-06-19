@@ -12,4 +12,5 @@ class API < Grape::API
   mount Hyper::Auth
   mount Hyper::Account
   mount Hyper::Devices
+  mount Hyper::Stacks
 end

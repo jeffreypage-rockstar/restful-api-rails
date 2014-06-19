@@ -41,6 +41,7 @@ group :development do
   gem 'quiet_assets'
   gem 'rails_layout'
   gem 'spring'
+  gem 'grape_doc'
 end
 
 group :development, :test do

@@ -121,6 +121,10 @@ GEM
     grape-active_model_serializers (1.0.1)
       active_model_serializers (>= 0.8.1)
       grape (~> 0.3)
+    grape_doc (0.1.0)
+      grape (~> 0.2, >= 0.2.1)
+      json (~> 1.7, >= 1.7.4)
+      trollop (~> 2.0)
     hashie (3.0.0)
     hike (1.2.3)
     http_parser.rb (0.6.0.beta.2)
@@ -234,6 +238,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    trollop (2.0)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
     uglifier (2.5.0)
@@ -273,6 +278,7 @@ DEPENDENCIES
   goliath
   grape
   grape-active_model_serializers
+  grape_doc
   hub
   jquery-rails
   pg

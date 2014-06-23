@@ -46,6 +46,7 @@ module Hyper
       delete do
         authenticate!
         current_user.destroy!
+        empty_body!
       end
     end
   end

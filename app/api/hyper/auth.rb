@@ -34,15 +34,12 @@ module Hyper
                type: String,
                desc: 'Password reset token.'
       requires :password, type: String, desc: 'New password'
-      requires :password_confirmation,
-               type: String,
-               desc: 'New password confirmation'
     end
     put '/auth/password-reset' do
       user = User.reset_password_by_token(
         reset_password_token: params[:reset_password_token],
         password: params[:password],
-        password_confirmation: params[:password_confirmation]
+        password_confirmation: params[:password]
       )
       validate_record!(user)
     end

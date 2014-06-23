@@ -23,9 +23,19 @@ describe Hyper::Account do
                         username: 'username??',
                         password: '123testme'
       r = JSON.parse(response.body)
-      expect(response.status).to eql 403 # invalid
-      expect(r['status_code']).to eql 'record_invalid'
+      expect(response.status).to eql 422 # invalid
+      expect(r['status_code']).to eql 'invalid_resource'
       expect(r['error']).to match('username is invalid')
+    end
+
+    it 'does not accept duplicated email' do
+      post '/api/user', email: user.email,
+                        username: 'otherusername',
+                        password: '123testme'
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 409 # invalid
+      expect(r['status_code']).to eql 'conflict'
+      expect(r['error']).to match('email has already been taken')
     end
   end
 
@@ -59,7 +69,7 @@ describe Hyper::Account do
     it 'does not allow empty e-mail' do
       http_login device.id, device.access_token
       put '/api/user', { email: '' }, @env
-      expect(response.status).to eql 403 # invalid
+      expect(response.status).to eql 422 # invalid
       r = JSON.parse(response.body)
       expect(r['error']).to match('email can\'t be blank')
     end
@@ -84,6 +94,20 @@ describe Hyper::Account do
       mail = ActionMailer::Base.deliveries.last
       expect(mail.subject).to match 'Confirmation instructions'
       expect(mail.to).to eql ['newemail@example.com']
+    end
+  end
+
+  # ======== DELETING CURRENT USER ACCOUNT ==================
+  describe 'delete /api/user' do
+    it 'requires authentication' do
+      delete '/api/user'
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it 'deletes current user account' do
+      http_login device.id, device.access_token
+      delete '/api/user', nil, @env
+      expect(response.status).to eql 204 # no content
     end
   end
 end

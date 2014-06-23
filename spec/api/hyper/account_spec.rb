@@ -78,7 +78,10 @@ describe Hyper::Account do
 
     it 'updates current user attributes/settings' do
       http_login device.id, device.access_token
-      put '/api/user', { avatar_url: 'http://new_avatar_url', facebook_token: "valid_facebook_token" }, @env
+      put '/api/user',
+          { avatar_url: 'http://new_avatar_url',
+            facebook_token: 'valid_facebook_token'
+          }, @env
       expect(response.status).to eql 204
     end
 

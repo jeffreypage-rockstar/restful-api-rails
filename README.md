@@ -23,7 +23,13 @@ You need a .env file in project root folder with some variables assigned. Ask a 
 
 ### set the database
 
-Hyper applications use postgres database to store data. Add the `hyper` user to postgres with db create permission and run:
+Hyper applications use a PostgreSQL database to store data. It also requires the `uuid-ossp` extension to be enabled. To do so, in a Debian-based system run:
+    $ sudo apt-get install postgresql-contrib
+
+Create the hyper PostgreSQL user with db create and superuser permissions with:
+    $ sudo -u postgres createuser --createdb --pwprompt --superuser hyper
+
+After that, run:
 
     $ rake db:setup
 

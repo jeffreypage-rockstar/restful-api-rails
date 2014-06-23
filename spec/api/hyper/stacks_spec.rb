@@ -28,7 +28,6 @@ describe Hyper::Stacks do
       stack = create(:stack)
       post '/api/stacks', { name: stack.name }, @env
       r = JSON.parse(response.body)
-      p r.inspect
       expect(response.status).to eql 409 # conflict
       expect(r['status_code']).to eql 'conflict'
       expect(r['error']).to match('name has already been taken')

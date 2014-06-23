@@ -15,6 +15,8 @@ describe Hyper::Account do
       expect(r['user']['email']).to eql 'user@example.com'
       expect(r['user']['id']).to_not be_blank
       expect(r['user']['confirmed']).to eql false
+      expect(r['user']['auth']['device_id']).to_not be_blank
+      expect(r['user']['auth']['access_token']).to_not be_blank
       expect(response.header['Location']).to match "\/user"
     end
 

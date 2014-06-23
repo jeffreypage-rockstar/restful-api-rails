@@ -22,20 +22,20 @@ describe Hyper::Login do
       post '/api/login', email: user.email, password: pass
       r = JSON.parse(response.body)
       expect(response.status).to eql 201
-      expect(r['user']['email']).to eql user.email
-      expect(r['user']['id']).to_not be_blank
-      expect(r['user']['auth']['device_id']).to_not be_blank
-      expect(r['user']['auth']['access_token']).to_not be_blank
+      expect(r['email']).to eql user.email
+      expect(r['id']).to_not be_blank
+      expect(r['auth']['device_id']).to_not be_blank
+      expect(r['auth']['access_token']).to_not be_blank
     end
 
     it 'authenticate a valid user, using the existent device id' do
       post '/api/login', email: user.email, password: pass, device_id: device.id
       r = JSON.parse(response.body)
       expect(response.status).to eql 201
-      expect(r['user']['email']).to eql user.email
-      expect(r['user']['id']).to_not be_blank
-      expect(r['user']['auth']['device_id']).to eql device.id
-      expect(r['user']['auth']['access_token']).to_not be_blank
+      expect(r['email']).to eql user.email
+      expect(r['id']).to_not be_blank
+      expect(r['auth']['device_id']).to eql device.id
+      expect(r['auth']['access_token']).to_not be_blank
     end
 
     it 'does not authenticate an invalid user' do

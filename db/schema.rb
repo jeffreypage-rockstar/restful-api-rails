@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623123043) do
+ActiveRecord::Schema.define(version: 20140623175636) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
   enable_extension 'uuid-ossp'
@@ -57,10 +58,12 @@ ActiveRecord::Schema.define(version: 20140623123043) do
     t.datetime 'updated_at'
     t.integer 'role'
     t.string 'avatar_url'
+    t.string 'facebook_token'
   end
 
   add_index 'users', ['confirmation_token'], name: 'index_users_on_confirmation_token', unique: true, using: :btree
   add_index 'users', ['email'], name: 'index_users_on_email', unique: true, using: :btree
+  add_index 'users', ['facebook_token'], name: 'index_users_on_facebook_token', using: :btree
   add_index 'users', ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true, using: :btree
   add_index 'users', ['username'], name: 'index_users_on_username', unique: true, using: :btree
 

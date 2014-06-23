@@ -15,11 +15,11 @@ describe Hyper::Stacks do
       post '/api/stacks', { name: 'My Stack Title', protected: true }, @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
-      expect(r['stack']['name']).to eql 'My Stack Title'
-      stack_id = r['stack']['id']
+      expect(r['name']).to eql 'My Stack Title'
+      stack_id = r['id']
       expect(stack_id).to_not be_blank
-      expect(r['stack']['protected']).to eql true
-      expect(r['stack']['user_id']).to eql device.user_id
+      expect(r['protected']).to eql true
+      expect(r['user_id']).to eql device.user_id
       expect(response.header['Location']).to match "\/stacks\/#{stack_id}"
     end
 
@@ -47,8 +47,8 @@ describe Hyper::Stacks do
       get '/api/stacks', nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['stacks'].size).to eql(1)
-      expect(r['stacks'].first['user_id']).to eql(device.user_id)
+      expect(r.size).to eql(1)
+      expect(r.first['user_id']).to eql(device.user_id)
     end
 
     it 'accepts pagination' do
@@ -57,7 +57,7 @@ describe Hyper::Stacks do
       get '/api/stacks', { page: 2, per_page: 3 }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['stacks'].size).to eql(3)
+      expect(r.size).to eql(3)
       # response headers
       expect(response.header['Total']).to eql('10')
       next_link = 'api/stacks?page=3&per_page=3>; rel="next"'
@@ -79,8 +79,8 @@ describe Hyper::Stacks do
       get '/api/stacks/trending', nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['stacks'].size).to eql(1)
-      expect(r['stacks'].first['id']).to eql other_stack.id
+      expect(r.size).to eql(1)
+      expect(r.first['id']).to eql other_stack.id
     end
   end
 
@@ -116,7 +116,7 @@ describe Hyper::Stacks do
       get "/api/stacks/#{stack.id}", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['stack']['id']).to eql(stack.id)
+      expect(r['id']).to eql(stack.id)
     end
   end
 end

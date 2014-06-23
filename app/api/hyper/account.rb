@@ -8,7 +8,8 @@ module Hyper
         requires :email, type: String, desc: 'User email.'
         requires :username, type: String, desc: 'User username.'
         requires :password, type: String, desc: 'User password.'
-        optional :avatar_url, type: String, desc: 'User avatar url'
+        optional :facebook_token, type: String, desc: 'User facebook token.'
+        optional :avatar_url, type: String, desc: 'User avatar url.'
         optional :device_type, type: String, desc: 'Current device type.'
       end
       post do
@@ -34,6 +35,7 @@ module Hyper
       params do
         optional :email, type: String, desc: 'User email.'
         optional :username, type: String, desc: 'User username.'
+        optional :facebook_token, type: String, desc: 'User facebook token.'
         optional :avatar_url, type: String, desc: 'User avatar url'
       end
       put do
@@ -41,7 +43,7 @@ module Hyper
         current_user.update_attributes!(
           declared(params, include_missing: false)
         )
-        current_user
+        empty_body!
       end
 
       # DELETE /user

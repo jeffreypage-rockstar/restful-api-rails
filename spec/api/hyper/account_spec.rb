@@ -12,11 +12,11 @@ describe Hyper::Account do
                         password: '123testme'
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
-      expect(r['user']['email']).to eql 'user@example.com'
-      expect(r['user']['id']).to_not be_blank
-      expect(r['user']['confirmed']).to eql false
-      expect(r['user']['auth']['device_id']).to_not be_blank
-      expect(r['user']['auth']['access_token']).to_not be_blank
+      expect(r['email']).to eql 'user@example.com'
+      expect(r['id']).to_not be_blank
+      expect(r['confirmed']).to eql false
+      expect(r['auth']['device_id']).to_not be_blank
+      expect(r['auth']['access_token']).to_not be_blank
       expect(response.header['Location']).to match "\/user"
     end
 
@@ -53,7 +53,7 @@ describe Hyper::Account do
       get '/api/user', nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['user']['id']).to eql(device.user_id)
+      expect(r['id']).to eql(device.user_id)
     end
   end
 
@@ -78,24 +78,15 @@ describe Hyper::Account do
 
     it 'updates current user attributes/settings' do
       http_login device.id, device.access_token
-      put '/api/user', { avatar_url: 'http://new_avatar_url' }, @env
-      r = JSON.parse(response.body)
-      expect(response.status).to eql 200
-      expect(r['user']['avatar_url']).to eql('http://new_avatar_url')
+      put '/api/user', { avatar_url: 'http://new_avatar_url', facebook_token: "valid_facebook_token" }, @env
+      expect(response.status).to eql 204
     end
 
     it 'updates current user e-mail, requiring new confirmation' do
       expect(user).to be_confirmed
       http_login device.id, device.access_token
       put '/api/user', { email: 'newemail@example.com' }, @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r['user']['email']).to eql(user.email)
-      expect(r['user']['unconfirmed_email']).to eql('newemail@example.com')
-      expect(r['user']['confirmed']).to eql(false)
-      mail = ActionMailer::Base.deliveries.last
-      expect(mail.subject).to match 'Confirmation instructions'
-      expect(mail.to).to eql ['newemail@example.com']
+      expect(response.status).to eql 204
     end
   end
 

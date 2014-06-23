@@ -19,8 +19,8 @@ describe Hyper::Auth do
            @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
-      expect(r['user']['email']).to eql user.email
-      expect(r['user']['confirmed']).to eql true
+      expect(r['email']).to eql user.email
+      expect(r['confirmed']).to eql true
     end
 
     it 'rejects an invalid confirmation token' do
@@ -47,7 +47,7 @@ describe Hyper::Auth do
                                       password: 'newpass123'
       r = JSON.parse(response.body)
       expect(response.status).to eql 200
-      expect(r['user']['email']).to eql user.email
+      expect(r['email']).to eql user.email
     end
 
     it 'rejects an invalid reset token' do

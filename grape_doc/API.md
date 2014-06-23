@@ -58,8 +58,6 @@
 
  - password (required) : New password
 
- - password_confirmation (required) : New password confirmation
-
 
 
 #### POST /user
@@ -75,9 +73,9 @@
 
  - password (required) : User password.
 
- - password_confirmation (required) : User password confirmation.
-
  - avatar_url : User avatar url
+
+ - device_type : Current device type.
 
 
 

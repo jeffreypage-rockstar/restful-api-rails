@@ -45,3 +45,11 @@ ActiveRecord::Base.establish_connection(db_config)
 Dir[File.expand_path('../../initializers/*.rb', __FILE__)].each do |f|
   require f
 end
+
+# devise initialization
+Devise.secret_key ||= Application.secrets.secret_key_base
+Devise.token_generator ||= Devise::TokenGenerator.new(
+                            Devise::CachingKeyGenerator.new(
+                              Devise::KeyGenerator.new(Devise.secret_key)
+                            )
+                          )

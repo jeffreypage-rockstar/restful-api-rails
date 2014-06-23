@@ -11,35 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140619175323) do
-
+ActiveRecord::Schema.define(version: 20140623123043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
   enable_extension 'uuid-ossp'
 
-  create_table 'devices', force: true do |t|
-    t.integer 'user_id',                    null: false
+  create_table 'devices', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
     t.string 'access_token',    limit: 32, null: false
     t.string 'device_type',     limit: 16
     t.datetime 'last_sign_in_at'
     t.datetime 'created_at'
     t.datetime 'updated_at'
+    t.uuid 'user_id'
   end
 
   add_index 'devices', ['access_token'], name: 'index_devices_on_access_token', unique: true, using: :btree
-  add_index 'devices', ['user_id'], name: 'index_devices_on_user_id', using: :btree
 
   create_table 'stacks', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
     t.string 'name',                       null: false
     t.boolean 'protected',  default: false, null: false
-    t.integer 'user_id',                    null: false
     t.datetime 'created_at'
     t.datetime 'updated_at'
+    t.uuid 'user_id'
   end
 
   add_index 'stacks', ['name'], name: 'index_stacks_on_name', unique: true, using: :btree
 
-  create_table 'users', force: true do |t|
+  create_table 'users', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
     t.string 'email',                  default: '', null: false
     t.string 'encrypted_password',     default: '', null: false
     t.string 'username',               default: '', null: false

@@ -10,7 +10,7 @@ module Hyper
 
         helpers do
           def auth_credentials
-            credentials = { id: '0', access_token: '0' }
+            credentials = { id: nil, access_token: '0' }
             if request.env['HTTP_AUTHORIZATION']
               auth_header = request.env['HTTP_AUTHORIZATION'].split(' ')
 

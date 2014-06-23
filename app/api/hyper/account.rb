@@ -8,12 +8,12 @@ module Hyper
         requires :email, type: String, desc: 'User email.'
         requires :username, type: String, desc: 'User username.'
         requires :password, type: String, desc: 'User password.'
-        requires :password_confirmation, type: String,
-                                         desc: 'User password confirmation.'
         optional :avatar_url, type: String, desc: 'User avatar url'
       end
       post do
-        User.create!(declared(params, include_missing: false))
+        User.create!(declared(params, include_missing: false).merge(
+          password_confirmation: params[:password]
+        ))
       end
 
       # GET /user

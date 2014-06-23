@@ -73,7 +73,9 @@
 
  - password (required) : User password.
 
- - avatar_url : User avatar url
+ - facebook_token : User facebook token.
+
+ - avatar_url : User avatar url.
 
  - device_type : Current device type.
 
@@ -95,6 +97,8 @@
  - email : User email.
 
  - username : User username.
+
+ - facebook_token : User facebook token.
 
  - avatar_url : User avatar url
 

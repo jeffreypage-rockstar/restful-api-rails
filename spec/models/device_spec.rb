@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 describe Device do
+  let(:user) { create(:user) }
+
   describe '.create' do
 
-    let(:attrs) { { user_id: 1, device_type: 'iphone' } }
+    let(:attrs) { { user_id: user.id, device_type: 'iphone' } }
 
     it 'creates a valid device' do
       expect(Device.new(attrs)).to be_valid

@@ -13,10 +13,13 @@ module Hyper
       end
       post do
         authenticate!
-        current_user.stacks.create!(
-          name: params[:name],
-          protected: params[:protected]
-        )
+        if stack = current_user.stacks.create!(
+                    name: params[:name],
+                    protected: params[:protected]
+                   )
+          header 'Location', "/stacks/#{stack.id}"
+          stack
+        end
       end
 
       # GET /stacks

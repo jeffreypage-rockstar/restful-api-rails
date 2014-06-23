@@ -11,9 +11,12 @@ module Hyper
         optional :avatar_url, type: String, desc: 'User avatar url'
       end
       post do
-        User.create!(declared(params, include_missing: false).merge(
-          password_confirmation: params[:password]
-        ))
+        if user = User.create!(declared(params, include_missing: false).merge(
+                                password_confirmation: params[:password]
+                              ))
+          header 'Location', '/user'
+          user
+        end
       end
 
       # GET /user

@@ -16,9 +16,11 @@ describe Hyper::Stacks do
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r['stack']['name']).to eql 'My Stack Title'
-      expect(r['stack']['id']).to_not be_blank
+      stack_id = r['stack']['id']
+      expect(stack_id).to_not be_blank
       expect(r['stack']['protected']).to eql true
       expect(r['stack']['user_id']).to eql device.user_id
+      expect(response.header['Location']).to match "\/stacks\/#{stack_id}"
     end
 
     it 'requires a unique stack title' do

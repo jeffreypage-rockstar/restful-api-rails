@@ -19,8 +19,8 @@ describe Hyper::Auth do
            @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
-      expect(r['user']['email']).to eql user.email
-      expect(r['user']['confirmed']).to eql true
+      expect(r['email']).to eql user.email
+      expect(r['confirmed']).to eql true
     end
 
     it 'rejects an invalid confirmation token' do
@@ -29,7 +29,7 @@ describe Hyper::Auth do
            { confirmation_token: 'invalidtoken' },
            @env
       r = JSON.parse(response.body)
-      expect(response.status).to eql 403 # invalid
+      expect(response.status).to eql 422 # invalid
       expect(r['error']).to match 'confirmation token is invalid'
     end
   end
@@ -44,28 +44,17 @@ describe Hyper::Auth do
 
     it 'updates the user password with a valid token' do
       put '/api/auth/password-reset', reset_password_token: @raw_token,
-                                      password: 'newpass123',
-                                      password_confirmation: 'newpass123'
+                                      password: 'newpass123'
       r = JSON.parse(response.body)
       expect(response.status).to eql 200
-      expect(r['user']['email']).to eql user.email
-    end
-
-    it 'rejects the new user password without a valid confirmation' do
-      put '/api/auth/password-reset', reset_password_token: @raw_token,
-                                      password: 'newpass123',
-                                      password_confirmation: 'newpass1234'
-      r = JSON.parse(response.body)
-      expect(response.status).to eql 403
-      expect(r['error']).to match "password confirmation doesn't match password"
+      expect(r['email']).to eql user.email
     end
 
     it 'rejects an invalid reset token' do
       put '/api/auth/password-reset', reset_password_token: 'invalidtoken',
-                                      password: 'newpass123',
-                                      password_confirmation: 'newpass123'
+                                      password: 'newpass123'
       r = JSON.parse(response.body)
-      expect(response.status).to eql 403 # invalid
+      expect(response.status).to eql 422 # invalid
       expect(r['error']).to match 'reset password token is invalid'
     end
   end
@@ -86,7 +75,7 @@ describe Hyper::Auth do
     it 'fails to send password reset token for an invalid email' do
       post '/api/auth/password-reset', email: 'invalid@example.com'
       r = JSON.parse(response.body)
-      expect(response.status).to eql 403
+      expect(response.status).to eql 422
       expect(r['error']).to match 'email not found'
     end
   end

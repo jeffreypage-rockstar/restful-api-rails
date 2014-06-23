@@ -65,15 +65,38 @@ module Hyper
           )
         end
 
-        rescue_from ActiveRecord::RecordInvalid do |e|
+        rescue_from ActiveRecord::RecordNotUnique do |e|
           message = e.message.downcase.capitalize
           Rack::Response.new(
             [{
-              status: 403,
-              status_code: 'record_invalid',
+              status: 409,
+              status_code: 'conflict',
               error: message
             }.to_json],
-            403,
+            409,
+            'Content-Type' => 'application/json'
+          )
+        end
+
+        # ActiveRecord::RecordInvalid is raise whenever a model validation is
+        # failed. ActiveRecord::RecordNotUnique is raised only if
+        # validate:false is provided to record.save method
+        rescue_from ActiveRecord::RecordInvalid do |e|
+          message = e.message.downcase.capitalize
+          if message =~ /has already been taken$/
+            status = 409
+            code = 'conflict'
+          else
+            status = 422
+            code = 'invalid_resource'
+          end
+          Rack::Response.new(
+            [{
+              status: status,
+              status_code: code,
+              error: message
+            }.to_json],
+            status,
             'Content-Type' => 'application/json'
           )
         end

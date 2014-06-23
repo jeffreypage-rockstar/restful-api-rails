@@ -13,10 +13,13 @@ module Hyper
       end
       post do
         authenticate!
-        current_user.stacks.create!(
-          name: params[:name],
-          protected: params[:protected]
-        )
+        if stack = current_user.stacks.create!(
+                    name: params[:name],
+                    protected: params[:protected]
+                   )
+          header 'Location', "/stacks/#{stack.id}"
+          stack
+        end
       end
 
       # GET /stacks
@@ -43,7 +46,7 @@ module Hyper
       params do
         requires :q, type: String, desc: 'The query for stack name lookup.'
       end
-      get :names, each_serializer: StackShortSerializer, root: false do
+      get :names, each_serializer: StackShortSerializer do
         authenticate!
         Stack.where('name ILIKE ?', "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
       end

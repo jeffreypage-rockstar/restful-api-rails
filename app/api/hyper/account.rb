@@ -8,12 +8,19 @@ module Hyper
         requires :email, type: String, desc: 'User email.'
         requires :username, type: String, desc: 'User username.'
         requires :password, type: String, desc: 'User password.'
-        requires :password_confirmation, type: String,
-                                         desc: 'User password confirmation.'
-        optional :avatar_url, type: String, desc: 'User avatar url'
+        optional :facebook_token, type: String, desc: 'User facebook token.'
+        optional :avatar_url, type: String, desc: 'User avatar url.'
+        optional :device_type, type: String, desc: 'Current device type.'
       end
       post do
-        User.create!(declared(params, include_missing: false))
+        if user = User.create!(declared(params, include_missing: false).merge(
+                                password_confirmation: params[:password]
+                              ))
+          req = Hashie::Mash.new(remote_ip: env['REMOTE_ADDR'])
+          user.sign_in_from_device!(req, nil, device_type: params[:device_type])
+          header 'Location', '/user'
+          user
+        end
       end
 
       # GET /user
@@ -28,6 +35,7 @@ module Hyper
       params do
         optional :email, type: String, desc: 'User email.'
         optional :username, type: String, desc: 'User username.'
+        optional :facebook_token, type: String, desc: 'User facebook token.'
         optional :avatar_url, type: String, desc: 'User avatar url'
       end
       put do
@@ -35,7 +43,7 @@ module Hyper
         current_user.update_attributes!(
           declared(params, include_missing: false)
         )
-        current_user
+        empty_body!
       end
 
       # DELETE /user
@@ -43,6 +51,7 @@ module Hyper
       delete do
         authenticate!
         current_user.destroy!
+        empty_body!
       end
     end
   end

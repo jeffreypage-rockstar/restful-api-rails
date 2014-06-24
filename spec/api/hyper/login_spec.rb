@@ -38,20 +38,28 @@ describe Hyper::Login do
   describe 'POST /api/login with facebook_token' do
     before do
       # fb api stubs
-      existent = double('existent', get_object: { 'id' => user.facebook_id })
+      existent = double('existent', debug_token: {
+                          'data' => {
+                            'user_id' => user.facebook_id,
+                            'is_valid' => true
+                          } })
       allow(Koala::Facebook::API).to receive(:new).
                                       with(user.facebook_token, nil).
                                       and_return(existent)
 
-      inexistent = double('inexistent', get_object: { 'id' => '123456' })
+      inexistent = double('inexistent', debug_token: {
+                            'data' => {
+                              'id' => '123456',
+                              'is_valid' => true
+                            } })
       allow(Koala::Facebook::API).to receive(:new).
                                       with('facebooktokennotsignedup', nil).
                                       and_return(inexistent)
 
-      invalid = double('invalid')
-      exception = Koala::Facebook::AuthenticationError.new(400, '')
-      allow(invalid).to receive(:get_object).
-                                and_raise(exception)
+      invalid = double('invalid', debug_token: {
+                         'data' => {
+                           'is_valid' => false
+                         } })
       allow(Koala::Facebook::API).to receive(:new).
                                        with('invalidfacebooktoken', nil).
                                        and_return(invalid)

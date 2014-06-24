@@ -5,8 +5,8 @@ class BaseAuthService
     @graph = Koala::Facebook::API.new(
               facebook_token,
               Rails.application.secrets.facebook_app_secret)
-    profile = @graph.get_object('me')
-    profile['id']
+    profile = @graph.debug_token(facebook_token)
+    profile['data']['is_valid'] ? profile['data']['user_id'] : nil
   rescue Koala::Facebook::AuthenticationError
     nil
   end

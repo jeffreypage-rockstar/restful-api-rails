@@ -3,23 +3,19 @@ module Hyper
     # POST /login
     desc 'Post to authenticate a user in a device'
     params do
-      requires :username, type: String, desc: 'User username.'
-      requires :password, type: String, desc: 'User password.'
+      optional :username, type: String, desc: 'User username.'
+      optional :password, type: String, desc: 'User password.'
+      optional :facebook_token, type: String, desc: 'User facebook token.'
       optional :device_id, type: String,
                            desc: 'Current device id. If blank, a new device'\
                                  ' entry is created.'
       optional :device_type, type: String, desc: 'Current device type.'
     end
     post '/login' do
-      user = User.find_for_database_authentication(username: params[:username])
-      if user && user.valid_password?(params[:password])
-        req = Hashie::Mash.new(remote_ip: env['REMOTE_ADDR'])
-        user.sign_in_from_device!(req, params[:device_id],
-                                  device_type: params[:device_type])
-        user
-      else
-        auth_error!
-      end
+      user = SignInService.new(env['REMOTE_ADDR'],
+                               declared(params, include_missing: false)
+                              ).call
+      user || auth_error!
     end
   end
 end

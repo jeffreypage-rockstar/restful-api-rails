@@ -45,6 +45,7 @@ describe Hyper::Account do
   describe 'POST /api/user with facebook_token' do
 
     before do
+      ActionMailer::Base.deliveries.clear
       # fb api stubs
       valid = double('valid me', get_object: { 'id' => '123456' })
       allow(Koala::Facebook::API).to receive(:new).
@@ -70,6 +71,7 @@ describe Hyper::Account do
                         username: 'otherusername',
                         facebook_token: 'validfacebooktoken'
       expect(response.status).to eql 201 # created
+      expect(ActionMailer::Base.deliveries).to be_empty
     end
 
     it 'does not accepts duplicated facebook_ids' do

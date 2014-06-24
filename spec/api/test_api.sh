@@ -7,6 +7,15 @@ curl -vXPOST http://hyper-api-staging.inakalabs.com/user -H Content-Type:applica
   }
 '
 
+curl -vXPOST http://hyper-api-staging.inakalabs.com/user -H Content-Type:application/json -d '
+  {
+    "username": "flaviogranero",
+    "email": "flavio@inaka.net",
+    "facebook_token": "invalidfacebooktoken"
+  }
+'
+
+
 # LOGIN
 curl -vXPOST http://hyper-api-staging.inakalabs.com/login -H Content-Type:application/json -d '
   {

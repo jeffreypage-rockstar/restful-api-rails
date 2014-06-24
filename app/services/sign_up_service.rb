@@ -1,3 +1,5 @@
+require_relative "base_auth_service"
+
 class SignUpService < BaseAuthService
   def initialize(user_attrs = {})
     @user = User.new(user_attrs)

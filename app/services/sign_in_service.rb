@@ -1,3 +1,5 @@
+require_relative "base_auth_service"
+
 class SignInService < BaseAuthService
   attr_accessor :username, :password, :facebook_token, :device_id, :device_type
 

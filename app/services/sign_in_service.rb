@@ -1,4 +1,4 @@
-require_relative "base_auth_service"
+require_relative 'base_auth_service'
 
 class SignInService < BaseAuthService
   attr_accessor :username, :password, :facebook_token, :device_id, :device_type
@@ -27,7 +27,7 @@ class SignInService < BaseAuthService
       facebook_id.present? && User.find_by(facebook_id: facebook_id)
     else
       user = User.find_for_database_authentication(username: username)
-      user.valid_password?(password) ? user : nil
+      user.try(:valid_password?, password) ? user : nil
     end
   end
 end

@@ -45,20 +45,29 @@ describe Hyper::Account do
   describe 'POST /api/user with facebook_token' do
 
     before do
+      ActionMailer::Base.deliveries.clear
       # fb api stubs
-      valid = double('valid me', get_object: { 'id' => '123456' })
+      valid = double('valid me', debug_token: {
+                       'data' => {
+                         'user_id' => '123456',
+                         'is_valid' => true
+                       } })
       allow(Koala::Facebook::API).to receive(:new).
                                       with('validfacebooktoken', nil).
                                       and_return(valid)
 
-      existent = double('existent', get_object: { 'id' => user.facebook_id })
+      existent = double('existent', debug_token: {
+                          'data' => {
+                            'user_id' => user.facebook_id,
+                            'is_valid' => true
+                          } })
       allow(Koala::Facebook::API).to receive(:new).
                                       with(user.facebook_token, nil).
                                       and_return(existent)
 
       invalid = double('invalid')
       exception = Koala::Facebook::AuthenticationError.new(400, '')
-      allow(invalid).to receive(:get_object).
+      allow(invalid).to receive(:debug_token).
                                 and_raise(exception)
       allow(Koala::Facebook::API).to receive(:new).
                                        with('invalidfacebooktoken', nil).
@@ -70,6 +79,7 @@ describe Hyper::Account do
                         username: 'otherusername',
                         facebook_token: 'validfacebooktoken'
       expect(response.status).to eql 201 # created
+      expect(ActionMailer::Base.deliveries).to be_empty
     end
 
     it 'does not accepts duplicated facebook_ids' do

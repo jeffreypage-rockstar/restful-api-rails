@@ -4,8 +4,8 @@ describe Hyper::Account do
   let(:user) { create(:user) }
   let(:device) { create(:device, user: user) }
 
-  # ======== CREATING A USER ACCOUNT ==================
-  describe 'POST /api/user' do
+  # ======== CREATING A USER ACCOUNT WITH PASSWORD==================
+  describe 'POST /api/user with password' do
     it 'creates a new valid user, not confirmed' do
       post '/api/user', email: 'user@example.com',
                         username: 'username',
@@ -38,6 +38,52 @@ describe Hyper::Account do
       expect(response.status).to eql 409 # invalid
       expect(r['status_code']).to eql 'conflict'
       expect(r['error']).to match('email has already been taken')
+    end
+  end
+
+  # ======== CREATING A USER ACCOUNT WITH FB TOKEN ==================
+  describe 'POST /api/user with facebook_token' do
+
+    before do
+      # fb api stubs
+      valid = double('valid me', get_object: { 'id' => '123456' })
+      allow(Koala::Facebook::API).to receive(:new).
+                                      with('validfacebooktoken', nil).
+                                      and_return(valid)
+
+      existent = double('existent', get_object: { 'id' => user.facebook_id })
+      allow(Koala::Facebook::API).to receive(:new).
+                                      with(user.facebook_token, nil).
+                                      and_return(existent)
+
+      invalid = double('invalid')
+      exception = Koala::Facebook::AuthenticationError.new(400, '')
+      allow(invalid).to receive(:get_object).
+                                and_raise(exception)
+      allow(Koala::Facebook::API).to receive(:new).
+                                       with('invalidfacebooktoken', nil).
+                                       and_return(invalid)
+    end
+
+    it 'accepts signups with a valid facebook_token' do
+      post '/api/user', email: 'other@example.com',
+                        username: 'otherusername',
+                        facebook_token: 'validfacebooktoken'
+      expect(response.status).to eql 201 # created
+    end
+
+    it 'does not accepts duplicated facebook_ids' do
+      post '/api/user', email: 'other@example.com',
+                        username: 'otherusername',
+                        facebook_token: user.facebook_token
+      expect(response.status).to eql 409 # conflict
+    end
+
+    it 'does not accepts invalid facebook token' do
+      post '/api/user', email: 'other@example.com',
+                        username: 'otherusername',
+                        facebook_token: 'invalidfacebooktoken'
+      expect(response.status).to eql 422
     end
   end
 

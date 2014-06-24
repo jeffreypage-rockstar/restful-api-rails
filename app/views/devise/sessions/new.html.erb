@@ -1,7 +1,7 @@
 <div class="authform">
   <%= bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
     <h3>Sign in</h3>
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.text_field :username, autofocus: true %>
     <%= f.password_field :password %>
     <%= f.submit 'Sign in', class: 'button right' %>
     <% if devise_mapping.rememberable? -%>

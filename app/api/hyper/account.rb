@@ -7,20 +7,17 @@ module Hyper
       params do
         requires :email, type: String, desc: 'User email.'
         requires :username, type: String, desc: 'User username.'
-        requires :password, type: String, desc: 'User password.'
+        optional :password, type: String, desc: 'User password.'
         optional :facebook_token, type: String, desc: 'User facebook token.'
         optional :avatar_url, type: String, desc: 'User avatar url.'
         optional :device_type, type: String, desc: 'Current device type.'
       end
       post do
-        if user = User.create!(declared(params, include_missing: false).merge(
-                                password_confirmation: params[:password]
-                              ))
-          req = Hashie::Mash.new(remote_ip: env['REMOTE_ADDR'])
-          user.sign_in_from_device!(req, nil, device_type: params[:device_type])
-          header 'Location', '/user'
-          user
-        end
+        user = SignUpService.new(declared(params, include_missing: false)).call
+        req = Hashie::Mash.new(remote_ip: env['REMOTE_ADDR'])
+        user.sign_in_from_device!(req, nil, device_type: params[:device_type])
+        header 'Location', '/user'
+        user
       end
 
       # GET /user

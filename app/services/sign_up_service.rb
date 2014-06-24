@@ -1,4 +1,4 @@
-require_relative "base_auth_service"
+require_relative 'base_auth_service'
 
 class SignUpService < BaseAuthService
   def initialize(user_attrs = {})

@@ -29,8 +29,13 @@ describe Hyper::Login do
       expect(r['auth']['access_token']).to_not be_blank
     end
 
-    it 'does not authenticate an invalid user' do
+    it 'does not authenticate an invalid password' do
       post '/api/login', username: user.username, password: '123testme1'
+      expect(response.status).to eql 401
+    end
+
+    it 'does not authenticate an invalid username' do
+      post '/api/login', username: 'invalidusername', password: '123testme'
       expect(response.status).to eql 401
     end
   end

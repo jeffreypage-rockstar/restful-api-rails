@@ -9,8 +9,8 @@ feature 'Sign in', :devise do
   #   When I sign in with valid credentials
   #   Then I see an invalid credentials message
   scenario 'user cannot sign in if not registered' do
-    signin('test@example.com', 'please123')
-    expect(page).to have_content 'Invalid email or password.'
+    signin('testusername', 'please123')
+    expect(page).to have_content 'Invalid username or password.'
   end
 
   # Scenario: User can sign in with valid credentials
@@ -20,19 +20,19 @@ feature 'Sign in', :devise do
   #   Then I see a success message
   scenario 'user can sign in with valid credentials' do
     user = FactoryGirl.create(:user)
-    signin(user.email, user.password)
+    signin(user.username, user.password)
     expect(page).to have_content 'Signed in successfully.'
   end
 
-  # Scenario: User cannot sign in with wrong email
+  # Scenario: User cannot sign in with wrong username
   #   Given I exist as a user
   #   And I am not signed in
-  #   When I sign in with a wrong email
-  #   Then I see an invalid email message
-  scenario 'user cannot sign in with wrong email' do
+  #   When I sign in with a wrong username
+  #   Then I see an invalid username message
+  scenario 'user cannot sign in with wrong username' do
     user = FactoryGirl.create(:user)
-    signin('invalid@email.com', user.password)
-    expect(page).to have_content 'Invalid email or password.'
+    signin('invalidusername', user.password)
+    expect(page).to have_content 'Invalid username or password.'
   end
 
   # Scenario: User cannot sign in with wrong password
@@ -42,8 +42,8 @@ feature 'Sign in', :devise do
   #   Then I see an invalid password message
   scenario 'user cannot sign in with wrong password' do
     user = FactoryGirl.create(:user)
-    signin(user.email, 'invalidpass')
-    expect(page).to have_content 'Invalid email or password.'
+    signin(user.username, 'invalidpass')
+    expect(page).to have_content 'Invalid username or password.'
   end
 
 end

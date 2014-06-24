@@ -1,16 +1,11 @@
 require File.expand_path('../environments/api', __FILE__)
 
-Dir[File.expand_path('../../app/models/*.rb', __FILE__)].each do |f|
-  require f
-end
-Dir[File.expand_path('../../app/serializers/*.rb', __FILE__)].each do |f|
-  require f
-end
-
 require 'app/api/hyper/base'
 
-Dir[File.expand_path('../../app/api/hyper/*.rb', __FILE__)].each do |f|
-  require f
+%w(models serializers services api/hyper).each do |folder|
+  Dir[File.expand_path("../../app/#{folder}/*.rb", __FILE__)].each do |f|
+    require f
+  end
 end
 
 require 'app/api/api'

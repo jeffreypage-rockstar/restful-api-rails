@@ -61,6 +61,26 @@ describe User do
       expect(user).to_not be_valid
       expect(user.errors[:password_confirmation].first).to match('match')
     end
+
+    it 'does not accepts duplicated facebook_id' do
+      user = create(:user)
+      other = User.new(attrs.merge(facebook_id: user.facebook_id))
+      expect(other).to_not be_valid
+      expect(other.errors[:facebook_id].first).to match('taken')
+    end
+
+    it 'accepts a blank facebook_id' do
+      user = User.new(attrs.merge(facebook_id: ''))
+      expect(user).to be_valid
+    end
+
+    it 'requires facebook_id if facebook_token is present' do
+      user = User.new(attrs.merge(facebook_token: 'facebooktoken',
+                                  facebook_id: ''))
+      expect(user).to_not be_valid
+      expect(user.errors[:facebook_token].first).to match('is invalid')
+    end
+
   end
 
   describe '#sign_in_from_device!' do

@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   validates :username, presence: true,
                        uniqueness: true,
                        format: { with: /\A[a-z0-9_]*\z/ }
+  validates :facebook_id, uniqueness: true, allow_blank: true
+  validate :check_facebook_token
 
   has_many :devices
   has_many :stacks
@@ -34,5 +36,11 @@ class User < ActiveRecord::Base
 
   def downcase_username
     self.username = username.to_s.downcase
+  end
+
+  def check_facebook_token
+    if facebook_token.present? && facebook_id.blank?
+      errors.add(:facebook_token, :invalid)
+    end
   end
 end

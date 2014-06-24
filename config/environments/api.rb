@@ -6,6 +6,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..')
 require 'grape'
 require 'warden'
 require 'boot'
+require 'kaminari/grape'
 
 Bundler.require :default, :api
 require 'erb'

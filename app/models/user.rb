@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
 
   has_many :devices
   has_many :stacks
+  has_many :subscriptions
+  has_many :subscribed_stacks, through: :subscriptions, source: :stack
 
   before_validation :downcase_username
 

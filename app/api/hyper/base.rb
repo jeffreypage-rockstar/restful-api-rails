@@ -109,7 +109,7 @@ module Hyper
 
         # global exception handler, used for error notifications
         rescue_from :all do |e|
-          if Rails.env.development?
+          if Rails.env.development? || Rails.env.test?
             raise e
           else
             Raven.capture_exception(e)

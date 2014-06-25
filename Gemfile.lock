@@ -222,6 +222,10 @@ GEM
     sendgrid (1.2.0)
       json
       json
+    sentry-raven (0.9.3)
+      faraday (>= 0.7.6)
+      hashie (>= 1.1.0)
+      uuidtools
     sidekiq (3.1.4)
       celluloid (>= 0.15.2)
       connection_pool (>= 2.0.0)
@@ -255,6 +259,7 @@ GEM
     uglifier (2.5.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uuidtools (2.1.4)
     virtus (1.0.2)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
@@ -303,6 +308,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   sendgrid
+  sentry-raven
   sidekiq
   spring
   sprockets (~> 2.11.0)

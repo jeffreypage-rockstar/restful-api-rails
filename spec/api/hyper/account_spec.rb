@@ -47,31 +47,17 @@ describe Hyper::Account do
     before do
       ActionMailer::Base.deliveries.clear
       # fb api stubs
-      valid = double('valid me', debug_token: {
-                       'data' => {
-                         'user_id' => '123456',
-                         'is_valid' => true
-                       } })
-      allow(Koala::Facebook::API).to receive(:new).
-                                      with('validfacebooktoken', nil).
-                                      and_return(valid)
+      allow(FBAuthService).to receive(:get_facebook_id).
+                                      with('validfacebooktoken').
+                                      and_return('123456')
 
-      existent = double('existent', debug_token: {
-                          'data' => {
-                            'user_id' => user.facebook_id,
-                            'is_valid' => true
-                          } })
-      allow(Koala::Facebook::API).to receive(:new).
-                                      with(user.facebook_token, nil).
-                                      and_return(existent)
+      allow(FBAuthService).to receive(:get_facebook_id).
+                                      with(user.facebook_token).
+                                      and_return(user.facebook_id)
 
-      invalid = double('invalid')
-      exception = Koala::Facebook::AuthenticationError.new(400, '')
-      allow(invalid).to receive(:debug_token).
-                                and_raise(exception)
-      allow(Koala::Facebook::API).to receive(:new).
-                                       with('invalidfacebooktoken', nil).
-                                       and_return(invalid)
+      allow(FBAuthService).to receive(:get_facebook_id).
+                                       with('invalidfacebooktoken').
+                                       and_return(nil)
     end
 
     it 'accepts signups with a valid facebook_token' do

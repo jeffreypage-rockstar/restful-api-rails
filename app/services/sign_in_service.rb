@@ -1,6 +1,4 @@
-require_relative 'base_auth_service'
-
-class SignInService < BaseAuthService
+class SignInService
   attr_accessor :username, :password, :facebook_token, :device_id, :device_type
 
   def initialize(remote_ip, auth_params = {})
@@ -23,7 +21,7 @@ class SignInService < BaseAuthService
 
   def auth_user
     if facebook_token.present?
-      facebook_id = get_facebook_id(facebook_token)
+      facebook_id = FBAuthService.get_facebook_id(facebook_token)
       facebook_id.present? && User.find_by(facebook_id: facebook_id)
     else
       user = User.find_for_database_authentication(username: username)

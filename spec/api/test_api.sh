@@ -49,3 +49,11 @@ curl -vXPOST --user 49b3764c-c68a-418d-9503-ec24f205c1bf:8dedef102987d8a7b683721
 
 # GET A STACK
 curl -vXGET --user f1e46c68-6779-4755-98c2-1571872005b1:b66d285f414d67d6eef975c5c3d16f0a http://localhost:9000/stacks -H Content-Type:application/json
+
+
+curl -vXPOST http://localhost:9000/user -H Content-Type:application/json -d '
+{
+    "email": "tom.ryan@inakanetworks.com",
+    "facebook_token": "CAALBKlHV16EBAPbnjLBdK5PP9AuRnosML18uZChhQ6zNk5mnvqbDHT6RK98Mtw0IvwAh5U8sHZBZC55ZBJko2BkZC0TmTSYTe1mZCz0VySgTBzi1vvSekQYdzfUABKxpg9k9gehBNL1fwsUMwHydyL5IOQjJw5RqxErEVZBz83HlY0kF6VMX5jMZBqM2CVC9TAOtLvaHl62CfQZDZD",
+    "username": "tom"
+}'

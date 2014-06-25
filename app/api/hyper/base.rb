@@ -58,7 +58,7 @@ module Hyper
             [{
               status: 404,
               status_code: 'not_found',
-              error: message
+              error: message,
             }.to_json],
             404,
             'Content-Type' => 'application/json'
@@ -71,7 +71,8 @@ module Hyper
             [{
               status: 409,
               status_code: 'conflict',
-              error: message
+              error: message,
+              errors: e.record.try(:errors)
             }.to_json],
             409,
             'Content-Type' => 'application/json'
@@ -94,7 +95,8 @@ module Hyper
             [{
               status: status,
               status_code: code,
-              error: message
+              error: message,
+              errors: e.record.try(:errors)
             }.to_json],
             status,
             'Content-Type' => 'application/json'

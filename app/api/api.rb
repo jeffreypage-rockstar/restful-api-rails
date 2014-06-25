@@ -14,4 +14,10 @@ class API < Grape::API
   mount Hyper::Devices
   mount Hyper::Stacks
   mount Hyper::Subscriptions
+
+  add_swagger_documentation mount_path: 'api_docs',
+                            api_version: 'v1',
+                            hide_documentation_path: true,
+                            hide_format: true,
+                            base_path: Proc.new { |r| "http#{r.base_url}" }
 end

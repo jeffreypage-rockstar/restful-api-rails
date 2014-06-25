@@ -11,7 +11,7 @@ end
 require 'app/api/api'
 
 ApplicationServer = Rack::Builder.new do
-  use Rack::Static, urls: [], root: 'public', index: 'index.html'
+  use Rack::Static, urls: %w(/docs/), root: 'public/api', index: 'index.html'
 
   map '/' do
     run API

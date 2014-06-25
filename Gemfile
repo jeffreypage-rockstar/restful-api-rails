@@ -14,6 +14,7 @@ gem 'foreman'
 gem "koala", "~> 1.10.0rc"
 gem 'kaminari'
 gem 'api-pagination'
+gem 'sentry-raven'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'
@@ -33,6 +34,7 @@ group :admin do
   gem 'bootstrap-sass'
   gem 'bootstrap_form'
   gem 'sendgrid'
+  gem 'sinatra', '>= 1.3.0', :require => nil #used by sidekiq monitoring
 end
 
 group :development do

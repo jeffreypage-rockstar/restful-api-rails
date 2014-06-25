@@ -106,6 +106,16 @@ module Hyper
         rescue_from EmptyBodyException do |_e|
           Rack::Response.new([''], 204, 'Content-Type' => 'text/plain')
         end
+
+        # global exception handler, used for error notifications
+        rescue_from :all do |e|
+          if Rails.env.development?
+            raise e
+          else
+            Raven.capture_exception(e)
+            error_response(message: 'Internal server error', status: 500)
+          end
+        end
       end
     end
 

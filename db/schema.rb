@@ -37,6 +37,31 @@ ActiveRecord::Schema.define(version: 20140626204658) do
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
   add_index "admins", ["username"], name: "index_admins_on_username", unique: true, using: :btree
 
+  create_table "card_images", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string   "image_url",  null: false
+    t.text     "caption"
+    t.uuid     "card_id",    null: false
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "card_images", ["card_id"], name: "index_card_images_on_card_id", using: :btree
+
+  create_table "cards", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string   "name",                                                            null: false
+    t.text     "description"
+    t.uuid     "stack_id",                                                        null: false
+    t.uuid     "user_id",                                                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "short_id",    default: "nextval('cards_short_id_seq'::regclass)", null: false
+  end
+
+  add_index "cards", ["short_id"], name: "index_cards_on_short_id", using: :btree
+  add_index "cards", ["stack_id"], name: "index_cards_on_stack_id", using: :btree
+  add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
+
   create_table "devices", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string   "access_token",    limit: 32, null: false
     t.string   "device_type",     limit: 16

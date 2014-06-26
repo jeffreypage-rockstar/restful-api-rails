@@ -11,11 +11,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140625165821) do
+ActiveRecord::Schema.define(version: 20140626190935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
   enable_extension 'uuid-ossp'
+
+  create_table 'card_images', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
+    t.string 'image_url',  null: false
+    t.text 'caption'
+    t.uuid 'card_id',    null: false
+    t.integer 'position'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+  end
+
+  add_index 'card_images', ['card_id'], name: 'index_card_images_on_card_id', using: :btree
+
+  create_table 'cards', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
+    t.string 'name',                                                            null: false
+    t.text 'description'
+    t.uuid 'stack_id',                                                        null: false
+    t.uuid 'user_id',                                                         null: false
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.integer 'short_id',    default: "nextval('cards_short_id_seq'::regclass)", null: false
+  end
+
+  add_index 'cards', ['short_id'], name: 'index_cards_on_short_id', using: :btree
+  add_index 'cards', ['stack_id'], name: 'index_cards_on_stack_id', using: :btree
+  add_index 'cards', ['user_id'], name: 'index_cards_on_user_id', using: :btree
 
   create_table 'devices', id: :uuid, default: 'uuid_generate_v4()', force: true do |t|
     t.string 'access_token',    limit: 32, null: false
@@ -65,7 +90,6 @@ ActiveRecord::Schema.define(version: 20140625165821) do
     t.string 'unconfirmed_email'
     t.datetime 'created_at'
     t.datetime 'updated_at'
-    t.integer 'role'
     t.string 'avatar_url'
     t.string 'facebook_token'
     t.string 'facebook_id'

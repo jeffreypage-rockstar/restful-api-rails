@@ -9,7 +9,6 @@ gem 'encode_with_alphabet'
 gem 'devise'
 gem 'devise-async'
 gem 'sidekiq'
-gem 'pundit'
 gem 'pg'
 gem 'foreman'
 gem "koala", "~> 1.10.0rc"

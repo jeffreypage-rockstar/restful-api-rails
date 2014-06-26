@@ -169,8 +169,6 @@ GEM
     polyglot (0.3.5)
     puma (2.8.2)
       rack (>= 1.1, < 2.0)
-    pundit (0.2.3)
-      activesupport (>= 3.0.0)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
@@ -315,7 +313,6 @@ DEPENDENCIES
   koala (~> 1.10.0rc)
   pg
   puma
-  pundit
   quiet_assets
   rack
   rails (= 4.1.1)

@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :async, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
-  enum role: [:user]
-  after_initialize :set_default_role, if: :new_record?
 
   validates :username, presence: true,
                        uniqueness: true,
@@ -18,14 +16,6 @@ class User < ActiveRecord::Base
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
 
   before_validation :downcase_username
-
-  def set_default_role
-    self.role ||= :user
-  end
-
-  def admin?
-    true
-  end
 
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)

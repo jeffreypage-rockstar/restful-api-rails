@@ -16,5 +16,12 @@ module Features
       fill_in 'Password', with: password
       click_button 'Sign in'
     end
+
+    def admin_signin(username, password)
+      visit rails_admin.dashboard_path
+      fill_in 'Username', with: username
+      fill_in 'Password', with: password
+      click_button 'Sign in'
+    end
   end
 end

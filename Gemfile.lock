@@ -1,3 +1,22 @@
+GIT
+  remote: git://github.com/inaka/rails_admin.git
+  revision: 7e00030232350f5bd9f673ceebdc3e74a083d468
+  specs:
+    rails_admin (0.6.2)
+      builder (~> 3.1)
+      coffee-rails (~> 4.0)
+      font-awesome-rails (>= 3.0)
+      haml (~> 4.0)
+      jquery-rails (~> 3.0)
+      jquery-ui-rails (~> 4.0)
+      kaminari (~> 0.14)
+      nested_form (~> 0.3)
+      rack-pjax (~> 0.7)
+      rails (~> 4.0)
+      remotipart (~> 1.0)
+      safe_yaml (~> 1.0)
+      sass-rails (~> 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -59,6 +78,13 @@ GEM
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
+    coffee-rails (4.0.1)
+      coffee-script (>= 2.2.0)
+      railties (>= 4.0.0, < 5.0)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.7.0)
     connection_pool (2.0.0)
     daemons (1.1.9)
     database_cleaner (1.3.0)
@@ -96,6 +122,8 @@ GEM
       railties (>= 3.0.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    font-awesome-rails (4.1.0.0)
+      railties (>= 3.2, < 5.0)
     foreman (0.71.0)
       dotenv (~> 0.11.1)
       thor (~> 0.19.1)
@@ -134,6 +162,8 @@ GEM
       grape (~> 0.2, >= 0.2.1)
       json (~> 1.7, >= 1.7.4)
       trollop (~> 2.0)
+    haml (4.0.5)
+      tilt
     hashie (3.0.0)
     hike (1.2.3)
     http_parser.rb (0.6.0.beta.2)
@@ -143,6 +173,8 @@ GEM
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (4.2.1)
+      railties (>= 3.2.16)
     json (1.8.1)
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
@@ -162,6 +194,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    nested_form (0.3.2)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     orm_adapter (0.5.0)
@@ -179,6 +212,9 @@ GEM
       rack (>= 0.9.1)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
+    rack-pjax (0.7.0)
+      nokogiri (~> 1.5)
+      rack (~> 1.3)
     rack-protection (1.5.3)
       rack
     rack-respond_to (0.9.8)
@@ -205,6 +241,7 @@ GEM
     redis (3.0.7)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
+    remotipart (1.2.1)
     rspec-core (3.0.0)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.0)
@@ -221,6 +258,7 @@ GEM
       rspec-mocks (~> 3.0.0)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.0)
+    safe_yaml (1.0.3)
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -316,6 +354,7 @@ DEPENDENCIES
   quiet_assets
   rack
   rails (= 4.1.1)
+  rails_admin!
   rails_layout
   rspec-rails
   sass-rails (~> 4.0.3)

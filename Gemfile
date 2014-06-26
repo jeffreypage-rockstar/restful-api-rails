@@ -35,6 +35,7 @@ group :admin do
   gem 'bootstrap_form'
   gem 'sendgrid'
   gem 'sinatra', '>= 1.3.0', :require => nil #used by sidekiq monitoring
+  gem 'rails_admin', github: 'inaka/rails_admin'
 end
 
 group :development do

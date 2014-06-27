@@ -164,7 +164,7 @@ GEM
       trollop (~> 2.0)
     haml (4.0.5)
       tilt
-    hashie (3.0.0)
+    hashie (3.1.0)
     hike (1.2.3)
     http_parser.rb (0.6.0.beta.2)
     hub (1.12.0)

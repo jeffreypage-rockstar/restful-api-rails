@@ -8,7 +8,7 @@ module Hyper
       desc 'Create a new card with current user as owner'
       params do
         requires :name, type: String, desc: 'Card name.'
-        requires :stack_id, type: String, desc: 'Stack id where card is been'\
+        requires :stack_id, type: String, desc: 'Stack id where card is being'\
                                                 ' created.'
         optional :images, type: Array, desc: 'Card images list' do
           requires :image_url, type: String, desc: 'Image url'
@@ -92,7 +92,7 @@ module Hyper
         end
       end
 
-      # DELETE /user
+      # DELETE /cards/:id
       desc 'Deletes a card'
       route_param :id do
         delete do

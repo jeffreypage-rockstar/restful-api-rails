@@ -148,9 +148,10 @@ describe Hyper::Stacks do
 
   # ======== GETTING A STACK DETAILS ==================
 
-  describe "GET /api/stacks/:id" do
-    it "requires authentication" do
-      get "/api/stacks/1"
+  describe 'GET /api/stacks/:id' do
+    it 'requires authentication' do
+      stack = create(:stack, user: device.user)
+      get "/api/stacks/#{stack.id}"
       expect(response.status).to eql 401 # authentication
     end
 
@@ -161,6 +162,14 @@ describe Hyper::Stacks do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(stack.id)
+    end
+
+    it 'requires an id in uuid format' do
+      http_login device.id, device.access_token
+      get '/api/stacks/invalid-format', nil, @env
+      expect(response.status).to eql 400
+      r = JSON.parse(response.body)
+      expect(r['error']).to match 'uuid format'
     end
   end
 end

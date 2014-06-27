@@ -115,6 +115,14 @@ module Hyper
           Rack::Response.new([""], 204, "Content-Type" => "text/plain")
         end
 
+        rescue_from Grape::Exceptions::ValidationErrors do |e|
+          Rack::Response.new({
+            status: e.status,
+            error: e.message,
+            errors: e.errors
+          }.to_json, e.status)
+        end
+
         # global exception handler, used for error notifications
         rescue_from :all do |e|
           if Rails.env.development? || Rails.env.test?

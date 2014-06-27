@@ -31,12 +31,14 @@ module Hyper
       paginate per_page: PAGE_SIZE
       params do
         optional :stack_id, type: String, desc: 'Stack id to filter cards.'
+        optional :user_id, type: String, desc: 'User id to filter cards.'
       end
       get do
         # TODO: allow sorting by popularity
         authenticate!
         klass = Card.includes(:images)
         klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
+        klass = klass.where(user_id: params[:user_id]) if params[:user_id]
         paginate klass.recent
       end
 

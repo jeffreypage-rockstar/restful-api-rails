@@ -55,7 +55,7 @@ describe Hyper::Cards do
     end
   end
 
-  # ======== GETTING FRONT CARDS ==================
+  # ======== GETTING CARDS ==================
   describe 'GET /api/cards' do
     it 'requires authentication' do
       get '/api/cards'
@@ -79,6 +79,16 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r.size).to eql(2)
       expect(r.map { |c|c['stack_id'] }.uniq).to eql [card.stack_id]
+    end
+
+    it 'returns the user cards' do
+      create(:card, user: device.user, stack: card.stack)
+      http_login device.id, device.access_token
+      get '/api/cards', { user_id: card.user_id }, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(2)
+      expect(r.map { |c|c['user_id'] }.uniq).to eql [card.user_id]
     end
 
     it 'accepts pagination' do

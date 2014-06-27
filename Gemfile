@@ -59,8 +59,5 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
 end
-<<<<<<< HEAD
-=======
 
 gem 'acts_as_list'
->>>>>>> [#73048052] adding /cards api, with get and post to create with images

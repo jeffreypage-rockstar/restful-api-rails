@@ -10,6 +10,7 @@ module Hyper
                            desc: 'Current device id. If blank, a new device'\
                                  ' entry is created.'
       optional :device_type, type: String, desc: 'Current device type.'
+      # mutually_exclusive :password, :facebook_token
     end
     post '/login' do
       user = SignInService.new(env['REMOTE_ADDR'],

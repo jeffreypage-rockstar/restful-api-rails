@@ -14,6 +14,7 @@ class API < Grape::API
   mount Hyper::Devices
   mount Hyper::Stacks
   mount Hyper::Subscriptions
+  mount Hyper::Cards
 
   base_path_proc = Proc.new do |r|
     if Rails.env.development?

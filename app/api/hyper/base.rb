@@ -24,6 +24,10 @@ module Hyper
             credentials
           end
 
+          def permitted_params
+            declared(params, include_missing: false)
+          end
+
           def current_user
             @current_user ||= begin
               Device.where(auth_credentials).includes(:user).first.try(:user)
@@ -36,6 +40,10 @@ module Hyper
 
           def auth_error!
             error!('401 Unauthenticated', 401)
+          end
+
+          def forbidden!
+            error!('403 Forbidden', 403)
           end
 
           def validate_record!(record)

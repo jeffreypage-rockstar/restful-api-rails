@@ -15,6 +15,7 @@ gem "koala", "~> 1.10.0rc"
 gem 'kaminari'
 gem 'api-pagination'
 gem 'sentry-raven'
+gem 'hashids'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'
@@ -58,3 +59,5 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
 end
+
+gem 'acts_as_list'

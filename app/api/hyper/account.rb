@@ -11,9 +11,10 @@ module Hyper
         optional :facebook_token, type: String, desc: 'User facebook token.'
         optional :avatar_url, type: String, desc: 'User avatar url.'
         optional :device_type, type: String, desc: 'Current device type.'
+        # mutually_exclusive :password, :facebook_token
       end
       post do
-        user = SignUpService.new(declared(params, include_missing: false)).call
+        user = SignUpService.new(permitted_params).call
         req = Hashie::Mash.new(remote_ip: env['REMOTE_ADDR'])
         user.sign_in_from_device!(req, nil, device_type: params[:device_type])
         header 'Location', '/user'
@@ -37,9 +38,7 @@ module Hyper
       end
       put do
         authenticate!
-        current_user.update_attributes!(
-          declared(params, include_missing: false)
-        )
+        current_user.update_attributes!(permitted_params)
         empty_body!
       end
 

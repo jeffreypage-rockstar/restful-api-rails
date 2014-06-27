@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :stacks
   has_many :subscriptions
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
+  has_many :cards
 
   before_validation :downcase_username
 

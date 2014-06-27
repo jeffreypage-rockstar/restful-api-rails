@@ -24,6 +24,10 @@ module Hyper
             credentials
           end
 
+          def permitted_params
+            declared(params, include_missing: false)
+          end
+
           def current_user
             @current_user ||= begin
               Device.where(auth_credentials).includes(:user).first.try(:user)

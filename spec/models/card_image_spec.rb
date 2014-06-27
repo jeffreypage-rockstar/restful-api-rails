@@ -6,7 +6,7 @@ RSpec.describe CardImage, type: :model do
       {
         caption: 'My Card Image Caption',
         image_url: 'http://imageurl.com/image.jpg',
-        card_id: 1
+        card: create(:card)
       }
     end
 
@@ -15,7 +15,7 @@ RSpec.describe CardImage, type: :model do
     end
 
     it 'requires a card_id' do
-      image = CardImage.new(attrs.merge(card_id: ''))
+      image = CardImage.new(attrs.merge(card: nil))
       expect(image).to_not be_valid
     end
 

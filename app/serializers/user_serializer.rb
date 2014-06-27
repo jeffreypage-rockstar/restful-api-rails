@@ -11,4 +11,9 @@ class UserSerializer < ActiveModel::Serializer
       { device_id: device.id, access_token: device.access_token }
     end
   end
+
+  # def filter(keys)
+  #   keys.delete :auth if object.devices.empty?
+  #   keys
+  # end
 end

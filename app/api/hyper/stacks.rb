@@ -13,13 +13,9 @@ module Hyper
       end
       post do
         authenticate!
-        if stack = current_user.stacks.create!(
-                    name: params[:name],
-                    protected: params[:protected]
-                   )
-          header 'Location', "/stacks/#{stack.id}"
-          stack
-        end
+        stack = current_user.stacks.create!(permitted_params)
+        header 'Location', "/stacks/#{stack.id}"
+        stack
       end
 
       # GET /stacks
@@ -59,7 +55,7 @@ module Hyper
       route_param :id do
         get do
           authenticate!
-          Stack.find_by!(id: params[:id])
+          Stack.find(params[:id])
         end
       end
     end

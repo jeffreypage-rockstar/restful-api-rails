@@ -5,5 +5,9 @@ class Card < ActiveRecord::Base
   belongs_to :user
   has_many :images, -> { order('position ASC') },
            class_name: 'CardImage',
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :card
+  accepts_nested_attributes_for :images
+
+  scope :recent, -> { order('created_at DESC') }
 end

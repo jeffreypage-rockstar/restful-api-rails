@@ -16,7 +16,6 @@ gem 'kaminari'
 gem 'api-pagination'
 gem 'sentry-raven'
 gem 'hashids'
-gem 'acts_as_list'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'
@@ -60,3 +59,8 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
 end
+<<<<<<< HEAD
+=======
+
+gem 'acts_as_list'
+>>>>>>> [#73048052] adding /cards api, with get and post to create with images

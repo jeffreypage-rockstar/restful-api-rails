@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe Card, type: :model do
 
   describe '.create' do
+    let(:stack) { create(:stack) }
+
     let(:attrs) do
       {
         name: 'My Card Title',
         description: 'My card description',
-        user_id: 1,
-        stack_id: 1
+        stack: stack,
+        user: stack.user
       }
     end
 
@@ -22,12 +24,12 @@ RSpec.describe Card, type: :model do
     end
 
     it 'requires a user_id' do
-      stack = Card.new(attrs.merge(user_id: ''))
+      stack = Card.new(attrs.merge(user: nil))
       expect(stack).to_not be_valid
     end
 
     it 'requires a stack_id' do
-      stack = Card.new(attrs.merge(stack_id: ''))
+      stack = Card.new(attrs.merge(stack: nil))
       expect(stack).to_not be_valid
     end
 

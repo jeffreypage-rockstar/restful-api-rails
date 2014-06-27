@@ -1,5 +1,5 @@
 class Card < ActiveRecord::Base
-  validates :name, :stack_id, :user_id, presence: true
+  validates :name, :stack, :user, presence: true
 
   belongs_to :stack
   belongs_to :user

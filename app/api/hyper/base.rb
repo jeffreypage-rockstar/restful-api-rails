@@ -42,6 +42,10 @@ module Hyper
             error!('401 Unauthenticated', 401)
           end
 
+          def forbidden!
+            error!('403 Forbidden', 403)
+          end
+
           def validate_record!(record)
             if record.errors.any?
               raise ActiveRecord::RecordInvalid.new(record)

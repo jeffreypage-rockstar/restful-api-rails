@@ -63,6 +63,44 @@ module Hyper
           # Card.includes(:images).find(params[:id])
         end
       end
+
+      # PUT /cards/:id
+      desc 'Update the card data'
+      params do
+        optional :name, type: String, desc: 'New card name.'
+        optional :stack_id, type: String, desc: 'Stack id where card should'\
+                                                ' be moved.'
+        optional :images, type: Array, desc: 'Card images list to be added' do
+          requires :image_url, type: String, desc: 'Image url'
+          requires :caption, type: String, desc: 'Image caption'
+        end
+      end
+      route_param :id do
+        put do
+          authenticate!
+          card = Card.find(params[:id])
+          forbidden! if card.user_id != current_user.id
+
+          stack = Stack.find(params[:stack_id]) if params[:stack_id]
+          card_params = permitted_params
+          card_params[:images_attributes] = card_params.delete(:images)
+          card_params[:stack] = stack
+          card.update_attributes!(card_params.compact)
+          empty_body!
+        end
+      end
+
+      # DELETE /user
+      desc 'Deletes a card'
+      route_param :id do
+        delete do
+          authenticate!
+          card = Card.find(params[:id])
+          forbidden! if card.user_id != current_user.id
+          card.destroy!
+          empty_body!
+        end
+      end
     end
   end
 end

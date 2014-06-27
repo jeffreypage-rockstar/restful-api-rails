@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Hyper::Cards do
   let(:device) { create(:device) }
-  let(:card) { create(:card) }
+  let(:user) { device.user }
+  let(:card) { create(:card, user: user) }
 
   # ======== CREATING CARDS ==================
   describe 'POST /api/cards' do
@@ -111,6 +112,74 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r['id']).to eql(card.id)
       expect(r['images']).to_not be_empty
+    end
+  end
+
+  # ======== UPDATING A CARD ==================
+
+  describe 'PUT /api/cards/:id' do
+    it 'requires authentication' do
+      put '/api/cards/1', name: 'New card title'
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it 'updates the card details' do
+      http_login device.id, device.access_token
+      new_stack = create(:stack)
+      put "/api/cards/#{card.id}", { name: 'new card title',
+                                     stack_id: new_stack.id },
+          @env
+      expect(response.status).to eql 204
+    end
+
+    it 'does not allow other user update the card' do
+      http_login device.id, device.access_token
+      other_card = create(:card)
+      put "/api/cards/#{other_card.id}", { name: 'updated card title' }, @env
+      expect(response.status).to eql 403 # forbidden
+    end
+
+    it 'allows images inclusion' do
+      card.images << build(:card_image)
+      card.save
+      http_login device.id, device.access_token
+      put "/api/cards/#{card.id}", { images: [
+        { image_url: 'http://example.com/new_image.jpg',
+          caption: 'New Image'
+        }
+      ]
+        }, @env
+      expect(response.status).to eql 204
+      card.images.reload
+      expect(card.images.size).to eql 2
+    end
+  end
+
+  # ======== DELETING A CARD ==================
+
+  describe 'DELETE /api/cards/:id' do
+    it 'requires authentication' do
+      delete '/api/cards/1'
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it 'fails for an inexistent card' do
+      http_login device.id, device.access_token
+      delete "/api/cards/#{user.id}", nil, @env
+      expect(response.status).to eql 404
+    end
+
+    it 'deletes an existent card' do
+      http_login device.id, device.access_token
+      delete "/api/cards/#{card.id}", nil, @env
+      expect(response.status).to eql 204
+    end
+
+    it 'does not allow other user delete the card' do
+      http_login device.id, device.access_token
+      other_card = create(:card)
+      delete "/api/cards/#{other_card.id}", nil, @env
+      expect(response.status).to eql 403 # forbidden
     end
   end
 end

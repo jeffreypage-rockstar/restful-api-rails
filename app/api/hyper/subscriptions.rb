@@ -6,15 +6,15 @@ module Hyper
     resource :subscriptions do
 
       # POST /subscriptions
-      desc 'Subscribe the current user to a stack or a group of stacks.'
+      desc "Subscribe the current user to a stack or a group of stacks."
       params do
         requires :stacks, type: String,
-                          desc: 'Stack ids. Use commas to subscribe to a group'\
-                               ' of stacks.'
+                          desc: "Stack ids. Use commas to subscribe to a group"\
+                               " of stacks."
       end
       post do
         authenticate!
-        stacks = Stack.where(id: params[:stacks].to_s.split(','))
+        stacks = Stack.where(id: params[:stacks].to_s.split(","))
         subscriptions = stacks.map do |stack|
           current_user.subscriptions.find_or_create_by(stack: stack)
         end
@@ -22,7 +22,7 @@ module Hyper
       end
 
       # GET /subscriptions
-      desc 'Returns current user subscriptions, paginated.'
+      desc "Returns current user subscriptions, paginated."
       paginate per_page: PAGE_SIZE
       get do
         authenticate!
@@ -30,9 +30,9 @@ module Hyper
       end
 
       # DELETE /subscriptions/:stack_id
-      desc 'Unsubscribe current user from the stack'
+      desc "Unsubscribe current user from the stack"
       params do
-        requires :id, type: String, desc: 'Stack id.'
+        requires :id, type: String, desc: "Stack id."
       end
       route_param :id do
         delete do

@@ -1,7 +1,7 @@
 class FBAuthService
   def get_facebook_id(facebook_token)
     profile = graph.debug_token(facebook_token)
-    profile['data']['is_valid'] ? profile['data']['user_id'] : nil
+    profile["data"]["is_valid"] ? profile["data"]["user_id"] : nil
   rescue Koala::Facebook::AuthenticationError
     nil
   end

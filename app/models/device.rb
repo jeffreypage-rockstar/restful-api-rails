@@ -6,7 +6,7 @@ class Device < ActiveRecord::Base
   before_save :generate_access_token, on: :create
 
   scope :recent, -> do
-    where('NOT last_sign_in_at IS NULL').order('last_sign_in_at DESC')
+    where("NOT last_sign_in_at IS NULL").order("last_sign_in_at DESC")
   end
 
   def sign_in!

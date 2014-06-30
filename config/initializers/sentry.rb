@@ -1,5 +1,5 @@
-require 'raven'
-require 'raven/sidekiq'
+require "raven"
+require "raven/sidekiq"
 
 if Rails.application.secrets.dsn
   Raven.configure do |config|

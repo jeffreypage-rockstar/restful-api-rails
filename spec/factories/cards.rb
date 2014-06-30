@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :card do
-    name 'A Card'
-    description 'A card description'
+    name "A Card"
+    description "A card description"
     stack
     user
   end

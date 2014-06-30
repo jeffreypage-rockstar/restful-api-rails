@@ -22,7 +22,7 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ['User']
+        except ["User"]
       end
       export
       bulk_delete
@@ -34,13 +34,13 @@ if defined? RailsAdmin
       # history_index
       # history_show
     end
-    config.included_models = ['Admin', 'User']
+    config.included_models = ["Admin", "User"]
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
     end
     config.current_user_method(&:current_admin)
-    config.model 'User' do
+    config.model "User" do
       list do
         field :email
         field :username

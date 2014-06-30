@@ -12,7 +12,7 @@ class CreateCards < ActiveRecord::Migration
     add_index :cards, :stack_id
     add_index :cards, :user_id
 
-    add_column :cards, :short_id, 'SERIAL'
+    add_column :cards, :short_id, "SERIAL"
     add_index :cards, :short_id
   end
 end

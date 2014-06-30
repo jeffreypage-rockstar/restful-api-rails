@@ -6,5 +6,5 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :stack
 
-  scope :recent, -> { order('created_at DESC') }
+  scope :recent, -> { order("created_at DESC") }
 end

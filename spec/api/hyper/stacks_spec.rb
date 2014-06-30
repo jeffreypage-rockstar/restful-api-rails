@@ -145,4 +145,22 @@ describe Hyper::Stacks do
       expect(r['trending']['more']).to eql true
     end
   end
+
+  # ======== GETTING A STACK DETAILS ==================
+
+  describe 'GET /api/stacks/:id' do
+    it 'requires authentication' do
+      get '/api/stacks/1'
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it 'returns a stack with related stacks list' do
+      stack = create(:stack, user: device.user)
+      http_login device.id, device.access_token
+      get "/api/stacks/#{stack.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r['id']).to eql(stack.id)
+    end
+  end
 end

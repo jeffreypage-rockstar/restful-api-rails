@@ -11,10 +11,12 @@ class Card < ActiveRecord::Base
   has_many :votes, as: :votable
 
   scope :recent, -> { order("created_at DESC") }
-  
+
+  # if a user vote exists, update it. if not, creates a new vote
   def vote_by!(user, up_vote: true)
-    vote = self.votes.find_or_initialize_by(user_id: user.id)
+    vote = votes.find_or_initialize_by(user_id: user.id)
     vote.flag = up_vote
     vote.save!
+    vote
   end
 end

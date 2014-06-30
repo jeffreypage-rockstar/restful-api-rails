@@ -51,7 +51,7 @@ RSpec.describe Card, type: :model do
       expect(card.images.map(&:position)).to eql [1, 2]
     end
   end
-  
+
   describe "#vote_by!" do
     it "accepts an upvote, updating score" do
       expect(card.vote_by!(user)).to eql true
@@ -59,7 +59,7 @@ RSpec.describe Card, type: :model do
       expect(card.votes.up_votes.size).to eql 1
       expect(card.reload.score).to eql 1
     end
-    
+
     it "accepts a downvote, updating score" do
       expect(card.vote_by!(user, up_vote: false)).to eql true
       expect(card.votes.size).to eql 1
@@ -67,12 +67,12 @@ RSpec.describe Card, type: :model do
       expect(card.votes.down_votes.size).to eql 1
       expect(card.reload.score).to eql -1
     end
-    
+
     it "changes the vote if already exists" do
       card.vote_by!(user)
       expect(card.reload.score).to eql 1
       expect(card.votes.size).to eql 1
-      
+
       expect(card.vote_by!(user, up_vote: false)).to eql true
       expect(card.reload.score).to eql -1
       expect(card.votes.size).to eql 1

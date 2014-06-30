@@ -59,14 +59,29 @@ module Hyper
       end
 
       # GET /cards/:id/votes
-      desc "Returns the card votes (WIP)"
+      desc "Returns the card votes"
+      paginate per_page: PAGE_SIZE
       params do
         requires :id, type: String, desc: "Card id.", uuid: true
       end
       route_param :id do
-        get "votes" do
+        get :votes, each_serializer: VoteCardSerializer do
           authenticate!
-          # Card.includes(:images).find(params[:id])
+          paginate Card.find(params[:id]).votes.recent
+        end
+      end
+
+      # POST /cards/:id/votes
+      desc "Cast a vote to the card"
+      params do
+        requires :id, type: String, desc: "Card id.", uuid: true
+        optional :up, type: Boolean, desc: "True for up vote. Default as true.",
+                      default: true
+      end
+      route_param :id do
+        post :votes, serializer: VoteCardSerializer do
+          authenticate!
+          Card.find(params[:id]).vote_by!(current_user, up_vote: params[:up])
         end
       end
 

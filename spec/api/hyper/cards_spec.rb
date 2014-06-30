@@ -193,4 +193,69 @@ describe Hyper::Cards do
       expect(response.status).to eql 403 # forbidden
     end
   end
+
+  # ======== POSTING A CARD VOTE ==================
+
+  describe "POST /api/cards/:id/votes" do
+    it "requires authentication" do
+      post "/api/cards/#{card.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid card id" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "creates a new up_vote to the card as default" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/votes", nil, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["card_id"]).to eql card.id
+      expect(r["vote_score"]).to eql 1
+    end
+
+    it "creates a new downvote to the card" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/votes", { up: false }, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["card_id"]).to eql card.id
+      expect(r["vote_score"]).to eql -1
+    end
+  end
+
+  # ======== GETTING CARD VOTES ==================
+
+  describe "GET /api/cards/:id/votes" do
+    it "requires authentication" do
+      get "/api/cards/#{card.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid card id" do
+      http_login device.id, device.access_token
+      get "/api/cards/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "returns a card's list of votes" do
+      card.vote_by!(user)
+      other_user = create(:user)
+      card.vote_by!(other_user, up_vote: false)
+
+      http_login device.id, device.access_token
+      get "/api/cards/#{card.id}/votes", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql 2
+      expect(r.map { |v| v["user_id"] }).to eql [other_user.id, user.id]
+      expect(r.map { |v| v["card_id"] }.uniq).to eql [card.id]
+      expect(r.map { |v| v["vote_score"] }).to eql [-1, 1]
+    end
+  end
 end

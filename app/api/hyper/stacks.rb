@@ -54,7 +54,7 @@ module Hyper
       # GET /stacks/:id
       desc "Returns the stack details"
       params do
-        requires :id, type: String, desc: 'Stack id.', uuid: true
+        requires :id, type: String, desc: "Stack id.", uuid: true
       end
       route_param :id do
         get do

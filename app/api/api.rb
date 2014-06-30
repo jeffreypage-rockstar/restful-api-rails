@@ -1,4 +1,4 @@
-require_relative 'validations/uuid'
+require_relative "validations/uuid"
 
 class API < Grape::API
   format :json

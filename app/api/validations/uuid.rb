@@ -4,7 +4,7 @@ module Validation
 
     def validate_param!(attr_name, params)
       unless params[attr_name] =~ UUID_REGEX
-        raise Grape::Exceptions::Validation, param: @scope.full_name(attr_name), message: 'must be in uuid format'
+        raise Grape::Exceptions::Validation, param: @scope.full_name(attr_name), message: "must be in uuid format"
       end
     end
   end

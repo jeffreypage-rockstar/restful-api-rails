@@ -7,10 +7,10 @@ module Hyper
       optional :password, type: String, desc: "User password."
       optional :facebook_token, type: String, desc: "User facebook token."
       optional :device_id, type: String,
-                           desc: 'Current device id. If blank, a new device'\
-                                 ' entry is created.',
+                           desc: "Current device id. If blank, a new device"\
+                                 " entry is created.",
                            uuid: true
-      optional :device_type, type: String, desc: 'Current device type.'
+      optional :device_type, type: String, desc: "Current device type."
       # mutually_exclusive :password, :facebook_token
     end
     post "/login" do

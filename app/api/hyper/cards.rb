@@ -31,10 +31,10 @@ module Hyper
       paginate per_page: PAGE_SIZE
       params do
         optional :stack_id, type: String,
-                            desc: 'Stack id to filter cards.',
+                            desc: "Stack id to filter cards.",
                             uuid: true
         optional :user_id, type: String,
-                           desc: 'User id to filter cards.',
+                           desc: "User id to filter cards.",
                            uuid: true
       end
       get do
@@ -49,7 +49,7 @@ module Hyper
       # GET /cards/:id
       desc "Returns the card details"
       params do
-        requires :id, type: String, desc: 'Card id.', uuid: true
+        requires :id, type: String, desc: "Card id.", uuid: true
       end
       route_param :id do
         get do
@@ -61,7 +61,7 @@ module Hyper
       # GET /cards/:id/votes
       desc "Returns the card votes (WIP)"
       params do
-        requires :id, type: String, desc: 'Card id.', uuid: true
+        requires :id, type: String, desc: "Card id.", uuid: true
       end
       route_param :id do
         get "votes" do
@@ -73,14 +73,14 @@ module Hyper
       # PUT /cards/:id
       desc "Update the card data"
       params do
-        requires :id, type: String, desc: 'Card id', uuid: true
-        optional :name, type: String, desc: 'New card name.'
+        requires :id, type: String, desc: "Card id", uuid: true
+        optional :name, type: String, desc: "New card name."
         optional :stack_id, type: String,
-                            desc: 'Stack id where card should be moved.',
+                            desc: "Stack id where card should be moved.",
                             uuid: true
-        optional :images, type: Array, desc: 'Card images list to be added' do
-          requires :image_url, type: String, desc: 'Image url'
-          requires :caption, type: String, desc: 'Image caption'
+        optional :images, type: Array, desc: "Card images list to be added" do
+          requires :image_url, type: String, desc: "Image url"
+          requires :caption, type: String, desc: "Image caption"
         end
       end
       route_param :id do
@@ -99,9 +99,9 @@ module Hyper
       end
 
       # DELETE /cards/:id
-      desc 'Deletes a card'
+      desc "Deletes a card"
       params do
-        requires :id, type: String, desc: 'Card id', uuid: true
+        requires :id, type: String, desc: "Card id", uuid: true
       end
       route_param :id do
         delete do

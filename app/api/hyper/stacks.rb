@@ -45,8 +45,7 @@ module Hyper
       end
 
       # GET /stacks/menu
-      desc 'Returns a menu object with user created stacks, subscribed stacks,'\
-           ' and trending stacks'
+      desc 'Returns an object with user created, subscribed and trending stacks'
       get :menu, serializer: StackMenuSerializer do
         authenticate!
         StackMenu.new.load(current_user)

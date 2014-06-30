@@ -30,11 +30,8 @@ module Hyper
       desc 'Returns trending stacks, paginated'
       paginate per_page: PAGE_SIZE
       get :trending do
-        # TODO: update this to return stacks ordered by points
-        # TODO: do not return stacks users created or is already following
-        # TODO: use the decay algorithm to return the sorted list
         authenticate!
-        paginate Stack.where.not(user_id: current_user.id).recent
+        paginate Stack.trending(current_user.id)
       end
 
       # GET /stacks/names
@@ -45,6 +42,14 @@ module Hyper
       get :names, each_serializer: StackShortSerializer do
         authenticate!
         Stack.where('name ILIKE ?', "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
+      end
+
+      # GET /stacks/menu
+      desc 'Returns a menu object with user created stacks, subscribed stacks,'\
+           ' and trending stacks'
+      get :menu, serializer: StackMenuSerializer do
+        authenticate!
+        StackMenu.new.load(current_user)
       end
 
       # GET /stacks/:id

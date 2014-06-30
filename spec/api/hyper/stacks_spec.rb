@@ -102,21 +102,47 @@ describe Hyper::Stacks do
     end
   end
 
-  # ======== GETTING A STACK DETAILS ==================
-
-  describe 'GET /api/stacks/:id' do
+  # ======== GETTING STACKS FOR AUTOCOMPLETE ==================
+  describe 'GET /api/stacks/names' do
     it 'requires authentication' do
-      get '/api/stacks/1'
+      get '/api/stacks/names', q: 'name'
       expect(response.status).to eql 401 # authentication
     end
 
-    it 'returns a stack with related stacks list' do
-      stack = create(:stack, user: device.user)
+    it 'returns the stacks with name matching the query' do
+      stack = create(:stack)
       http_login device.id, device.access_token
-      get "/api/stacks/#{stack.id}", nil, @env
+      get '/api/stacks/names', { q: stack.name[0..2] }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r['id']).to eql(stack.id)
+      expect(r.size).to eql(1)
+      expect(r.first.keys).to eql(['id', 'name'])
+    end
+  end
+
+  # ======== GETTING STACK LISTS FOR THE MENU ==================
+
+  describe 'GET /api/stacks/menu' do
+    it 'requires authentication' do
+      get '/api/stacks/menu'
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it 'returns an object with user onwed, subscribed and trending stacks' do
+      stack = create(:stack, user: device.user)
+      create(:stack) # stack for trending
+      (1..10).map { create(:subscription, user: device.user) }
+      http_login device.id, device.access_token
+      get '/api/stacks/menu', nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r['subscribed_to']['stacks'].size).to eql 10
+      expect(r['subscribed_to']['more']).to eql false
+      expect(r['mine']['stacks'].size).to eql 1
+      expect(r['mine']['stacks'].first['id']).to eql stack.id
+      expect(r['mine']['more']).to eql false
+      expect(r['trending']['stacks'].size).to eql 10
+      expect(r['trending']['more']).to eql true
     end
   end
 end

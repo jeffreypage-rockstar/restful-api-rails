@@ -1,17 +1,17 @@
-env = (ENV['RACK_ENV'] || :development)
+env = (ENV["RACK_ENV"] || :development)
 
-$LOAD_PATH.unshift File.dirname(File.expand_path('../..', __FILE__))
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..')
+$LOAD_PATH.unshift File.dirname(File.expand_path("../..", __FILE__))
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), "..")
 
-require 'grape'
-require 'warden'
-require 'boot'
-require 'kaminari/grape'
+require "grape"
+require "warden"
+require "boot"
+require "kaminari/grape"
 
 Bundler.require :default, :api
-require 'erb'
+require "erb"
 
-require 'dotenv'
+require "dotenv"
 Dotenv.load
 
 module Application
@@ -20,7 +20,7 @@ module Application
   def self.secrets
     @secrets ||= begin
       secrets = ActiveSupport::OrderedOptions.new
-      all_secrets = YAML.load(ERB.new(File.read('config/secrets.yml')).result)
+      all_secrets = YAML.load(ERB.new(File.read("config/secrets.yml")).result)
       env_secrets = all_secrets[Application.config.env]
       secrets.merge!(env_secrets.symbolize_keys) if env_secrets
       secrets
@@ -38,12 +38,12 @@ end
 Rails.application ||= Application
 
 # database config
-all_db_config = YAML.load(ERB.new(File.read('config/database.yml')).result)
+all_db_config = YAML.load(ERB.new(File.read("config/database.yml")).result)
 db_config = all_db_config[Application.config.env]
 ActiveRecord::Base.default_timezone = :utc
 ActiveRecord::Base.establish_connection(db_config)
 
-Dir[File.expand_path('../../initializers/*.rb', __FILE__)].each do |f|
+Dir[File.expand_path("../../initializers/*.rb", __FILE__)].each do |f|
   require f
 end
 

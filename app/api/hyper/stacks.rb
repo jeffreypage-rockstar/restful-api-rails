@@ -6,20 +6,20 @@ module Hyper
 
     resource :stacks do
       # POST /stacks
-      desc 'Create a new stack with current user as owner'
+      desc "Create a new stack with current user as owner"
       params do
-        requires :name, type: String, desc: 'Stack name, must be unique.'
-        optional :protected, type: Boolean, desc: 'Stack visibility.'
+        requires :name, type: String, desc: "Stack name, must be unique."
+        optional :protected, type: Boolean, desc: "Stack visibility."
       end
       post do
         authenticate!
         stack = current_user.stacks.create!(permitted_params)
-        header 'Location', "/stacks/#{stack.id}"
+        header "Location", "/stacks/#{stack.id}"
         stack
       end
 
       # GET /stacks
-      desc 'Returns current user stacks, paginated'
+      desc "Returns current user stacks, paginated"
       paginate per_page: PAGE_SIZE
       get do
         authenticate!
@@ -27,7 +27,7 @@ module Hyper
       end
 
       # GET /stacks/trending
-      desc 'Returns trending stacks, paginated'
+      desc "Returns trending stacks, paginated"
       paginate per_page: PAGE_SIZE
       get :trending do
         authenticate!
@@ -35,26 +35,26 @@ module Hyper
       end
 
       # GET /stacks/names
-      desc 'Returns stacks for an autocomplete box'
+      desc "Returns stacks for an autocomplete box"
       params do
-        requires :q, type: String, desc: 'The query for stack name lookup.'
+        requires :q, type: String, desc: "The query for stack name lookup."
       end
       get :names, each_serializer: StackShortSerializer do
         authenticate!
-        Stack.where('name ILIKE ?', "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
+        Stack.where("name ILIKE ?", "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
       end
 
       # GET /stacks/menu
-      desc 'Returns an object with user created, subscribed and trending stacks'
+      desc "Returns an object with user created, subscribed and trending stacks"
       get :menu, serializer: StackMenuSerializer do
         authenticate!
         StackMenu.new.load(current_user)
       end
 
       # GET /stacks/:id
-      desc 'Returns the stack details'
+      desc "Returns the stack details"
       params do
-        requires :id, type: String, desc: 'Stack id.'
+        requires :id, type: String, desc: "Stack id."
       end
       route_param :id do
         get do

@@ -5,14 +5,14 @@ module Hyper
 
     resource :cards do
       # POST /cards
-      desc 'Create a new card with current user as owner'
+      desc "Create a new card with current user as owner"
       params do
-        requires :name, type: String, desc: 'Card name.'
-        requires :stack_id, type: String, desc: 'Stack id where card is being'\
-                                                ' created.'
-        optional :images, type: Array, desc: 'Card images list' do
-          requires :image_url, type: String, desc: 'Image url'
-          requires :caption, type: String, desc: 'Image caption'
+        requires :name, type: String, desc: "Card name."
+        requires :stack_id, type: String, desc: "Stack id where card is being"\
+                                                " created."
+        optional :images, type: Array, desc: "Card images list" do
+          requires :image_url, type: String, desc: "Image url"
+          requires :caption, type: String, desc: "Image caption"
         end
       end
       post do
@@ -22,16 +22,16 @@ module Hyper
         card_params[:user_id] = current_user.id
         stack = Stack.find(params[:stack_id])
         card = stack.cards.create!(card_params.compact)
-        header 'Location', "/cards/#{card.id}"
+        header "Location", "/cards/#{card.id}"
         card
       end
 
       # GET /cards
-      desc 'Returns front page cards or the stack cards, paginated'
+      desc "Returns front page cards or the stack cards, paginated"
       paginate per_page: PAGE_SIZE
       params do
-        optional :stack_id, type: String, desc: 'Stack id to filter cards.'
-        optional :user_id, type: String, desc: 'User id to filter cards.'
+        optional :stack_id, type: String, desc: "Stack id to filter cards."
+        optional :user_id, type: String, desc: "User id to filter cards."
       end
       get do
         # TODO: allow sorting by popularity
@@ -43,9 +43,9 @@ module Hyper
       end
 
       # GET /cards/:id
-      desc 'Returns the card details'
+      desc "Returns the card details"
       params do
-        requires :id, type: String, desc: 'Card id.'
+        requires :id, type: String, desc: "Card id."
       end
       route_param :id do
         get do
@@ -55,26 +55,26 @@ module Hyper
       end
 
       # GET /cards/:id/votes
-      desc 'Returns the card votes (WIP)'
+      desc "Returns the card votes (WIP)"
       params do
-        requires :id, type: String, desc: 'Card id.'
+        requires :id, type: String, desc: "Card id."
       end
       route_param :id do
-        get 'votes' do
+        get "votes" do
           authenticate!
           # Card.includes(:images).find(params[:id])
         end
       end
 
       # PUT /cards/:id
-      desc 'Update the card data'
+      desc "Update the card data"
       params do
-        optional :name, type: String, desc: 'New card name.'
-        optional :stack_id, type: String, desc: 'Stack id where card should'\
-                                                ' be moved.'
-        optional :images, type: Array, desc: 'Card images list to be added' do
-          requires :image_url, type: String, desc: 'Image url'
-          requires :caption, type: String, desc: 'Image caption'
+        optional :name, type: String, desc: "New card name."
+        optional :stack_id, type: String, desc: "Stack id where card should"\
+                                                " be moved."
+        optional :images, type: Array, desc: "Card images list to be added" do
+          requires :image_url, type: String, desc: "Image url"
+          requires :caption, type: String, desc: "Image caption"
         end
       end
       route_param :id do
@@ -93,7 +93,7 @@ module Hyper
       end
 
       # DELETE /cards/:id
-      desc 'Deletes a card'
+      desc "Deletes a card"
       route_param :id do
         delete do
           authenticate!

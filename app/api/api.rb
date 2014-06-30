@@ -3,8 +3,8 @@ class API < Grape::API
   formatter :json, Grape::Formatter::ActiveModelSerializers
 
   before do
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Request-Method'] = '*'
+    header["Access-Control-Allow-Origin"] = "*"
+    header["Access-Control-Request-Method"] = "*"
   end
 
   mount Hyper::Status
@@ -23,8 +23,8 @@ class API < Grape::API
       "http://#{r.host}"
     end
   end
-  add_swagger_documentation mount_path: 'api_docs',
-                            api_version: 'v1',
+  add_swagger_documentation mount_path: "api_docs",
+                            api_version: "v1",
                             hide_documentation_path: true,
                             hide_format: true,
                             base_path: base_path_proc

@@ -5,17 +5,17 @@ module Hyper
     def self.inherited(subclass)
       super
       subclass.instance_eval do
-        version 'v1', using: :accept_version_header
+        version "v1", using: :accept_version_header
         format :json
 
         helpers do
           def auth_credentials
-            credentials = { id: nil, access_token: '0' }
-            if request.env['HTTP_AUTHORIZATION']
-              auth_header = request.env['HTTP_AUTHORIZATION'].split(' ')
+            credentials = { id: nil, access_token: "0" }
+            if request.env["HTTP_AUTHORIZATION"]
+              auth_header = request.env["HTTP_AUTHORIZATION"].split(" ")
 
-              if auth_header[0] == 'Basic' && auth_header[1] != ''
-                id, token = Base64.decode64(auth_header[1]).split(':')
+              if auth_header[0] == "Basic" && auth_header[1] != ""
+                id, token = Base64.decode64(auth_header[1]).split(":")
                 credentials[:id] = id unless id.blank?
                 credentials[:access_token] = token unless token.blank?
               end
@@ -39,11 +39,11 @@ module Hyper
           end
 
           def auth_error!
-            error!('401 Unauthenticated', 401)
+            error!("401 Unauthenticated", 401)
           end
 
           def forbidden!
-            error!('403 Forbidden', 403)
+            error!("403 Forbidden", 403)
           end
 
           def validate_record!(record)
@@ -61,15 +61,15 @@ module Hyper
         end
 
         rescue_from ActiveRecord::RecordNotFound do |e|
-          message = e.message.gsub(/\s*\[.*\Z/, '')
+          message = e.message.gsub(/\s*\[.*\Z/, "")
           Rack::Response.new(
             [{
               status: 404,
-              status_code: 'not_found',
+              status_code: "not_found",
               error: message,
             }.to_json],
             404,
-            'Content-Type' => 'application/json'
+            "Content-Type" => "application/json"
           )
         end
 
@@ -78,12 +78,12 @@ module Hyper
           Rack::Response.new(
             [{
               status: 409,
-              status_code: 'conflict',
+              status_code: "conflict",
               error: message,
               errors: e.record.try(:errors)
             }.to_json],
             409,
-            'Content-Type' => 'application/json'
+            "Content-Type" => "application/json"
           )
         end
 
@@ -94,10 +94,10 @@ module Hyper
           message = e.message.downcase.capitalize
           if message =~ /has already been taken$/
             status = 409
-            code = 'conflict'
+            code = "conflict"
           else
             status = 422
-            code = 'invalid_resource'
+            code = "invalid_resource"
           end
           Rack::Response.new(
             [{
@@ -107,12 +107,12 @@ module Hyper
               errors: e.record.try(:errors)
             }.to_json],
             status,
-            'Content-Type' => 'application/json'
+            "Content-Type" => "application/json"
           )
         end
 
         rescue_from EmptyBodyException do |_e|
-          Rack::Response.new([''], 204, 'Content-Type' => 'text/plain')
+          Rack::Response.new([""], 204, "Content-Type" => "text/plain")
         end
 
         # global exception handler, used for error notifications
@@ -121,7 +121,7 @@ module Hyper
             raise e
           else
             Raven.capture_exception(e)
-            error_response(message: 'Internal server error', status: 500)
+            error_response(message: "Internal server error", status: 500)
           end
         end
       end

@@ -2,6 +2,7 @@
 
 FactoryGirl.define do
   factory :vote do
+    flag true
     user
     votable { build(:card) }
   end

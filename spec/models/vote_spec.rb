@@ -25,7 +25,7 @@ RSpec.describe Vote, type: :model do
       vote = Vote.new(attrs.merge(user: nil))
       expect(vote).to_not be_valid
     end
-
+    
     it "requires a unique vote by user+votable combination" do
       other = Vote.new(attrs.merge(votable: vote.votable, user: vote.user))
       expect(other).to_not be_valid

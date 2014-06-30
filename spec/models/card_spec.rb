@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Card, type: :model do
+  let(:card) { create(:card) }
+  let(:user) { create(:user) }
 
   describe ".create" do
     let(:stack) { create(:stack) }
@@ -40,8 +42,6 @@ RSpec.describe Card, type: :model do
   end
 
   describe "#images" do
-    let(:card) { create(:card) }
-
     it "accepts images setting positions" do
       card.images << build(:card_image)
       card.images << build(:card_image)
@@ -49,6 +49,33 @@ RSpec.describe Card, type: :model do
       card.reload
       expect(card.images.size).to eql 2
       expect(card.images.map(&:position)).to eql [1, 2]
+    end
+  end
+  
+  describe "#vote_by!" do
+    it "accepts an upvote, updating score" do
+      expect(card.vote_by!(user)).to eql true
+      expect(card.votes.size).to eql 1
+      expect(card.votes.up_votes.size).to eql 1
+      expect(card.reload.score).to eql 1
+    end
+    
+    it "accepts a downvote, updating score" do
+      expect(card.vote_by!(user, up_vote: false)).to eql true
+      expect(card.votes.size).to eql 1
+      expect(card.votes.up_votes.size).to eql 0
+      expect(card.votes.down_votes.size).to eql 1
+      expect(card.reload.score).to eql -1
+    end
+    
+    it "changes the vote if already exists" do
+      card.vote_by!(user)
+      expect(card.reload.score).to eql 1
+      expect(card.votes.size).to eql 1
+      
+      expect(card.vote_by!(user, up_vote: false)).to eql true
+      expect(card.reload.score).to eql -1
+      expect(card.votes.size).to eql 1
     end
   end
 end

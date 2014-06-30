@@ -49,8 +49,7 @@ describe Hyper::Cards do
 
     it "fails for an inexistent stack" do
       http_login device.id, device.access_token
-      post "/api/cards", { name: "My card title", stack_id: nil },
-           @env
+      post '/api/cards', { name: 'My card title', stack_id: device.id }, @env
       expect(response.status).to eql 404 # not found
     end
   end
@@ -107,9 +106,9 @@ describe Hyper::Cards do
 
   # ======== GETTING A CARD DETAILS ==================
 
-  describe "GET /api/cards/:id" do
-    it "requires authentication" do
-      get "/api/cards/1"
+  describe 'GET /api/cards/:id' do
+    it 'requires authentication' do
+      get "/api/cards/##{card.id}"
       expect(response.status).to eql 401 # authentication
     end
 
@@ -127,9 +126,11 @@ describe Hyper::Cards do
 
   # ======== UPDATING A CARD ==================
 
-  describe "PUT /api/cards/:id" do
-    it "requires authentication" do
-      put "/api/cards/1", name: "New card title"
+  describe 'PUT /api/cards/:id' do
+    it 'requires authentication' do
+      new_stack = create(:stack)
+      put "/api/cards/#{card.id}", name: 'New card title',
+                                   stack_id: new_stack.id
       expect(response.status).to eql 401 # authentication
     end
 
@@ -167,9 +168,9 @@ describe Hyper::Cards do
 
   # ======== DELETING A CARD ==================
 
-  describe "DELETE /api/cards/:id" do
-    it "requires authentication" do
-      delete "/api/cards/1"
+  describe 'DELETE /api/cards/:id' do
+    it 'requires authentication' do
+      delete "/api/cards/#{card.id}"
       expect(response.status).to eql 401 # authentication
     end
 

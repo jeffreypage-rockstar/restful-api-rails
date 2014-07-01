@@ -116,20 +116,6 @@ describe Hyper::Cards do
       next_link = 'api/cards?page=3&per_page=3>; rel="next"'
       expect(response.header["Link"]).to include(next_link)
     end
-
-    it "accepts a max_score filter" do
-      (1..10).map { |i| create(:card, score: i * 10) }
-      http_login device.id, device.access_token
-      get "/api/cards", { max_score: 50, per_page: 3 }, @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r.size).to eql(3)
-      expect(r.first["score"]).to eql(50)
-      # response headers
-      expect(response.header["Total"]).to eql("5")
-      next_link = 'api/cards?max_score=50&page=2&per_page=3>; rel="next"'
-      expect(response.header["Link"]).to include(next_link)
-    end
   end
 
   # ======== GETTING A CARD DETAILS ==================

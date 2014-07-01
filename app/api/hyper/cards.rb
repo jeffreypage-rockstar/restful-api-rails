@@ -36,9 +36,6 @@ module Hyper
         optional :user_id, type: String,
                            desc: "User id to filter cards",
                            uuid: true
-        optional :max_score, type: Integer,
-                             desc: "Returns cards with popularity score"\
-                                   " lower than max_score parameter"
         optional :order_by, type: String,
                             values: %w(newest popularity),
                             default: "newest",
@@ -49,7 +46,6 @@ module Hyper
         klass = Card.includes(:images)
         klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
         klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-        klass = klass.max_score(params[:max_score]) if params[:max_score]
         paginate klass.send(params[:order_by])
       end
 

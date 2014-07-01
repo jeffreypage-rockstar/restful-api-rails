@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140626204658) do
+ActiveRecord::Schema.define(version: 20140630191953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,8 +56,10 @@ ActiveRecord::Schema.define(version: 20140626204658) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "short_id",    default: "nextval('cards_short_id_seq'::regclass)", null: false
+    t.integer "score",       default: 0
   end
 
+  add_index "cards", ["score"], name: "index_cards_on_score", using: :btree
   add_index "cards", ["short_id"], name: "index_cards_on_short_id", using: :btree
   add_index "cards", ["stack_id"], name: "index_cards_on_stack_id", using: :btree
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
@@ -120,5 +122,17 @@ ActiveRecord::Schema.define(version: 20140626204658) do
   add_index "users", ["facebook_id"], name: "index_users_on_facebook_id", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+
+  create_table "votes", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid "votable_id",                  null: false
+    t.string "votable_type",                null: false
+    t.uuid "user_id",                     null: false
+    t.boolean "flag",         default: true
+    t.integer "weight",       default: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "votes", ["votable_id", "votable_type", "user_id"], name: "index_votes_on_votable_id_and_votable_type_and_user_id", unique: true, using: :btree
 
 end

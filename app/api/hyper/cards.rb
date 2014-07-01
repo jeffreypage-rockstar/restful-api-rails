@@ -30,22 +30,29 @@ module Hyper
       desc "Returns front page cards or the stack cards, paginated"
       paginate per_page: PAGE_SIZE
       params do
-        optional :stack_id, type: String, desc: "Stack id to filter cards."
-        optional :user_id, type: String, desc: "User id to filter cards."
+        optional :stack_id, type: String,
+                            desc: "Stack id to filter cards",
+                            uuid: true
+        optional :user_id, type: String,
+                           desc: "User id to filter cards",
+                           uuid: true
+        optional :order_by, type: String,
+                            values: %w(newest popularity),
+                            default: "newest",
+                            desc: "Results ordering (newest|popularity)"
       end
       get do
-        # TODO: allow sorting by popularity
         authenticate!
         klass = Card.includes(:images)
         klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
         klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-        paginate klass.recent
+        paginate klass.send(params[:order_by])
       end
 
       # GET /cards/:id
       desc "Returns the card details"
       params do
-        requires :id, type: String, desc: "Card id."
+        requires :id, type: String, desc: "Card id.", uuid: true
       end
       route_param :id do
         get do
@@ -55,23 +62,40 @@ module Hyper
       end
 
       # GET /cards/:id/votes
-      desc "Returns the card votes (WIP)"
+      desc "Returns the card votes"
+      paginate per_page: PAGE_SIZE
       params do
-        requires :id, type: String, desc: "Card id."
+        requires :id, type: String, desc: "Card id.", uuid: true
       end
       route_param :id do
-        get "votes" do
+        get :votes, each_serializer: VoteCardSerializer do
           authenticate!
-          # Card.includes(:images).find(params[:id])
+          paginate Card.find(params[:id]).votes.recent
+        end
+      end
+
+      # POST /cards/:id/votes
+      desc "Cast a vote to the card"
+      params do
+        requires :id, type: String, desc: "Card id.", uuid: true
+        optional :kind, type: String, values: %w(up down), default: "up",
+                        desc: "Vote kind can be up or down. Default is up."
+      end
+      route_param :id do
+        post :votes, serializer: VoteCardSerializer do
+          authenticate!
+          Card.find(params[:id]).vote_by!(current_user, kind: params[:kind])
         end
       end
 
       # PUT /cards/:id
       desc "Update the card data"
       params do
+        requires :id, type: String, desc: "Card id", uuid: true
         optional :name, type: String, desc: "New card name."
-        optional :stack_id, type: String, desc: "Stack id where card should"\
-                                                " be moved."
+        optional :stack_id, type: String,
+                            desc: "Stack id where card should be moved.",
+                            uuid: true
         optional :images, type: Array, desc: "Card images list to be added" do
           requires :image_url, type: String, desc: "Image url"
           requires :caption, type: String, desc: "Image caption"
@@ -94,6 +118,9 @@ module Hyper
 
       # DELETE /cards/:id
       desc "Deletes a card"
+      params do
+        requires :id, type: String, desc: "Card id", uuid: true
+      end
       route_param :id do
         delete do
           authenticate!

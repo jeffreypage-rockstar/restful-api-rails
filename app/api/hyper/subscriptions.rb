@@ -32,7 +32,7 @@ module Hyper
       # DELETE /subscriptions/:stack_id
       desc "Unsubscribe current user from the stack"
       params do
-        requires :id, type: String, desc: "Stack id."
+        requires :id, type: String, desc: "Stack id.", uuid: true
       end
       route_param :id do
         delete do

@@ -10,6 +10,7 @@ describe Hyper::Cards do
     it "requires authentication" do
       post "/api/cards",  name: "My card title", stack_id: card.stack_id
       expect(response.status).to eql 401 # authentication
+      expect(response.header["WWW-Authenticate"]).to eql "Basic realm=\"Hyper\""
     end
 
     it "creates a new valid card" do
@@ -49,8 +50,7 @@ describe Hyper::Cards do
 
     it "fails for an inexistent stack" do
       http_login device.id, device.access_token
-      post "/api/cards", { name: "My card title", stack_id: nil },
-           @env
+      post "/api/cards", { name: "My card title", stack_id: device.id }, @env
       expect(response.status).to eql 404 # not found
     end
   end
@@ -81,6 +81,19 @@ describe Hyper::Cards do
       expect(r.map { |c|c["stack_id"] }.uniq).to eql [card.stack_id]
     end
 
+    it "returns the stack cards ordered by popularity" do
+      new_card = create(:card, user: device.user, stack: card.stack)
+      new_card.vote_by!(device.user)
+      http_login device.id, device.access_token
+      get "/api/cards", { stack_id: card.stack_id, order_by: "popularity" },
+          @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(2)
+      expect(r.first["id"]).to eql(new_card.id)
+      expect(r.map { |c|c["score"] }.uniq).to eql [1, 0]
+    end
+
     it "returns the user cards" do
       create(:card, user: device.user, stack: card.stack)
       http_login device.id, device.access_token
@@ -109,7 +122,7 @@ describe Hyper::Cards do
 
   describe "GET /api/cards/:id" do
     it "requires authentication" do
-      get "/api/cards/1"
+      get "/api/cards/#{card.id}"
       expect(response.status).to eql 401 # authentication
     end
 
@@ -129,7 +142,9 @@ describe Hyper::Cards do
 
   describe "PUT /api/cards/:id" do
     it "requires authentication" do
-      put "/api/cards/1", name: "New card title"
+      new_stack = create(:stack)
+      put "/api/cards/#{card.id}", name: "New card title",
+                                   stack_id: new_stack.id
       expect(response.status).to eql 401 # authentication
     end
 
@@ -169,7 +184,7 @@ describe Hyper::Cards do
 
   describe "DELETE /api/cards/:id" do
     it "requires authentication" do
-      delete "/api/cards/1"
+      delete "/api/cards/#{card.id}"
       expect(response.status).to eql 401 # authentication
     end
 
@@ -190,6 +205,71 @@ describe Hyper::Cards do
       other_card = create(:card)
       delete "/api/cards/#{other_card.id}", nil, @env
       expect(response.status).to eql 403 # forbidden
+    end
+  end
+
+  # ======== POSTING A CARD VOTE ==================
+
+  describe "POST /api/cards/:id/votes" do
+    it "requires authentication" do
+      post "/api/cards/#{card.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid card id" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "creates a new up_vote to the card as default" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/votes", nil, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["card_id"]).to eql card.id
+      expect(r["vote_score"]).to eql 1
+    end
+
+    it "creates a new downvote to the card" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/votes", { kind: "down" }, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["card_id"]).to eql card.id
+      expect(r["vote_score"]).to eql -1
+    end
+  end
+
+  # ======== GETTING CARD VOTES ==================
+
+  describe "GET /api/cards/:id/votes" do
+    it "requires authentication" do
+      get "/api/cards/#{card.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid card id" do
+      http_login device.id, device.access_token
+      get "/api/cards/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "returns a card's list of votes" do
+      card.vote_by!(user)
+      other_user = create(:user)
+      card.vote_by!(other_user, kind: "down")
+
+      http_login device.id, device.access_token
+      get "/api/cards/#{card.id}/votes", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql 2
+      expect(r.map { |v| v["user_id"] }).to eql [other_user.id, user.id]
+      expect(r.map { |v| v["card_id"] }.uniq).to eql [card.id]
+      expect(r.map { |v| v["vote_score"] }).to eql [-1, 1]
     end
   end
 end

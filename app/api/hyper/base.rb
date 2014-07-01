@@ -39,7 +39,9 @@ module Hyper
           end
 
           def auth_error!
-            error!("401 Unauthenticated", 401)
+            error!("401 Unauthenticated", 401,
+                   "WWW-Authenticate" => "Basic realm=\"Hyper\""
+                  )
           end
 
           def forbidden!
@@ -113,6 +115,14 @@ module Hyper
 
         rescue_from EmptyBodyException do |_e|
           Rack::Response.new([""], 204, "Content-Type" => "text/plain")
+        end
+
+        rescue_from Grape::Exceptions::ValidationErrors do |e|
+          Rack::Response.new({
+            status: e.status,
+            error: e.message,
+            errors: e.errors
+          }.to_json, e.status)
         end
 
         # global exception handler, used for error notifications

@@ -82,13 +82,13 @@ module Hyper
       desc "Cast a vote to the card"
       params do
         requires :id, type: String, desc: "Card id.", uuid: true
-        optional :up, type: Boolean, desc: "True for up vote. Default as true.",
-                      default: true
+        optional :kind, type: String, values: %w(up down), default: "up",
+                        desc: "Vote kind can be up or down. Default is up."
       end
       route_param :id do
         post :votes, serializer: VoteCardSerializer do
           authenticate!
-          Card.find(params[:id]).vote_by!(current_user, up_vote: params[:up])
+          Card.find(params[:id]).vote_by!(current_user, kind: params[:kind])
         end
       end
 

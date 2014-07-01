@@ -248,7 +248,7 @@ describe Hyper::Cards do
 
     it "creates a new downvote to the card" do
       http_login device.id, device.access_token
-      post "/api/cards/#{card.id}/votes", { up: false }, @env
+      post "/api/cards/#{card.id}/votes", { kind: "down" }, @env
       expect(response.status).to eql 201 # created
       r = JSON.parse(response.body)
       expect(r["user_id"]).to eql user.id
@@ -274,7 +274,7 @@ describe Hyper::Cards do
     it "returns a card's list of votes" do
       card.vote_by!(user)
       other_user = create(:user)
-      card.vote_by!(other_user, up_vote: false)
+      card.vote_by!(other_user, kind: "down")
 
       http_login device.id, device.access_token
       get "/api/cards/#{card.id}/votes", nil, @env

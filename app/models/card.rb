@@ -16,9 +16,9 @@ class Card < ActiveRecord::Base
   scope :popularity, -> { order("score DESC") }
 
   # if a user vote exists, update it. if not, creates a new vote
-  def vote_by!(user, up_vote: true)
+  def vote_by!(user, kind: :up)
     vote = votes.find_or_initialize_by(user_id: user.id)
-    vote.flag = up_vote
+    vote.kind = kind
     vote.save!
     vote
   end

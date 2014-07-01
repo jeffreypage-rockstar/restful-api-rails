@@ -1,4 +1,6 @@
 class Vote < ActiveRecord::Base
+  KINDS = %w(up down)
+
   validates :votable, :user, presence: true
 
   validates :user_id, uniqueness: { scope: :votable_id }
@@ -19,6 +21,11 @@ class Vote < ActiveRecord::Base
 
   def down_vote?
     !flag?
+  end
+
+  def kind=(value)
+    return unless KINDS.include?(value.to_s)
+    self.flag = value.to_s == "up"
   end
 
   def vote_score

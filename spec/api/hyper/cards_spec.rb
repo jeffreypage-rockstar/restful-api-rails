@@ -122,7 +122,7 @@ describe Hyper::Cards do
 
   describe "GET /api/cards/:id" do
     it "requires authentication" do
-      get "/api/cards/##{card.id}"
+      get "/api/cards/#{card.id}"
       expect(response.status).to eql 401 # authentication
     end
 

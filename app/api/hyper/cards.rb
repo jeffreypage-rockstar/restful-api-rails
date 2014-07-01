@@ -45,7 +45,6 @@ module Hyper
                             desc: "Results ordering (newest|popularity)"
       end
       get do
-        # TODO: allow sorting by popularity
         authenticate!
         klass = Card.includes(:images)
         klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]

@@ -39,7 +39,9 @@ module Hyper
           end
 
           def auth_error!
-            error!("401 Unauthenticated", 401)
+            error!("401 Unauthenticated", 401,
+                   "WWW-Authenticate" => "Basic realm=\"Hyper\""
+                  )
           end
 
           def forbidden!

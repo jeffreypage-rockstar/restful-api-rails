@@ -1,5 +1,5 @@
 class VoteCardSerializer < ActiveModel::Serializer
-  attributes :user_id, :vote_score, :card_id
+  attributes :user_id, :kind, :vote_score, :card_id, :created_at
 
   def card_id
     object.votable_id

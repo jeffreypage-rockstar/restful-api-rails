@@ -150,7 +150,7 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
-    grape-active_model_serializers (1.0.1)
+    grape-active_model_serializers (1.1.0)
       active_model_serializers (>= 0.8.1)
       grape (~> 0.3)
     grape-entity (0.4.3)

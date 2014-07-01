@@ -136,6 +136,17 @@ describe Hyper::Cards do
       expect(r["id"]).to eql(card.id)
       expect(r["images"]).to_not be_empty
     end
+
+    it "returns my_vote with the card response" do
+      http_login device.id, device.access_token
+      card.vote_by!(user)
+      get "/api/cards/#{card.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(card.id)
+      expect(r["my_vote"]["kind"]).to eql "up"
+      expect(r["my_vote"]["vote_score"]).to eql 1
+    end
   end
 
   # ======== UPDATING A CARD ==================

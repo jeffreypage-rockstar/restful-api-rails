@@ -31,11 +31,18 @@ module Hyper
       paginate per_page: PAGE_SIZE
       params do
         optional :stack_id, type: String,
-                            desc: "Stack id to filter cards.",
+                            desc: "Stack id to filter cards",
                             uuid: true
         optional :user_id, type: String,
-                           desc: "User id to filter cards.",
+                           desc: "User id to filter cards",
                            uuid: true
+        optional :max_score, type: Integer,
+                             desc: "Returns cards with popularity score"\
+                                   " lower than max_score parameter"
+        optional :order_by, type: String,
+                            values: %w(newest popularity),
+                            default: "newest",
+                            desc: "Results ordering (newest|popularity)"
       end
       get do
         # TODO: allow sorting by popularity
@@ -43,7 +50,8 @@ module Hyper
         klass = Card.includes(:images)
         klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
         klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-        paginate klass.recent
+        klass = klass.max_score(params[:max_score]) if params[:max_score]
+        paginate klass.send(params[:order_by])
       end
 
       # GET /cards/:id

@@ -1,5 +1,6 @@
 class Card < ActiveRecord::Base
   validates :name, :stack, :user, presence: true
+  attr_readonly :score
 
   belongs_to :stack
   belongs_to :user
@@ -10,7 +11,9 @@ class Card < ActiveRecord::Base
   accepts_nested_attributes_for :images
   has_many :votes, as: :votable
 
-  scope :recent, -> { order("created_at DESC") }
+  scope :max_score, ->(score) { where("score <= ?", score) }
+  scope :newest, -> { order("created_at DESC") }
+  scope :popularity, -> { order("score DESC") }
 
   # if a user vote exists, update it. if not, creates a new vote
   def vote_by!(user, up_vote: true)

@@ -21,18 +21,18 @@ RSpec.describe Card, type: :model do
     end
 
     it "requires a name" do
-      stack = Card.new(attrs.merge(name: ""))
-      expect(stack).to_not be_valid
+      card = Card.new(attrs.merge(name: ""))
+      expect(card).to_not be_valid
     end
 
     it "requires a user_id" do
-      stack = Card.new(attrs.merge(user: nil))
-      expect(stack).to_not be_valid
+      card = Card.new(attrs.merge(user: nil))
+      expect(card).to_not be_valid
     end
 
     it "requires a stack_id" do
-      stack = Card.new(attrs.merge(stack: nil))
-      expect(stack).to_not be_valid
+      card = Card.new(attrs.merge(stack: nil))
+      expect(card).to_not be_valid
     end
 
     it "generates a short_id on save" do

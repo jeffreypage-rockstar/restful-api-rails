@@ -7,6 +7,7 @@ RSpec.describe Stack, type: :model do
     let(:attrs) do
       {
         name: "My Stack Title",
+        description: "My stack description",
         user_id: 1
       }
     end

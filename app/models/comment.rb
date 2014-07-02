@@ -1,20 +1,25 @@
 class Comment < ActiveRecord::Base
-  validates :user, :card, :presence => true
-  
+  include Votable
+  validates :user, :card, presence: true
+
   belongs_to :user
   belongs_to :card
-  belongs_to :replying, :class_name => "Card"
-  
+  belongs_to :replying, class_name: "Card"
+
   store_accessor :mentions
-  
+
   before_save :extract_mentions
-  
-  private #===============================================================
-  
+
+  scope :max_score, ->(score) { where("score <= ?", score) }
+  scope :newest, -> { order("created_at DESC") }
+  scope :popularity, -> { order("score DESC") }
+
+  private # ===============================================================
+
   def extract_mentions
-    usernames = self.body.scan(/@([[:alnum:].]+)/i).flatten
+    usernames = body.scan(/@([[:alnum:].]+)/i).flatten
     users = User.where(username: usernames)
-    self.mentions = users.inject({}) do |hash,item|
+    self.mentions = users.inject({}) do |hash, item|
       hash[item.username] = item.id
       hash
     end

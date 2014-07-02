@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :comment do
-    user_id ""
+    body "A comment wihout mentions"
+    user
+    card
   end
 end

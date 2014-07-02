@@ -23,6 +23,10 @@ class Vote < ActiveRecord::Base
     !flag?
   end
 
+  def kind
+    up_vote? ? "up" : "down"
+  end
+
   def kind=(value)
     return unless KINDS.include?(value.to_s)
     self.flag = value.to_s == "up"

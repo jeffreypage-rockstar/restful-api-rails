@@ -3,6 +3,7 @@
 FactoryGirl.define do
   factory :stack do
     sequence(:name) { |n| "Stack Title #{n}" }
+    description "Stack description"
     user
   end
 end

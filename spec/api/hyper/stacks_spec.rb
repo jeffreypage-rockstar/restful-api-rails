@@ -12,10 +12,15 @@ describe Hyper::Stacks do
 
     it "creates a new valid stack" do
       http_login device.id, device.access_token
-      post "/api/stacks", { name: "My Stack Title", protected: true }, @env
+      post "/api/stacks", {
+        name: "My Stack Title",
+        description: "My Stack Description",
+        protected: true
+      }, @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r["name"]).to eql "My Stack Title"
+      expect(r["description"]).to eql "My Stack Description"
       stack_id = r["id"]
       expect(stack_id).to_not be_blank
       expect(r["protected"]).to eql true

@@ -9,6 +9,7 @@ module Hyper
       desc "Create a new stack with current user as owner"
       params do
         requires :name, type: String, desc: "Stack name, must be unique."
+        optional :description, type: String, desc: "Stack description."
         optional :protected, type: Boolean, desc: "Stack visibility."
       end
       post do

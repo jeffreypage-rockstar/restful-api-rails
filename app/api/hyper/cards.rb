@@ -1,5 +1,5 @@
 module Hyper
-  # api to create a user and/or get the current user data
+  # api to manage cards
   class Cards < Base
     PAGE_SIZE = 30
 

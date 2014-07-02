@@ -1,11 +1,11 @@
 module Hyper
-  # api to create a user and/or get the current user data
+  # api to manage card comments
   class Comments < Base
     PAGE_SIZE = 30
 
     namespace "cards/:card_id" do
       params do
-        requires :card_id, type: String, desc: "A Card id."
+        requires :card_id, type: String, desc: "A Card id.", uuid: true
       end
 
       resource :comments do
@@ -41,6 +41,35 @@ module Hyper
           klass = Comment
           klass = klass.where(user_id: params[:user_id]) if params[:user_id]
           paginate klass.send(params[:order_by])
+        end
+      end
+    end
+
+    resource :comments do
+      # GET /comments/:id
+      desc "Returns the comment details"
+      params do
+        requires :id, type: String, desc: "Comment id.", uuid: true
+      end
+      route_param :id do
+        get do
+          authenticate!
+          Comment.find(params[:id])
+        end
+      end
+
+      # DELETE /comments/:id
+      desc "Deletes a comment"
+      params do
+        requires :id, type: String, desc: "Comment id", uuid: true
+      end
+      route_param :id do
+        delete do
+          authenticate!
+          comment = Comment.find(params[:id])
+          forbidden! if comment.user_id != current_user.id
+          comment.destroy!
+          empty_body!
         end
       end
     end

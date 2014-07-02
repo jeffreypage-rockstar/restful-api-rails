@@ -86,4 +86,53 @@ describe Hyper::Cards do
       expect(response.header["Link"]).to include(link)
     end
   end
+
+  # ======== GETTING A COMMENT DETAILS ==================
+
+  describe "GET /api/comments/:id" do
+    it "requires authentication" do
+      get "/api/comments/#{comment.id}"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "returns a comment details, including my vote" do
+      http_login device.id, device.access_token
+      comment.vote_by!(user)
+      get "/api/comments/#{comment.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(comment.id)
+      expect(r["score"]).to eql 1
+      expect(r["my_vote"]["kind"]).to eql "up"
+      expect(r["my_vote"]["vote_score"]).to eql 1
+    end
+  end
+
+  # ======== DELETING A COMMENT ==================
+
+  describe "DELETE /api/comments/:id" do
+    it "requires authentication" do
+      delete "/api/comments/#{comment.id}"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "fails for an inexistent comment" do
+      http_login device.id, device.access_token
+      delete "/api/comments/#{user.id}", nil, @env
+      expect(response.status).to eql 404
+    end
+
+    it "deletes an existent comment" do
+      http_login device.id, device.access_token
+      delete "/api/comments/#{comment.id}", nil, @env
+      expect(response.status).to eql 204
+    end
+
+    it "does not allow other user delete the card" do
+      http_login device.id, device.access_token
+      other_comment = create(:comment)
+      delete "/api/comments/#{other_comment.id}", nil, @env
+      expect(response.status).to eql 403 # forbidden
+    end
+  end
 end

@@ -9,7 +9,8 @@ describe Hyper::Account do
     it "creates a new valid user, not confirmed" do
       post "/api/user", email: "user@example.com",
                         username: "username",
-                        password: "123testme"
+                        password: "123testme",
+                        location: "New York"
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r["email"]).to eql "user@example.com"
@@ -17,6 +18,7 @@ describe Hyper::Account do
       expect(r["confirmed"]).to eql false
       expect(r["auth"]["device_id"]).to_not be_blank
       expect(r["auth"]["access_token"]).to_not be_blank
+      expect(r["location"]).to eql "New York"
       expect(response.header["Location"]).to match "\/user"
     end
 
@@ -122,6 +124,7 @@ describe Hyper::Account do
       http_login device.id, device.access_token
       put "/api/user",
           { avatar_url: "http://new_avatar_url",
+            location: "New York, NY",
             facebook_token: "valid_facebook_token"
           }, @env
       expect(response.status).to eql 204

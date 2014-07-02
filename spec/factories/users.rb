@@ -6,6 +6,7 @@ FactoryGirl.define do
     sequence(:facebook_token) { |n| "abdcef#{n}" }
     avatar_url "http://placehold.it/80x80"
     password "please123"
+    location "New York, NY"
 
     confirmed_at 1.day.ago
   end

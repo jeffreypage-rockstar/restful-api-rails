@@ -10,6 +10,7 @@ module Hyper
         optional :password, type: String, desc: "User password."
         optional :facebook_token, type: String, desc: "User facebook token."
         optional :avatar_url, type: String, desc: "User avatar url."
+        optional :location, type: String, desc: "User location."
         optional :device_type, type: String, desc: "Current device type."
         # mutually_exclusive :password, :facebook_token
       end
@@ -35,6 +36,7 @@ module Hyper
         optional :username, type: String, desc: "User username."
         optional :facebook_token, type: String, desc: "User facebook token."
         optional :avatar_url, type: String, desc: "User avatar url"
+        optional :location, type: String, desc: "User location."
       end
       put do
         authenticate!

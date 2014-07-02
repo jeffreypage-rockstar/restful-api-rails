@@ -13,6 +13,9 @@ module Hyper
         desc "Create a new comment with current user as owner"
         params do
           optional :body, type: String, desc: "Comment body text"
+          optional :replying_id, type: String,
+                                 desc: "Replyed comment id",
+                                 uuid: true
         end
         post do
           authenticate!

@@ -16,7 +16,10 @@ describe Hyper::Cards do
 
     it "creates a new valid comment" do
       http_login device.id, device.access_token
-      post "/api/cards/#{card.id}/comments", { body: "My card comment" }, @env
+      parent = create(:comment, card: card)
+      post "/api/cards/#{card.id}/comments", { body: "My card comment",
+                                               replying_id: parent.id
+                                              }, @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r["body"]).to eql "My card comment"
@@ -24,6 +27,7 @@ describe Hyper::Cards do
       expect(comment_id).to_not be_blank
       expect(r["card_id"]).to eql card.id
       expect(r["user_id"]).to eql device.user_id
+      expect(r["replying_id"]).to eql parent.id
       expect(r["score"]).to eql 0
       expect(response.header["Location"]).to match "\/comments\/#{comment_id}"
     end
@@ -105,6 +109,17 @@ describe Hyper::Cards do
       expect(r["score"]).to eql 1
       expect(r["my_vote"]["kind"]).to eql "up"
       expect(r["my_vote"]["vote_score"]).to eql 1
+    end
+
+    it "returns the comment details with mentions" do
+      http_login device.id, device.access_token
+      comment.body = "a comment replying @#{user.username}"
+      comment.save
+      get "/api/comments/#{comment.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(comment.id)
+      expect(r["mentions"][user.username]).to eql user.id
     end
   end
 

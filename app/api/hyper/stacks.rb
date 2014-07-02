@@ -1,5 +1,5 @@
 module Hyper
-  # api to create a user and/or get the current user data
+  # api to manage stacks
   class Stacks < Base
     PAGE_SIZE = 30
     AUTOCOMPLETE_SIZE = 10

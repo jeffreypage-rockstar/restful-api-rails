@@ -12,6 +12,7 @@ class Comment < ActiveRecord::Base
 
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
+  scope :oldest, -> { order("created_at ASC") }
   scope :popularity, -> { order("score DESC") }
 
   private # ===============================================================

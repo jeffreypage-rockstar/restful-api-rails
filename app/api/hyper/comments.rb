@@ -75,6 +75,33 @@ module Hyper
           empty_body!
         end
       end
+
+      # GET /comments/:id/votes
+      desc "Returns the comment votes"
+      paginate per_page: PAGE_SIZE
+      params do
+        requires :id, type: String, desc: "Comment id.", uuid: true
+      end
+      route_param :id do
+        get :votes, each_serializer: VoteCommentSerializer do
+          authenticate!
+          paginate Comment.find(params[:id]).votes.recent
+        end
+      end
+
+      # POST /comments/:id/votes
+      desc "Cast a vote to the comment"
+      params do
+        requires :id, type: String, desc: "Comment id.", uuid: true
+        optional :kind, type: String, values: %w(up down), default: "up",
+                        desc: "Vote kind can be up or down. Default is up."
+      end
+      route_param :id do
+        post :votes, serializer: VoteCommentSerializer do
+          authenticate!
+          Comment.find(params[:id]).vote_by!(current_user, kind: params[:kind])
+        end
+      end
     end
   end
 end

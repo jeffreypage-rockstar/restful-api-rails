@@ -10,6 +10,7 @@ class Card < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :card
   accepts_nested_attributes_for :images
+  has_many :comments, -> { order("created_at ASC") }
 
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }

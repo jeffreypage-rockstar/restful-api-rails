@@ -17,10 +17,10 @@ class Comment < ActiveRecord::Base
   private # ===============================================================
 
   def extract_mentions
-    usernames = body.scan(/@([[:alnum:].]+)/i).flatten
+    usernames = body.to_s.scan(/@([[:alnum:].]+)/i).flatten
     users = User.where(username: usernames)
-    self.mentions = users.inject({}) do |hash, item|
-      hash[item.username] = item.id
+    self.mentions = users.inject({}) do |hash, user|
+      hash[user.username] = user.id
       hash
     end
   end

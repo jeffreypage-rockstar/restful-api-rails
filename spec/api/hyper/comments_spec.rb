@@ -150,4 +150,69 @@ describe Hyper::Cards do
       expect(response.status).to eql 403 # forbidden
     end
   end
+
+  # ======== POSTING A COMMENT VOTE ==================
+
+  describe "POST /api/comments/:id/votes" do
+    it "requires authentication" do
+      post "/api/comments/#{comment.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid comment id" do
+      http_login device.id, device.access_token
+      post "/api/comments/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "creates a new up_vote to the comment as default" do
+      http_login device.id, device.access_token
+      post "/api/comments/#{comment.id}/votes", nil, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["comment_id"]).to eql comment.id
+      expect(r["vote_score"]).to eql 1
+    end
+
+    it "creates a new downvote to the card" do
+      http_login device.id, device.access_token
+      post "/api/comments/#{comment.id}/votes", { kind: "down" }, @env
+      expect(response.status).to eql 201 # created
+      r = JSON.parse(response.body)
+      expect(r["user_id"]).to eql user.id
+      expect(r["comment_id"]).to eql comment.id
+      expect(r["vote_score"]).to eql -1
+    end
+  end
+
+  # ======== GETTING COMMENT VOTES ==================
+
+  describe "GET /api/comments/:id/votes" do
+    it "requires authentication" do
+      get "/api/comments/#{comment.id}/votes"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid comment id" do
+      http_login device.id, device.access_token
+      get "/api/comments/#{user.id}/votes", nil, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "returns a comment's list of votes" do
+      comment.vote_by!(user)
+      other_user = create(:user)
+      comment.vote_by!(other_user, kind: "down")
+
+      http_login device.id, device.access_token
+      get "/api/comments/#{comment.id}/votes", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql 2
+      expect(r.map { |v| v["user_id"] }).to eql [other_user.id, user.id]
+      expect(r.map { |v| v["comment_id"] }.uniq).to eql [comment.id]
+      expect(r.map { |v| v["vote_score"] }).to eql [-1, 1]
+    end
+  end
 end

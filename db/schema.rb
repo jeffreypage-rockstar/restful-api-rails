@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140703184814) do
+ActiveRecord::Schema.define(version: 20140703195528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,15 +50,16 @@ ActiveRecord::Schema.define(version: 20140703184814) do
   add_index "card_images", ["card_id"], name: "index_card_images_on_card_id", using: :btree
 
   create_table "cards", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.string "name",                                                            null: false
+    t.string "name",                                                               null: false
     t.text "description"
-    t.uuid "stack_id",                                                        null: false
-    t.uuid "user_id",                                                         null: false
+    t.uuid "stack_id",                                                           null: false
+    t.uuid "user_id",                                                            null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "short_id",    default: "nextval('cards_short_id_seq'::regclass)", null: false
-    t.integer "score",       default: 0
-    t.integer "flags_count", default: 0
+    t.integer "short_id",       default: "nextval('cards_short_id_seq'::regclass)", null: false
+    t.integer "score",          default: 0
+    t.integer "flags_count",    default: 0
+    t.integer "comments_count", default: 0
   end
 
   add_index "cards", ["score"], name: "index_cards_on_score", using: :btree

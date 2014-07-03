@@ -1,7 +1,7 @@
 module Hyper
   # api to create a user and/or get the current user data
   class Devices < Base
-		  PAGE_SIZE = 30
+    PAGE_SIZE = 30
 
     resources :devices do
       # GET /devices
@@ -29,7 +29,7 @@ module Hyper
         end
       end
 
-  		  # DELETE /devices/:id
+      # DELETE /devices/:id
       desc "Deletes a user device"
       params do
         requires :id, type: String, desc: "Device id", uuid: true

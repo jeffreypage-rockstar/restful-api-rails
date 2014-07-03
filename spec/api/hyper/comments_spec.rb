@@ -28,6 +28,7 @@ describe Hyper::Cards do
       expect(r["card_id"]).to eql card.id
       expect(r["user_id"]).to eql device.user_id
       expect(r["replying_id"]).to eql parent.id
+      expect(r["flags_count"]).to eql 0
       expect(r["score"]).to eql 0
       expect(response.header["Location"]).to match "\/comments\/#{comment_id}"
     end

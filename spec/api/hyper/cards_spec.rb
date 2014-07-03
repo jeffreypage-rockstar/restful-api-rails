@@ -137,6 +137,18 @@ describe Hyper::Cards do
       expect(r["images"]).to_not be_empty
     end
 
+    it "returns flags_count and comments_count in response" do
+      http_login device.id, device.access_token
+      create(:comment, card: card)
+      card.flag_by!(user)
+      get "/api/cards/#{card.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(card.id)
+      expect(r["flags_count"]).to eql 1
+      expect(r["comments_count"]).to eql 1
+    end
+
     it "returns my_vote with the card response" do
       http_login device.id, device.access_token
       card.vote_by!(user)

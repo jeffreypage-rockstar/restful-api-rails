@@ -1,5 +1,5 @@
 module Hyper
-  # api to create a user and/or get the current user data
+  # api to manage current user devices
   class Devices < Base
     PAGE_SIZE = 30
 

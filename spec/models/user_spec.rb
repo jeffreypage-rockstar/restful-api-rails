@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe User do
+  let(:user) { create(:user) }
+
   describe ".create" do
 
     let(:attrs) do
@@ -84,7 +86,6 @@ describe User do
   end
 
   describe "#sign_in_from_device!" do
-    let(:user) { create(:user) }
     let(:req) { Hashie::Mash.new(remote_ip: "127.0.0.1") }
 
     it "creates a new device, updating tackable fields" do
@@ -97,6 +98,21 @@ describe User do
       expect(device.device_type).to eql "android"
 
       expect(user.current_sign_in_ip).to eql("127.0.0.1")
+    end
+  end
+
+  describe "#flag_by!" do
+    it "stores a flag to the user, updating flags_count" do
+      expect(user.flag_by!(user)).to be_valid
+      expect(user.reload.flags.size).to eql 1
+      expect(user.flags_count).to eql 1
+    end
+
+    it "does not acceps duplicated flag" do
+      flag = user.flag_by!(user)
+      other_flag = user.flag_by!(user)
+      expect(flag.id).to eql other_flag.id
+      expect(user.reload.flags_count).to eql 1
     end
   end
 

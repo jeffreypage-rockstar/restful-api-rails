@@ -61,4 +61,18 @@ RSpec.describe Comment, type: :model do
     end
   end
 
+  describe "#flag_by!" do
+    it "stores a flag to the comment, updating flags_count" do
+      expect(comment.flag_by!(user)).to be_valid
+      expect(comment.reload.flags.size).to eql 1
+      expect(comment.flags_count).to eql 1
+    end
+
+    it "does not acceps duplicated flag" do
+      flag = comment.flag_by!(user)
+      other_flag = comment.flag_by!(user)
+      expect(flag.id).to eql other_flag.id
+      expect(comment.reload.flags_count).to eql 1
+    end
+  end
 end

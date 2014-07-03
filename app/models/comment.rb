@@ -1,9 +1,10 @@
 class Comment < ActiveRecord::Base
   include Votable
+  include Flaggable
   validates :user, :card, presence: true
 
   belongs_to :user
-  belongs_to :card
+  belongs_to :card, counter_cache: true
   belongs_to :replying, class_name: "Card"
 
   store_accessor :mentions

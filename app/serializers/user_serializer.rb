@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :email, :username, :facebook_token, :avatar_url, :location,
-             :unconfirmed_email, :confirmed, :auth
+             :unconfirmed_email, :confirmed, :flags_count, :auth
 
   def confirmed
     object.confirmed? && !object.pending_reconfirmation?

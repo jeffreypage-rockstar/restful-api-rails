@@ -16,6 +16,7 @@ gem 'kaminari'
 gem 'api-pagination'
 gem 'sentry-raven'
 gem 'hashids'
+gem 'aws-sdk'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'

@@ -55,6 +55,9 @@ GEM
     arel (5.0.1.20140414130214)
     async-rack (0.5.1)
       rack (~> 1.1)
+    aws-sdk (1.46.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -331,6 +334,7 @@ DEPENDENCIES
   activerecord (~> 4.1.1)
   acts_as_list
   api-pagination
+  aws-sdk
   better_errors
   binding_of_caller
   bootstrap-sass

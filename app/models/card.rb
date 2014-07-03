@@ -1,5 +1,7 @@
 class Card < ActiveRecord::Base
   include Votable
+  include Flaggable
+
   validates :name, :stack, :user, presence: true
   attr_readonly :score
 

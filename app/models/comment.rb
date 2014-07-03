@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
   include Votable
+  include Flaggable
   validates :user, :card, presence: true
 
   belongs_to :user

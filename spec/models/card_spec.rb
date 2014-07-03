@@ -78,4 +78,19 @@ RSpec.describe Card, type: :model do
       expect(card.votes.size).to eql 1
     end
   end
+
+  describe "#flag_by" do
+    it "stores a flag to the card, updating flags_count" do
+      expect(card.flag_by(user)).to be_valid
+      expect(card.reload.flags.size).to eql 1
+      expect(card.flags_count).to eql 1
+    end
+
+    it "does not acceps duplicated flag" do
+      flag = card.flag_by(user)
+      other_flag = card.flag_by(user)
+      expect(flag.id).to eql other_flag.id
+      expect(card.reload.flags_count).to eql 1
+    end
+  end
 end

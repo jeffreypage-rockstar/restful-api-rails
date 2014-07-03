@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140703170850) do
+ActiveRecord::Schema.define(version: 20140703184814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20140703170850) do
     t.datetime "updated_at"
     t.integer "short_id",    default: "nextval('cards_short_id_seq'::regclass)", null: false
     t.integer "score",       default: 0
+    t.integer "flags_count", default: 0
   end
 
   add_index "cards", ["score"], name: "index_cards_on_score", using: :btree
@@ -74,6 +75,7 @@ ActiveRecord::Schema.define(version: 20140703170850) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "score",       default: 0
+    t.integer "flags_count", default: 0
   end
 
   add_index "comments", ["card_id"], name: "index_comments_on_card_id", using: :btree
@@ -93,6 +95,17 @@ ActiveRecord::Schema.define(version: 20140703170850) do
   end
 
   add_index "devices", ["access_token"], name: "index_devices_on_access_token", unique: true, using: :btree
+
+  create_table "flags", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid "flaggable_id",               null: false
+    t.string "flaggable_type",             null: false
+    t.uuid "user_id",                    null: false
+    t.integer "kind",           default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "flags", ["flaggable_id", "flaggable_type", "user_id"], name: "index_flags_on_flaggable_id_and_flaggable_type_and_user_id", unique: true, using: :btree
 
   create_table "stacks", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "name",                        null: false
@@ -136,6 +149,7 @@ ActiveRecord::Schema.define(version: 20140703170850) do
     t.string "facebook_token"
     t.string "facebook_id"
     t.string "location"
+    t.integer "flags_count",            default: 0
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

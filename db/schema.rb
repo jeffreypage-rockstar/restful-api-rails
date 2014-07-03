@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702164640) do
+ActiveRecord::Schema.define(version: 20140703170850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,8 @@ ActiveRecord::Schema.define(version: 20140702164640) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.uuid "user_id"
+    t.string "push_token"
+    t.string "sns_arn"
   end
 
   add_index "devices", ["access_token"], name: "index_devices_on_access_token", unique: true, using: :btree

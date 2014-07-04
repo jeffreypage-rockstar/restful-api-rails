@@ -3,7 +3,7 @@ Warden.test_mode!
 # Feature: Stack user management
 #   As an admin
 #   I want to manage stacks
-#   So I can list add, edit, and delete stacks users
+#   So I can list add, edit, and delete stacks
 feature "Admin Stack management", :devise do
   before :each do
     admin = FactoryGirl.create(:admin)

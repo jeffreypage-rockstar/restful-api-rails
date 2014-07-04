@@ -24,7 +24,6 @@ if defined? RailsAdmin
       new do
         except ["User"]
       end
-      # export
       bulk_delete
       show
       edit

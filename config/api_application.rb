@@ -14,8 +14,6 @@ end
 
 require "app/api/api"
 
-API.logger.level = Logger::DEBUG
-
 ApplicationServer = Rack::Builder.new do
   use Rack::Static, urls: %w(/docs/), root: "public/api", index: "index.html"
 

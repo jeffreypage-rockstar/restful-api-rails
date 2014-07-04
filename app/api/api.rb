@@ -8,8 +8,9 @@ class API < Grape::API
     header["Access-Control-Allow-Origin"] = "*"
     header["Access-Control-Request-Method"] = "*"
     unless Rails.env.test?
-      logger.info [request.env["REQUEST_METHOD"], request.env["REQUEST_PATH"]]
-      logger.info request.body.read
+      log = request.env["rack.logger"] || logger
+      log.info [request.env["REQUEST_METHOD"], request.env["REQUEST_PATH"]]
+      log.info request.body.read
     end
   end
 

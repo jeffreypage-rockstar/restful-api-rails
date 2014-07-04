@@ -24,7 +24,6 @@ if defined? RailsAdmin
       new do
         except ["User"]
       end
-      export
       bulk_delete
       show
       edit
@@ -34,7 +33,7 @@ if defined? RailsAdmin
       # history_index
       # history_show
     end
-    config.included_models = ["Admin", "User"]
+    config.included_models = ["Admin", "User", "Stack"]
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -52,6 +51,47 @@ if defined? RailsAdmin
         field :username
         field :facebook_token
         field :facebook_id
+      end
+      show do
+        field :email
+        field :password
+        field :password_confirmation
+        field :username
+        field :facebook_token
+        field :facebook_id
+      end
+    end
+
+    config.model "Stack" do
+      list do
+        field :name
+        field :description
+        field :user do
+          pretty_value do
+            value.username
+          end
+        end
+        field :protected
+      end
+      show do
+        field :name
+        field :description
+        field :user do
+          pretty_value do
+            value.username
+          end
+        end
+        field :protected
+      end
+      edit do
+        field :name
+        field :description
+        field :user  do
+          pretty_value do
+            value.username
+          end
+        end
+        field :protected
       end
     end
   end

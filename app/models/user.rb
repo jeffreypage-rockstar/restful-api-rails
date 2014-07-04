@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
     device.sign_in!
   end
 
+  def title
+    username
+  end
+
   private
 
   def downcase_username

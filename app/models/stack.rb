@@ -14,4 +14,9 @@ class Stack < ActiveRecord::Base
   def self.trending(user_id)
     where.not(user_id: user_id).recent
   end
+
+  def user
+    return nil if user_id.blank?
+    super
+  end
 end

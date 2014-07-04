@@ -44,6 +44,8 @@ if defined? RailsAdmin
       list do
         field :email
         field :username
+        field :last_sign_in_at
+        field :confirmed_at
       end
       edit do
         field :email

@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
     device.sign_in!
   end
 
+  def title
+    self.username
+  end
+
   private
 
   def downcase_username
@@ -36,4 +40,5 @@ class User < ActiveRecord::Base
       errors.add(:facebook_token, :invalid)
     end
   end
+
 end

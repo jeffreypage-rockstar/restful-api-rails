@@ -24,7 +24,7 @@ if defined? RailsAdmin
       new do
         except ["User"]
       end
-      #export
+      # export
       bulk_delete
       show
       edit
@@ -40,7 +40,6 @@ if defined? RailsAdmin
       warden.authenticate! scope: :admin
     end
     config.current_user_method(&:current_admin)
-    
     config.model "User" do
       list do
         field :email

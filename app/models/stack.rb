@@ -16,7 +16,7 @@ class Stack < ActiveRecord::Base
   end
 
   def user
-    return nil if self.user_id.blank?
+    return nil if user_id.blank?
     super
   end
 end

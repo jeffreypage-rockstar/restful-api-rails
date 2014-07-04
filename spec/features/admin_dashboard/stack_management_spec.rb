@@ -29,7 +29,7 @@ feature "Admin Stack management", :devise do
       visit rails_admin.new_path(model_name: "stack")
       fill_in "Name", with: new_stack[:name]
       fill_in "Description", with: new_stack[:description]
-      select new_user.username, :from => "stack[user_id]"    
+      select new_user.username, from: "stack[user_id]"
       click_button "Save"
     end.to change(Stack, :count).by(1)
     expect(current_path).to eq rails_admin.index_path(model_name: "stack")
@@ -53,8 +53,6 @@ feature "Admin Stack management", :devise do
     expect(stack.name).to eq "anothername"
     expect(stack.description).to eq "anotherdescription"
   end
-
-
 
   # Scenario: Admin can delete an stack
   #   Given I am an admin

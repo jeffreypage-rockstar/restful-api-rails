@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   end
 
   def title
-    self.username
+    username
   end
 
   private
@@ -40,5 +40,4 @@ class User < ActiveRecord::Base
       errors.add(:facebook_token, :invalid)
     end
   end
-
 end

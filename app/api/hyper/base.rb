@@ -28,6 +28,10 @@ module Hyper
             declared(params, include_missing: false)
           end
 
+          def logger
+            API.logger
+          end
+
           def current_user
             @current_user ||= begin
               Device.where(auth_credentials).includes(:user).first.try(:user)

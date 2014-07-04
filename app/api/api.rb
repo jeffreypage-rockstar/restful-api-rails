@@ -7,8 +7,10 @@ class API < Grape::API
   before do
     header["Access-Control-Allow-Origin"] = "*"
     header["Access-Control-Request-Method"] = "*"
-    logger.info [request.env["REQUEST_METHOD"], request.env["REQUEST_PATH"]]
-    logger.info request.body.read
+    unless Rails.env.test?
+      logger.info [request.env["REQUEST_METHOD"], request.env["REQUEST_PATH"]]
+      logger.info request.body.read
+    end
   end
 
   mount Hyper::Status

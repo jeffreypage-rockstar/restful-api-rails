@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   validates :facebook_id, uniqueness: true, allow_blank: true
   validate :check_facebook_token
 
-  has_many :devices
+  has_many :devices, dependent: :destroy
   has_many :stacks
   has_many :subscriptions
   has_many :subscribed_stacks, through: :subscriptions, source: :stack

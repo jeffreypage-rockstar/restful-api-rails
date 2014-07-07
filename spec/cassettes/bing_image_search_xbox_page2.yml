@@ -1,0 +1,60 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://:3aE%2F8Du531krOVcS%2F%2BR%2FkQZtTnq1WXZ3OUkzSRE1qMc@api.datamarket.azure.com/Bing/Search/v1/Composite?$format=json&$skip=3&$top=3&Query='xbox'&Sources='Image'
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      Server:
+      - Microsoft-IIS/8.0
+      X-Content-Type-Options:
+      - nosniff
+      Activityid:
+      - 7d09c2ee-bba7-4044-bd6f-d6cc7c6f5de9
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Powered-By:
+      - ASP.NET
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'false'
+      Access-Control-Allow-Headers:
+      - Authorization, DataServiceVersion, MaxDataServiceVersion
+      Access-Control-Expose-Headers:
+      - DataServiceVersion, MaxDataServiceVersion
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Max-Age:
+      - '604800'
+      Date:
+      - Mon, 07 Jul 2014 17:54:01 GMT
+      Content-Length:
+      - '945'
+    body:
+      encoding: UTF-8
+      string: '{"d":{"results":[{"__metadata":{"uri":"https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/Composite?Sources=\u0027Image\u0027&Query=\u0027xbox\u0027&$skip=3&$top=1","type":"ExpandableSearchResult"},"ID":"88b6d916-a5cd-43e7-b687-99b134cc6bbb","WebTotal":"","WebOffset":"","ImageTotal":"74400","ImageOffset":"3","VideoTotal":"","VideoOffset":"","NewsTotal":"","NewsOffset":"","SpellingSuggestionsTotal":"","AlteredQuery":"","AlterationOverrideQuery":"","Web":[],"Image":[{"__metadata":{"uri":"https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/ExpandableSearchResultSet(guid\u002788b6d916-a5cd-43e7-b687-99b134cc6bbb\u0027)/Image?$skip=0&$top=1","type":"ImageResult"},"ID":"42b62a6a-6140-4249-995a-9ab1ded7f1d1","Title":"Description
+        Xbox-360S-Console-Set.jpg","MediaUrl":"http://upload.wikimedia.org/wikipedia/commons/7/76/Xbox-360S-Console-Set.jpg","SourceUrl":"http://en.wikipedia.org/wiki/File:Xbox-360S-Console-Set.jpg","DisplayUrl":"en.wikipedia.org/wiki/File:Xbox-360S-Console-Set.jpg","Width":"2440","Height":"3360","FileSize":"2305578","ContentType":"image/jpeg","Thumbnail":{"__metadata":{"type":"Bing.Thumbnail"},"MediaUrl":"http://ts3.mm.bing.net/th?id=HN.608005071090615450&pid=15.1","ContentType":"image/jpg","Width":"348","Height":"480","FileSize":"10155"}},{"__metadata":{"uri":"https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/ExpandableSearchResultSet(guid\u002788b6d916-a5cd-43e7-b687-99b134cc6bbb\u0027)/Image?$skip=1&$top=1","type":"ImageResult"},"ID":"58ac349a-1e8b-4f51-a616-b68b5bdae2f4","Title":"the
+        xbox 360 is a seventh generation game console and is the successor ...","MediaUrl":"http://images1.wikia.nocookie.net/__cb20120715144005/halo/images/5/52/Xbox_360_Slim.jpg","SourceUrl":"http://halo.wikia.com/wiki/Xbox_360","DisplayUrl":"halo.wikia.com/wiki/Xbox_360","Width":"500","Height":"500","FileSize":"29775","ContentType":"image/jpeg","Thumbnail":{"__metadata":{"type":"Bing.Thumbnail"},"MediaUrl":"http://ts3.mm.bing.net/th?id=HN.608032288311609162&pid=15.1","ContentType":"image/jpg","Width":"480","Height":"480","FileSize":"11427"}},{"__metadata":{"uri":"https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/ExpandableSearchResultSet(guid\u002788b6d916-a5cd-43e7-b687-99b134cc6bbb\u0027)/Image?$skip=2&$top=1","type":"ImageResult"},"ID":"27b2d131-7d02-4ca4-9110-8e372a71fd0b","Title":"xbox","MediaUrl":"http://www.liberatemedia.com/wp-content/uploads/2011/11/xbox.jpg","SourceUrl":"http://www.liberatemedia.com/blog/xbox-is-10-today/","DisplayUrl":"www.liberatemedia.com/blog/xbox-is-10-today","Width":"500","Height":"500","FileSize":"29692","ContentType":"image/jpeg","Thumbnail":{"__metadata":{"type":"Bing.Thumbnail"},"MediaUrl":"http://ts4.mm.bing.net/th?id=HN.608014928044950915&pid=15.1","ContentType":"image/jpg","Width":"480","Height":"480","FileSize":"17819"}}],"Video":[],"News":[],"RelatedSearch":[],"SpellingSuggestions":[]}]}}'
+    http_version: 
+  recorded_at: Mon, 07 Jul 2014 17:54:04 GMT
+recorded_with: VCR 2.9.2

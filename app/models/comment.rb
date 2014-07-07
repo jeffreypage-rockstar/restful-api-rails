@@ -23,7 +23,6 @@ class Comment < ActiveRecord::Base
     users = User.where(username: usernames)
     self.mentions = users.each_with_object({}) do |user, hash|
       hash[user.username] = user.id
-      hash
     end
   end
 end

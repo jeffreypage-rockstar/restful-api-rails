@@ -24,10 +24,10 @@ class BingImage
     self.url = data[:MediaUrl]
     self.width = data[:Width]
     self.height = data[:Height]
-    if data[:Thumbnail]
-      self.thumbnail = data[:Thumbnail][:MediaUrl]
-      self.thumbnail_width = data[:Thumbnail][:Width]
-      self.thumbnail_height = data[:Thumbnail][:Height]
-    end
+
+    return if data[:Thumbnail].blank?
+    self.thumbnail = data[:Thumbnail][:MediaUrl]
+    self.thumbnail_width = data[:Thumbnail][:Width]
+    self.thumbnail_height = data[:Thumbnail][:Height]
   end
 end

@@ -17,8 +17,6 @@ class User < ActiveRecord::Base
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
   has_many :cards
 
-  before_validation :downcase_username
-
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)
     device = devices.find(device_id) if device_id
@@ -31,10 +29,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def downcase_username
-    self.username = username.to_s.downcase
-  end
 
   def check_facebook_token
     if facebook_token.present? && facebook_id.blank?

@@ -17,6 +17,9 @@ gem 'api-pagination'
 gem 'sentry-raven'
 gem 'hashids'
 gem 'aws-sdk'
+gem 'searchbing'
+gem 'oj'
+gem 'oj_mimic_json'
 
 group :api do
   gem 'activerecord', '~>4.1.1', require: 'active_record'
@@ -59,6 +62,8 @@ end
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'webmock'
+  gem 'vcr'
 end
 
 gem 'acts_as_list'

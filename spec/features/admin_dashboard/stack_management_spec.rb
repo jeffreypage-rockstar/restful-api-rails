@@ -59,7 +59,7 @@ feature "Admin Stack management", :devise do
   #   When I try to delete an stack
   #   Then an stack gets deleted
   scenario "admin can delete an stack" do
-    new_stack = FactoryGirl.create(:stack)
+    FactoryGirl.create(:stack)
 
     page.find("[data-model=stack] a").click
     expect(current_path).to eq rails_admin.index_path(model_name: "stack")

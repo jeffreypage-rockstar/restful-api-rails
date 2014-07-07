@@ -41,9 +41,22 @@ describe User do
       expect(user.errors[:username].first).to match("invalid")
     end
 
-    it "does not accepts duplicated username" do
+    it "does not accepts username with blank spaces" do
+      user = User.new(attrs.merge(username: "my user name"))
+      expect(user).to_not be_valid
+      expect(user.errors[:username].first).to match("invalid")
+    end
+
+    it "deals with case insensitive usernames" do
+      user = User.new(attrs.merge(username: "MyUserName"))
+      expect(user.save).to eql true
+      result = User.find_for_database_authentication(username: "myusername")
+      expect(result.id).to eql user.id
+    end
+
+    it "does not accepts duplicated username, case insensitive" do
       user = create(:user)
-      other = User.new(attrs.merge(username: user.username))
+      other = User.new(attrs.merge(username: user.username.upcase))
       expect(other).to_not be_valid
       expect(other.errors[:username].first).to match("taken")
     end

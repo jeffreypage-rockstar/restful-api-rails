@@ -25,6 +25,7 @@ class API < Grape::API
   mount Hyper::Comments
   mount Hyper::Flags
   mount Hyper::SuggestedImages
+  mount Hyper::Networks
 
   base_path_proc = Proc.new do |r|
     if Rails.env.development?

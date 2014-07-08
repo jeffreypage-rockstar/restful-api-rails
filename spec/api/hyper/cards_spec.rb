@@ -10,7 +10,8 @@ describe Hyper::Cards do
     it "requires authentication" do
       post "/api/cards",  name: "My card title", stack_id: card.stack_id
       expect(response.status).to eql 401 # authentication
-      expect(response.header["WWW-Authenticate"]).to eql "Basic realm=\"Hyper\""
+      realm = "Basic realm=\"Hyper\""
+      expect(response.header["WWW-Authenticate"]).to eql realm
     end
 
     it "creates a new valid card" do

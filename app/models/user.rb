@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_many :subscriptions
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
   has_many :cards
+  has_many :networks
 
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)

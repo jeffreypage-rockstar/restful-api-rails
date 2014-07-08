@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140703195528) do
+ActiveRecord::Schema.define(version: 20140708122457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,18 @@ ActiveRecord::Schema.define(version: 20140703195528) do
   end
 
   add_index "flags", ["flaggable_id", "flaggable_type", "user_id"], name: "index_flags_on_flaggable_id_and_flaggable_type_and_user_id", unique: true, using: :btree
+
+  create_table "networks", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string "provider",   null: false
+    t.string "uid",        null: false
+    t.string "token",      null: false
+    t.uuid "user_id",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "networks", ["provider", "user_id"], name: "index_networks_on_provider_and_user_id", unique: true, using: :btree
+  add_index "networks", ["uid"], name: "index_networks_on_uid", using: :btree
 
   create_table "stacks", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "name",                        null: false

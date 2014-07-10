@@ -1,0 +1,93 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://graph.facebook.com/oauth/access_token
+    body:
+      encoding: UTF-8
+      string: client_id=775337459177377&client_secret=d5eb4d69011e72718c065415cf84a453&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Fb-Rev:
+      - '1323393'
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      X-Fb-Debug:
+      - zdAw886FBWypRVIxePFByTGg1XOgIk+nKFa9fq3xW5umHycKIE53nknMqaelGla1xjJeo8WFsyO2v3IS0xD4EA==
+      Date:
+      - Thu, 10 Jul 2014 15:13:45 GMT
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+    body:
+      encoding: UTF-8
+      string: access_token=775337459177377|GovtBhW2wB1iTbalO3OOyeY7yUE
+    http_version: 
+  recorded_at: Thu, 10 Jul 2014 15:13:46 GMT
+- request:
+    method: get
+    uri: https://graph.facebook.com/debug_token?access_token=775337459177377%7CGovtBhW2wB1iTbalO3OOyeY7yUE&appsecret_proof=033e5176fa1b32587003a949943522187d5efca08c0cfed22b94bc853765a998&input_token=invalidfacebooktoken
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Etag:
+      - '"7a4676d9194ea732286319a6be42c0eb761174e5"'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Fb-Rev:
+      - '1323393'
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      X-Fb-Debug:
+      - k9gvUQs4JOd6UYK/Y8SlmHHAIXXr1YnKzTU5h3koEzH/YvM/jbXdc1ZHjC4NBFIWsLKUwiOfQNpYBy1gfSem2w==
+      Date:
+      - Thu, 10 Jul 2014 15:13:46 GMT
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '88'
+    body:
+      encoding: UTF-8
+      string: '{"data":{"error":{"message":"Invalid OAuth access token.","code":190},"is_valid":false}}'
+    http_version: 
+  recorded_at: Thu, 10 Jul 2014 15:13:46 GMT
+recorded_with: VCR 2.9.2

@@ -9,5 +9,10 @@ FactoryGirl.define do
     location "New York, NY"
 
     confirmed_at 1.day.ago
+
+    factory :user_with_valid_fb do
+      facebook_id Rails.application.secrets.fb_valid_user_id
+      facebook_token Rails.application.secrets.fb_valid_token
+    end
   end
 end

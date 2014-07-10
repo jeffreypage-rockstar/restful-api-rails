@@ -12,11 +12,13 @@ class User < ActiveRecord::Base
   validate :check_facebook_token
 
   has_many :devices, dependent: :destroy
+  has_many :networks, dependent: :destroy
   has_many :stacks
   has_many :subscriptions
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
   has_many :cards
-  has_many :networks
+
+  after_save :update_facebook_network
 
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)
@@ -29,11 +31,26 @@ class User < ActiveRecord::Base
     username
   end
 
+  def add_facebook_network
+    return if facebook_token.blank?
+    networks.find_or_initialize_by(provider: "facebook").tap do |network|
+      network.token = facebook_token
+      network.uid = facebook_id
+    end
+  end
+
   private
 
   def check_facebook_token
     if facebook_token.present? && facebook_id.blank?
       errors.add(:facebook_token, :invalid)
+    end
+  end
+
+  def update_facebook_network
+    if facebook_token_changed?
+      network = networks.find_by(provider: "facebook")
+      network.update_attribute(:token, facebook_token) if network
     end
   end
 end

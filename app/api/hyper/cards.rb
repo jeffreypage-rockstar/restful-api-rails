@@ -14,15 +14,23 @@ module Hyper
           requires :image_url, type: String, desc: "Image url"
           requires :caption, type: String, desc: "Image caption"
         end
+        optional :share, type: Array, desc: "List of social networks to share"\
+                                            "the new card"
       end
       post do
         authenticate!
         card_params = permitted_params
         card_params[:images_attributes] = card_params.delete(:images)
         card_params[:user_id] = current_user.id
+        networks_to_share = Array(card_params.delete(:share))
         stack = Stack.find(params[:stack_id])
         card = stack.cards.create!(card_params.compact)
         header "Location", "/cards/#{card.id}"
+        if networks_to_share.any?
+          ShareWorker.perform_async(
+            current_user.id, card.id, networks_to_share
+          )
+        end
         card
       end
 

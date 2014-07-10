@@ -54,6 +54,17 @@ describe Hyper::Cards do
       post "/api/cards", { name: "My card title", stack_id: device.id }, @env
       expect(response.status).to eql 404 # not found
     end
+
+    it "creates a card and share" do
+      expect(ShareWorker).to receive(:perform_async).
+                             with(user.id, /\w/, ["facebook", "twitter"])
+      http_login device.id, device.access_token
+      post "/api/cards", { name: "My card title",
+                           stack_id: card.stack_id,
+                           share: ["facebook", "twitter"]
+                          }, @env
+      expect(response.status).to eql 201 # created
+    end
   end
 
   # ======== GETTING CARDS ==================

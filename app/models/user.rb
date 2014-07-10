@@ -42,15 +42,13 @@ class User < ActiveRecord::Base
   private
 
   def check_facebook_token
-    if facebook_token.present? && facebook_id.blank?
-      errors.add(:facebook_token, :invalid)
-    end
+    return unless facebook_token.present? && facebook_id.blank?
+    errors.add(:facebook_token, :invalid) 
   end
 
   def update_facebook_network
-    if facebook_token_changed?
-      network = networks.find_by(provider: "facebook")
-      network.update_attribute(:token, facebook_token) if network
-    end
+    return unless facebook_token_changed?
+    network = networks.find_by(provider: "facebook")
+    network.update_attribute(:token, facebook_token) if network
   end
 end

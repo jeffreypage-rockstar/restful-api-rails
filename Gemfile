@@ -14,7 +14,7 @@ gem 'foreman'
 gem "koala", "~> 1.10.0rc"
 gem 'kaminari'
 gem 'api-pagination'
-gem 'sentry-raven'
+gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"
 gem 'hashids'
 gem 'aws-sdk'
 gem 'searchbing'

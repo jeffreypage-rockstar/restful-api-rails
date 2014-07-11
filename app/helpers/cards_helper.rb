@@ -5,6 +5,7 @@ module CardsHelper
 
   def share_url(card)
     [
+      "http:/",
       Rails.application.secrets.domain_name,
       "c",
       hashids.encrypt(card.short_id)

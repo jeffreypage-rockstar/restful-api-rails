@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 
   def check_facebook_token
     return unless facebook_token.present? && facebook_id.blank?
-    errors.add(:facebook_token, :invalid) 
+    errors.add(:facebook_token, :invalid)
   end
 
   def update_facebook_network

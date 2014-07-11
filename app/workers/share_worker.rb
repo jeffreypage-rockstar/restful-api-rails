@@ -14,7 +14,13 @@ class ShareWorker
                         )
   end
 
-  def share_twitter(_card, _network)
+  def share_twitter(card, network)
+    client = Twitter::Client.new
+    client.consumer_key       = Rails.application.secrets.twitter_api_key
+    client.consumer_secret    = Rails.application.secrets.twitter_api_secret
+    client.oauth_token        = network.token
+    client.oauth_token_secret = network.secret
+    client.update("Check my new card on #Hyper: #{share_url(card)}")
   end
 
   def share_tumblr(_card, _network)
@@ -23,7 +29,7 @@ class ShareWorker
   def perform(user_id, card_id, providers = [])
     return [] unless user = User.find_by(id: user_id)
     return [] unless card = Card.find_by(id: card_id)
-    user.networks.where(provider: Array(providers)).map do |network|
+    user.networks.where(provider: Array(providers)).each do |network|
       send("share_#{network.provider}", card, network)
     end
   end

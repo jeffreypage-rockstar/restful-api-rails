@@ -12,6 +12,7 @@ gem 'sidekiq'
 gem 'pg'
 gem 'foreman'
 gem "koala", "~> 1.10.0rc"
+gem "twitter"
 gem 'kaminari'
 gem 'api-pagination'
 gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"

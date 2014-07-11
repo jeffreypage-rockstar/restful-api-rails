@@ -10,6 +10,7 @@ module Hyper
         requires :provider, type: String, desc: "Network provider name"
         requires :uid, type: String, desc: "User uid for this network"
         requires :token, type: String, desc: "User token for this network"
+        optional :secret, type: String, desc: "User secret for this network"
       end
       post do
         authenticate!
@@ -51,6 +52,7 @@ module Hyper
         requires :provider, type: String, desc: "Network provider. ex: twitter"
         optional :uid, type: String, desc: "User uid for this network"
         optional :token, type: String, desc: "User token for this network"
+        optional :secret, type: String, desc: "User secret for this network"
       end
       route_param :provider do
         put do

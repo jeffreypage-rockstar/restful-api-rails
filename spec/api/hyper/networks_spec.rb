@@ -44,7 +44,7 @@ describe Hyper::Networks do
     end
 
     it "returns the user networks" do
-      Network::PROVIDERS.map { |p|   create(:network, user: user, provider: p) }
+      Network::PROVIDERS.map { |p| create(:network, user: user, provider: p) }
       http_login device.id, device.access_token
       get "/api/networks", nil, @env
       expect(response.status).to eql 200

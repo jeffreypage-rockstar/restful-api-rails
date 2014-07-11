@@ -95,6 +95,12 @@ describe Hyper::Account do
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(device.user_id)
     end
+
+    it "fails authentication for an invalid devide id format" do
+      http_login "#{device.id} ", device.access_token
+      get "/api/user", nil, @env
+      expect(response.status).to eql 401
+    end
   end
 
   # ======== UPDATING CURRENT USER INFO ==================

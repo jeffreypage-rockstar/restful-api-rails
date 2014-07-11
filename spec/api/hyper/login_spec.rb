@@ -41,21 +41,6 @@ describe Hyper::Login do
   end
 
   describe "POST /api/login with facebook_token" do
-    before do
-      # fb api stubs
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with("facebooktokennotsignedup").
-                                      and_return("123456")
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with(user.facebook_token).
-                                      and_return(user.facebook_id)
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                       with("invalidfacebooktoken").
-                                       and_return(nil)
-    end
-
     it "authenticate with a valid facebook_token" do
       VCR.use_cassette("fb_auth_valid") do
         post "/api/login", facebook_token: user.facebook_token
@@ -76,6 +61,9 @@ describe Hyper::Login do
     end
 
     it "rejects authentication with an inexistent facebook_id" do
+      allow(FBAuthService).to receive(:get_facebook_id).
+                                      with("facebooktokennotsignedup").
+                                      and_return("123456")
       post "/api/login", facebook_token: "facebooktokennotsignedup"
       expect(response.status).to eql 401
     end

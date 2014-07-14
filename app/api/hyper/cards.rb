@@ -12,7 +12,7 @@ module Hyper
                                                 " created."
         optional :images, type: Array, desc: "Card images list" do
           requires :image_url, type: String, desc: "Image url"
-          requires :caption, type: String, desc: "Image caption"
+          optional :caption, type: String, desc: "Image caption"
         end
         optional :share, type: Array, desc: "List of social networks to share"\
                                             "the new card"

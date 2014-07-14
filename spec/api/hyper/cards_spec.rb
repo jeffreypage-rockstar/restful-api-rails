@@ -37,8 +37,7 @@ describe Hyper::Cards do
                              { image_url: "http://example.com/image1.jpg",
                                caption: "Image 1"
                              },
-                             { image_url: "http://example.com/image2.jpg",
-                               caption: "Image 2"
+                             { image_url: "http://example.com/image2.jpg"
                              }
                            ]
                          },

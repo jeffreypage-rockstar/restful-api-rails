@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Hyper::Login do
-  let(:user) { create(:user) }
+  let(:user) { create(:user_with_valid_fb) }
   let(:device) { create(:device, user: user) }
 
   describe "POST /api/login with username and password" do
@@ -41,37 +41,29 @@ describe Hyper::Login do
   end
 
   describe "POST /api/login with facebook_token" do
-    before do
-      # fb api stubs
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with("facebooktokennotsignedup").
-                                      and_return("123456")
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with(user.facebook_token).
-                                      and_return(user.facebook_id)
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                       with("invalidfacebooktoken").
-                                       and_return(nil)
-    end
-
     it "authenticate with a valid facebook_token" do
-      post "/api/login", facebook_token: user.facebook_token
-      r = JSON.parse(response.body)
-      expect(response.status).to eql 201
-      expect(r["email"]).to eql user.email
-      expect(r["id"]).to_not be_blank
-      expect(r["auth"]["device_id"]).to_not be_blank
-      expect(r["auth"]["access_token"]).to_not be_blank
+      VCR.use_cassette("fb_auth_valid") do
+        post "/api/login", facebook_token: user.facebook_token
+        r = JSON.parse(response.body)
+        expect(response.status).to eql 201
+        expect(r["email"]).to eql user.email
+        expect(r["id"]).to_not be_blank
+        expect(r["auth"]["device_id"]).to_not be_blank
+        expect(r["auth"]["access_token"]).to_not be_blank
+      end
     end
 
     it "rejects authentication with an invalid facebook_token" do
-      post "/api/login", facebook_token: "invalidfacebooktoken"
-      expect(response.status).to eql 401
+      VCR.use_cassette("fb_auth_invalid") do
+        post "/api/login", facebook_token: "invalidfacebooktoken"
+        expect(response.status).to eql 401
+      end
     end
 
     it "rejects authentication with an inexistent facebook_id" do
+      allow(FBAuthService).to receive(:get_facebook_id).
+                                      with("facebooktokennotsignedup").
+                                      and_return("123456")
       post "/api/login", facebook_token: "facebooktokennotsignedup"
       expect(response.status).to eql 401
     end

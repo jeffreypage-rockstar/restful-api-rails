@@ -129,4 +129,21 @@ describe User do
     end
   end
 
+  describe "#add_facebook_network" do
+    it "adds a network entry for facebook" do
+      network = user.add_facebook_network
+      expect(network).to be_valid
+      user.save
+      user.reload
+      expect(user.networks.first.token).to eql user.facebook_token
+    end
+
+    it "updates the facebook network when facebook_token is updated" do
+      network = user.add_facebook_network
+      user.facebook_token = "newfacebooktoken"
+      user.save
+      expect(network.reload.token).to eql "newfacebooktoken"
+    end
+  end
+
 end

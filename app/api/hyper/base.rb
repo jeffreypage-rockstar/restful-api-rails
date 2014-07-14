@@ -16,7 +16,7 @@ module Hyper
 
               if auth_header[0] == "Basic" && auth_header[1] != ""
                 id, token = Base64.decode64(auth_header[1]).split(":")
-                credentials[:id] = id unless id.blank?
+                credentials[:id] = id if id =~ Validation::Uuid::UUID_REGEX
                 credentials[:access_token] = token unless token.blank?
               end
             end

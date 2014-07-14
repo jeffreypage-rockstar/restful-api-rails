@@ -1,0 +1,93 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://graph.facebook.com/oauth/access_token
+    body:
+      encoding: UTF-8
+      string: client_id=775337459177377&client_secret=d5eb4d69011e72718c065415cf84a453&grant_type=client_credentials
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Fb-Rev:
+      - '1323393'
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      X-Fb-Debug:
+      - iYXE5Li/1pHE7Wbt8NPq16HY0buYZKFg+0wz1HNBhYNpgsg/e19yO9xdS5EhZMyk05BdPWG3R9z40H54bF+tqQ==
+      Date:
+      - Thu, 10 Jul 2014 15:21:47 GMT
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+    body:
+      encoding: UTF-8
+      string: access_token=775337459177377|GovtBhW2wB1iTbalO3OOyeY7yUE
+    http_version: 
+  recorded_at: Thu, 10 Jul 2014 15:21:48 GMT
+- request:
+    method: get
+    uri: https://graph.facebook.com/debug_token?access_token=775337459177377%7CGovtBhW2wB1iTbalO3OOyeY7yUE&appsecret_proof=033e5176fa1b32587003a949943522187d5efca08c0cfed22b94bc853765a998&input_token=CAALBKlHV16EBAIX2Hr0T0CohHxdGLG7A56ewdWCN1ZCxE9b1wsZBn0doTqKmbEoR4O5FrJYI9xCLgwoCkciZB57fKZCRZAXaWjtBuXtZCtXAZCNaKbqGGLerrwxmdqN43mQZCWGeZBEr4cgkpfIaWgCAdFXxD41UDmvqcFH7fvB8fDEVdVsaOePGveaOkrQlxfK8ZD
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Etag:
+      - '"4273e2fd2e2f0940fb8cee47f407c290ea61c4a7"'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Fb-Rev:
+      - '1323393'
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      X-Fb-Debug:
+      - IVNJqS918/LAvIYASVH2GCCHbqzXsVtDVDY8i2hKVI3Whoano8zJ2lH1SWl3b1AAtf2RlQ4kGUoTzSI05/sNWg==
+      Date:
+      - Thu, 10 Jul 2014 15:21:48 GMT
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '217'
+    body:
+      encoding: UTF-8
+      string: '{"data":{"app_id":"775337459177377","is_valid":true,"application":"Hyper","user_id":"10204401232955921","expires_at":1405011600,"scopes":["public_profile","email","publish_actions","user_activities","user_about_me"]}}'
+    http_version: 
+  recorded_at: Thu, 10 Jul 2014 15:21:49 GMT
+recorded_with: VCR 2.9.2

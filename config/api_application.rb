@@ -3,8 +3,8 @@ require File.expand_path("../environments/api", __FILE__)
 require "app/api/hyper/base"
 
 folders = %w(
-  models/concerns models serializers services api/validations
-  api/hyper
+  models/concerns models helpers workers serializers services workers
+  api/validations api/hyper
 )
 folders.each do |folder|
   Dir[File.expand_path("../../app/#{folder}/*.rb", __FILE__)].each do |f|

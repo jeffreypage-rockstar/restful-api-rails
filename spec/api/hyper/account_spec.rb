@@ -1,7 +1,8 @@
 require "spec_helper"
 
 describe Hyper::Account do
-  let(:user) { create(:user) }
+  let(:fb_token) { Rails.application.secrets.fb_valid_token }
+  let(:user) { create(:user_with_valid_fb) }
   let(:device) { create(:device, user: user) }
 
   # ======== CREATING A USER ACCOUNT WITH PASSWORD==================
@@ -48,40 +49,35 @@ describe Hyper::Account do
 
     before do
       ActionMailer::Base.deliveries.clear
-      # fb api stubs
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with("validfacebooktoken").
-                                      and_return("123456")
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                      with(user.facebook_token).
-                                      and_return(user.facebook_id)
-
-      allow(FBAuthService).to receive(:get_facebook_id).
-                                       with("invalidfacebooktoken").
-                                       and_return(nil)
     end
 
     it "accepts signups with a valid facebook_token" do
-      post "/api/user", email: "other@example.com",
-                        username: "otherusername",
-                        facebook_token: "validfacebooktoken"
-      expect(response.status).to eql 201 # created
-      expect(ActionMailer::Base.deliveries).to be_empty
+      VCR.use_cassette("fb_auth_valid") do
+        post "/api/user", email: "other@example.com",
+                          username: "otherusername",
+                          facebook_token: fb_token
+        expect(response.status).to eql 201 # created
+        expect(ActionMailer::Base.deliveries).to be_empty
+      end
     end
 
     it "does not accepts duplicated facebook_ids" do
-      post "/api/user", email: "other@example.com",
-                        username: "otherusername",
-                        facebook_token: user.facebook_token
-      expect(response.status).to eql 409 # conflict
+      existent_token = user.facebook_token
+      VCR.use_cassette("fb_auth_valid") do
+        post "/api/user", email: "other@example.com",
+                          username: "otherusername",
+                          facebook_token: existent_token
+        expect(response.status).to eql 409 # conflict
+      end
     end
 
     it "does not accepts invalid facebook token" do
-      post "/api/user", email: "other@example.com",
-                        username: "otherusername",
-                        facebook_token: "invalidfacebooktoken"
-      expect(response.status).to eql 422
+      VCR.use_cassette("fb_auth_invalid") do
+        post "/api/user", email: "other@example.com",
+                          username: "otherusername",
+                          facebook_token: "invalidfacebooktoken"
+        expect(response.status).to eql 422
+      end
     end
   end
 
@@ -98,6 +94,12 @@ describe Hyper::Account do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(device.user_id)
+    end
+
+    it "fails authentication for an invalid device id format" do
+      http_login "#{device.id} ", device.access_token
+      get "/api/user", nil, @env
+      expect(response.status).to eql 401
     end
   end
 

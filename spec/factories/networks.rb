@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :network do
-    provider "tumblr"
+    provider "facebook"
     sequence(:uid) { |n| "000001#{n}" }
     sequence(:token) { |n| "abdcef#{n}" }
     sequence(:secret) { |n| "zyxvu#{n}" }

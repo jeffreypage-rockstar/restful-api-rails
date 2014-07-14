@@ -1,4 +1,6 @@
 # A sidekiq worker to share cards using the user available networks
+require "tumblr"
+
 class ShareWorker
   include Sidekiq::Worker
   include CardsHelper
@@ -23,7 +25,15 @@ class ShareWorker
     client.update("Check my new card on #Hyper: #{share_url(card)}")
   end
 
-  def share_tumblr(_card, _network)
+  def share_tumblr(card, network)
+    client = Tumblr::Client.new
+    client.consumer_key       = Rails.application.secrets.tumblr_api_key
+    client.consumer_secret    = Rails.application.secrets.tumblr_api_secret
+    client.oauth_token        = network.token
+    client.oauth_token_secret = network.secret
+    client.link(network.uid, share_url(card),
+                "title" => card.name,
+                "description" => card.description)
   end
 
   def perform(user_id, card_id, providers = [])

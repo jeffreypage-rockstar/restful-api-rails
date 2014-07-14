@@ -3,7 +3,7 @@ class Network < ActiveRecord::Base
 
   validates :user, :provider, :uid, :token, presence: true
   validates :provider, uniqueness: { scope: :user_id }, inclusion: PROVIDERS
-  validates :secret, presence: true, if: Proc.new { |n| n.twitter? }
+  validates :secret, presence: true, if: Proc.new { |n| !n.facebook? }
 
   before_validation :downcase_provider
 

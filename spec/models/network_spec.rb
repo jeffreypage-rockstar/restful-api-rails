@@ -40,6 +40,12 @@ RSpec.describe Network, type: :model do
       expect(network.errors["secret"].first).to match "blank"
     end
 
+    it "requires a secret if provider is tumblr" do
+      network = Network.new(attrs.merge(provider: "tumblr", secret: ""))
+      expect(network).to_not be_valid
+      expect(network.errors["secret"].first).to match "blank"
+    end
+
     it "requires a provider from the valid list" do
       network = Network.new(attrs.merge(provider: "invalid"))
       expect(network).to_not be_valid

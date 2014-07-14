@@ -23,8 +23,21 @@ RSpec.describe ShareWorker, type: :worker do
     expect(client).to receive(:oauth_token=).with(network.token)
     expect(client).to receive(:oauth_token_secret=).with(network.secret)
     expect(client).to receive(:update)
-    expect(Twitter::Client).to receive(:new).
-                                    and_return(client)
+    expect(Twitter::Client).to receive(:new).and_return(client)
     worker.perform(user.id, card.id, ["twitter"])
+  end
+
+  it "performs a tumblr share" do
+    network = create(:network, provider: "tumblr",
+                               user: user,
+                               uid: "myblog.tumblr.com")
+    client = double("client")
+    expect(client).to receive(:consumer_key=)
+    expect(client).to receive(:consumer_secret=)
+    expect(client).to receive(:oauth_token=).with(network.token)
+    expect(client).to receive(:oauth_token_secret=).with(network.secret)
+    expect(client).to receive(:link)
+    expect(Tumblr::Client).to receive(:new).and_return(client)
+    worker.perform(user.id, card.id, ["tumblr"])
   end
 end

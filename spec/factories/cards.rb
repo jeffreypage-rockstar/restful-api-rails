@@ -2,8 +2,9 @@
 
 FactoryGirl.define do
   factory :card do
-    name "A Card"
+    sequence(:name) { |n| "A Card #{n}" }
     description "A card description"
+    sequence(:short_id) { |n| n }
     stack
     user
   end

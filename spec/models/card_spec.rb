@@ -93,4 +93,12 @@ RSpec.describe Card, type: :model do
       expect(card.reload.flags_count).to eql 1
     end
   end
+
+  describe ".find_by_hash_id!" do
+    it "looks up for a card based on a hash id" do
+      expect(card.short_id).to be_a(Integer)
+      expect(card.hash_id).to match /\w/
+      expect(Card.find_by_hash_id!(card.hash_id).id).to eql card.id
+    end
+  end
 end

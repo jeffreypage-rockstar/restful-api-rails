@@ -27,6 +27,8 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  Rails.application.routes.default_url_options[:host] = "localhost:3000"
+
   config.action_mailer.smtp_settings = {
     address: "smtp.sendgrid.net",
     port: 587,

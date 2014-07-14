@@ -17,4 +17,20 @@ class Card < ActiveRecord::Base
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
   scope :popularity, -> { order("score DESC") }
+
+  def to_param
+    hash_id
+  end
+
+  def hash_id
+    self.class.hashids.encrypt(short_id)
+  end
+
+  def self.find_by_hash_id!(hash_id)
+    self.find_by! short_id: hashids.decrypt(hash_id)
+  end
+
+  def self.hashids
+    @hashids ||= Hashids.new("Hyper card short_id salt")
+  end
 end

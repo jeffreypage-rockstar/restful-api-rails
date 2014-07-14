@@ -15,10 +15,7 @@ module Hyper
       post do
         authenticate!
         stacks = Stack.where(id: params[:stacks].to_s.split(","))
-        subscriptions = stacks.map do |stack|
-          current_user.subscriptions.find_or_create_by(stack: stack)
-        end
-        subscriptions
+        stacks.map { |stack| current_user.subscribe(stack) }
       end
 
       # GET /subscriptions

@@ -25,12 +25,15 @@ module Hyper
         networks_to_share = Array(card_params.delete(:share))
         stack = Stack.find(params[:stack_id])
         card = stack.cards.create!(card_params.compact)
-        header "Location", "/cards/#{card.id}"
+        # auto subscribe when creating a card
+        current_user.subscribe(stack)
+        # auto sharing to social networks
         if networks_to_share.any?
           ShareWorker.perform_async(
             current_user.id, card.id, networks_to_share
           )
         end
+        header "Location", "/cards/#{card.id}"
         card
       end
 

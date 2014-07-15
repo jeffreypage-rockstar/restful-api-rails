@@ -135,7 +135,7 @@ describe Hyper::Stacks do
 
     it "returns an object with user onwed, subscribed and trending stacks" do
       stack = create(:stack, user: device.user)
-      create(:stack) # stack for trending
+      (1..25).map { create(:stack) } # stacks for trending
       (1..10).map { create(:subscription, user: device.user) }
       http_login device.id, device.access_token
       get "/api/stacks/menu", nil, @env
@@ -146,7 +146,7 @@ describe Hyper::Stacks do
       expect(r["mine"]["stacks"].size).to eql 1
       expect(r["mine"]["stacks"].first["id"]).to eql stack.id
       expect(r["mine"]["more"]).to eql false
-      expect(r["trending"]["stacks"].size).to eql 10
+      expect(r["trending"]["stacks"].size).to eql 30
       expect(r["trending"]["more"]).to eql true
     end
   end

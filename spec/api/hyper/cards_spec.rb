@@ -37,8 +37,7 @@ describe Hyper::Cards do
                              { image_url: "http://example.com/image1.jpg",
                                caption: "Image 1"
                              },
-                             { image_url: "http://example.com/image2.jpg",
-                               caption: "Image 2"
+                             { image_url: "http://example.com/image2.jpg"
                              }
                            ]
                          },
@@ -64,6 +63,16 @@ describe Hyper::Cards do
                            share: ["facebook", "twitter"]
                           }, @env
       expect(response.status).to eql 201 # created
+    end
+
+    it "creates a card and auto subscribe" do
+      expect(user.subscriptions.map(&:stack_id)).to_not include(card.stack_id)
+      http_login device.id, device.access_token
+      post "/api/cards", { name: "My card title", stack_id: card.stack_id },
+           @env
+      expect(response.status).to eql 201 # created
+      user.reload
+      expect(user.subscriptions.map(&:stack_id)).to include(card.stack_id)
     end
   end
 

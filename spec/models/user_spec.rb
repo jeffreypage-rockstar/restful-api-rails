@@ -146,4 +146,16 @@ describe User do
     end
   end
 
+  describe "#subscribe" do
+    it "subscribe the user to a stack" do
+      stack = create(:stack)
+      subscription = user.subscribe(stack)
+      expect(subscription.stack_id).to eql stack.id
+      expect(subscription.user_id).to eql user.id
+      expect(subscription).to be_valid
+
+      expect(user.subscribe(stack).id).to eql subscription.id
+    end
+  end
+
 end

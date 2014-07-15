@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def subscribe(stack)
+    subscriptions.find_or_create_by(stack: stack)
+  end
+
   private
 
   def check_facebook_token

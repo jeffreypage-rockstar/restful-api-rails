@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://:3aE%2F8Du531krOVcS%2F%2BR%2FkQZtTnq1WXZ3OUkzSRE1qMc@api.datamarket.azure.com/Bing/Search/v1/Composite?$format=json&$skip=0&$top=10&Query='xbox%20one'&Sources='Image'
+    uri: https://:3aE%2F8Du531krOVcT%2F%2BR%2FkQZtTnq1WXZ3OUkzSRE1qMc@api.datamarket.azure.com/Bing/Search/v1/Composite?$format=json&$skip=0&$top=10&Query='xbox%20one'&Sources='Image'
     body:
       encoding: US-ASCII
       string: ''

@@ -5,7 +5,7 @@ http_interactions:
     uri: https://graph.facebook.com/oauth/access_token
     body:
       encoding: UTF-8
-      string: client_id=775337459177377&client_secret=d5eb4d69011e72718c065415cf84a453&grant_type=client_credentials
+      string: client_id=775337459177377&client_secret=d5eb4d69011e72718f065415cf84a453&grant_type=client_credentials
     headers:
       User-Agent:
       - Faraday v0.9.0
@@ -47,7 +47,7 @@ http_interactions:
   recorded_at: Thu, 10 Jul 2014 15:21:48 GMT
 - request:
     method: get
-    uri: https://graph.facebook.com/debug_token?access_token=775337459177377%7CGovtBhW2wB1iTbalO3OOyeY7yUE&appsecret_proof=033e5176fa1b32587003a949943522187d5efca08c0cfed22b94bc853765a998&input_token=CAALBKlHV16EBAIX2Hr0T0CohHxdGLG7A56ewdWCN1ZCxE9b1wsZBn0doTqKmbEoR4O5FrJYI9xCLgwoCkciZB57fKZCRZAXaWjtBuXtZCtXAZCNaKbqGGLerrwxmdqN43mQZCWGeZBEr4cgkpfIaWgCAdFXxD41UDmvqcFH7fvB8fDEVdVsaOePGveaOkrQlxfK8ZD
+    uri: https://graph.facebook.com/debug_token?access_token=775337459177377%7CGovtBhW2wB1iTbalO3OOyeY7yUE&appsecret_proof=c8f67ce62e9a5de9e85dd5345f1e14db548de3a60bc3a803a7487103aed64f86&input_token=CAALBKlHV16EBAIX2Hr0T0CohHxdGLG7A56ewdWCN1ZCxE9b1wsZBn0doTqKmbEoR4O5FrJYI9xCLgwoCkciZB57fKZCRZAXaWjtBuXtZCtXAZCNaKbqGGLerrwxmdqN43mQZCWGeZBEr4cgkpfIaWgCAdFXxD41UDmvqcFH7fvB8fDEVdVsaOePGveaOkrQlxfK8ZD
     body:
       encoding: US-ASCII
       string: ''

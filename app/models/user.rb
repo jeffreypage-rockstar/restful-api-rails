@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include Flaggable
-
+  include PublicActivity::Model
+  activist
   acts_as_paranoid
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

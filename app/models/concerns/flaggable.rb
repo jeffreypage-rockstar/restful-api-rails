@@ -6,6 +6,13 @@ module Flaggable
   end
 
   def flag_by!(user)
-    flags.find_or_create_by!(user_id: user.id)
+    flag = flags.find_or_create_by!(user_id: user.id)
+    log_flag(user)
+    flag
+  end
+
+  def log_flag(user)
+    return unless respond_to? :create_activity
+    create_activity(:flag, owner: user)
   end
 end

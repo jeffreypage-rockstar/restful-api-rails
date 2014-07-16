@@ -1,6 +1,8 @@
 class Comment < ActiveRecord::Base
   include Votable
   include Flaggable
+  include PublicActivity::Model
+  tracked owner: :user, recipient: :card
   validates :user, :card, presence: true
 
   belongs_to :user

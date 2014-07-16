@@ -1,4 +1,7 @@
 class Stack < ActiveRecord::Base
+  include PublicActivity::Model
+  tracked owner: :user
+
   validates :name, :user_id, presence: true
 
   validates_uniqueness_of :name

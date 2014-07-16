@@ -7,7 +7,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :card, counter_cache: true
-  belongs_to :replying, class_name: "Card"
+  belongs_to :replying, class_name: "Comment"
 
   store_accessor :mentions
 
@@ -18,6 +18,8 @@ class Comment < ActiveRecord::Base
   scope :oldest, -> { order("created_at ASC") }
   scope :popularity, -> { order("score DESC") }
 
+  after_save :log_reply, on: :create
+
   private # ===============================================================
 
   def extract_mentions
@@ -26,5 +28,10 @@ class Comment < ActiveRecord::Base
     self.mentions = users.each_with_object({}) do |user, hash|
       hash[user.username] = user.id
     end
+  end
+
+  def log_reply
+    return if replying.nil?
+    replying.create_activity :reply, owner: user, recipient: self
   end
 end

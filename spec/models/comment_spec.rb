@@ -83,7 +83,6 @@ RSpec.describe Comment, type: :model do
       expect(comment.votes.size).to eql 1
     end
 
-
     it "generates an activity entry for up_vote" do
       PublicActivity.with_tracking do
         comment.vote_by!(user)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Stack, type: :model do
-  let(:user){ create(:user) }
+  let(:user) { create(:user) }
 
   describe ".create" do
 

@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
   has_many :cards
   has_many :comments
+  has_many :notifications
 
   after_save :update_facebook_network
 

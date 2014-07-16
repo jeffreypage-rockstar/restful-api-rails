@@ -1,6 +1,6 @@
 require "vcr"
-require 'public_activity'
-require 'public_activity/testing'
+require "public_activity"
+require "public_activity/testing"
 
 PublicActivity.enabled = false
 

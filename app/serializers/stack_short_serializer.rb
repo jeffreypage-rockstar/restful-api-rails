@@ -1,3 +1,3 @@
 class StackShortSerializer < ActiveModel::Serializer
-  attributes :id, :name
+  attributes :id, :name, :subscriptions_count
 end

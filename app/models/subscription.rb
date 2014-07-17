@@ -4,7 +4,7 @@ class Subscription < ActiveRecord::Base
                                      if: Proc.new { |u| u.user_id.present? }
 
   belongs_to :user
-  belongs_to :stack
+  belongs_to :stack, counter_cache: true
 
   scope :recent, -> { order("created_at DESC") }
 end

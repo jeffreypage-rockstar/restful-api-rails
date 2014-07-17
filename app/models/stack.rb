@@ -5,8 +5,10 @@ class Stack < ActiveRecord::Base
 
   belongs_to :user
   has_many :cards, dependent: :restrict_with_exception
+  has_many :subscriptions
 
   scope :recent, -> { order("created_at DESC") }
+  scope :popular, -> { order("subscriptions_count ASC") }
 
   # TODO: update this to return stacks ordered by points
   # TODO: do not return stacks users created or is already following

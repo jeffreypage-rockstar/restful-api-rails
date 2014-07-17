@@ -103,25 +103,7 @@ describe Hyper::Stacks do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expect(r.first.keys).to eql(["id", "name"])
-    end
-  end
-
-  # ======== GETTING STACKS FOR AUTOCOMPLETE ==================
-  describe "GET /api/stacks/names" do
-    it "requires authentication" do
-      get "/api/stacks/names", q: "name"
-      expect(response.status).to eql 401 # authentication
-    end
-
-    it "returns the stacks with name matching the query" do
-      stack = create(:stack)
-      http_login device.id, device.access_token
-      get "/api/stacks/names", { q: stack.name[0..2] }, @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r.size).to eql(1)
-      expect(r.first.keys).to eql(["id", "name"])
+      expect(r.first.keys).to eql(["id", "name", "subscriptions_count"])
     end
   end
 

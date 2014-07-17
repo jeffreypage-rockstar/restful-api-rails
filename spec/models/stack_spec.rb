@@ -44,4 +44,13 @@ RSpec.describe Stack, type: :model do
       expect(stack.protected?).to eql true
     end
   end
+
+  describe "#subscriptions_count" do
+    it "auto updates subscriptions_count" do
+      stack = create(:stack)
+      expect(stack.subscriptions_count).to eql 0
+      create(:subscription, stack: stack)
+      expect(stack.reload.subscriptions_count).to eql 1
+    end
+  end
 end

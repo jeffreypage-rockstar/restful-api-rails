@@ -52,7 +52,7 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expected_caption = "john, peter, michael have liked your post"
+      expected_caption = "john, peter and michael have liked your post"
       expect(r.first["caption"]).to eql expected_caption
     end
 

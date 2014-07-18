@@ -19,7 +19,7 @@ class Comment < ActiveRecord::Base
   scope :popularity, -> { order("score DESC") }
 
   def mentions
-    read_attribute(:mentions) || {}
+    self[:mentions] || {}
   end
 
   private # ===============================================================

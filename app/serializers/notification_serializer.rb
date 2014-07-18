@@ -11,7 +11,8 @@ class NotificationSerializer < ActiveModel::Serializer
     elsif senders.size.to_i > SENDERS_LIMIT
       result << "#{senders.size} people have"
     else
-      result << senders.keys.join(", ") + " have"
+      result << senders.keys.to_sentence(last_word_connector: " and ")
+      result << "have"
     end
     result << I18n.t(object.action, scope: "notifications")
     result.delete_if(&:blank?).join(" ")

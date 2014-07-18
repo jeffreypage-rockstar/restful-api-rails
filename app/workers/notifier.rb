@@ -1,4 +1,5 @@
+require_relative "notifier/base"
+require_relative "notifier/card_create"
+
 module Notifier
-  autoload :Base,       "notifier/base"
-  autoload :CardCreate, "notifier/card_create"
 end

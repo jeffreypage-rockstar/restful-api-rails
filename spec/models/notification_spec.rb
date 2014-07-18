@@ -44,4 +44,22 @@ RSpec.describe Notification, type: :model do
       expect(user.notifications.unread.count).to eql 0
     end
   end
+
+  describe "#add_sender" do
+    it "adds a user as a notification sender" do
+      notification = create(:notification)
+      notification.add_sender(user)
+      notification.add_sender(user)
+      expect(notification.senders_count).to eql 1
+      expect(notification.senders[user.username]).to eql user.id
+    end
+  end
+
+  describe "#send!" do
+    it "marks the notification as sent" do
+      notification = build(:notification)
+      notification.send!
+      expect(notification).to be_sent
+    end
+  end
 end

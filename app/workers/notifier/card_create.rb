@@ -13,7 +13,7 @@ module Notifier
 
     def subscribers_notifications
       card = @activity.trackable
-      Subscriber.where(stack_id: card.stack_id).map do |s|
+      Subscription.where(stack_id: card.stack_id).map do |s|
         load_notification subject: card,
                           user_id: s.user_id,
                           action: @activity.key

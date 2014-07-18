@@ -18,6 +18,7 @@ module Notifier
         notification.send!
       end
       @activity.update notified: true
+      notifications
     end
   end
 end

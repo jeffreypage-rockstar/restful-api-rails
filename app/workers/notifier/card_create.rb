@@ -1,6 +1,8 @@
 module Notifier
   # performs the notification for activities with card.create key
   # creates notifications for the stack owner and for stack subscribers
+  # ex. 7 people have posted in a window you created
+  # ex. 7 people have posted in a window you follow
   class CardCreate < Base
     def owner_notification
       card = @activity.trackable

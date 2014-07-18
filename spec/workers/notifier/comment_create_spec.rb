@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Notifier::CommentCreate, type: :worker do
   let(:worker) { Notifier::CommentCreate.new }
 
-  it "performs generating notifications for stack subscribers" do
+  it "performs generating notifications for card owner and mentions" do
     expect(Notifier::CommentCreate).to receive(:perform_async).once.
                                     and_return("0001")
     card = create(:card)

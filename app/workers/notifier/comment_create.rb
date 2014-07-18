@@ -1,6 +1,8 @@
 module Notifier
   # performs the notification for activities with comment.create key
   # creates notifications for the card owner and comment mentions
+  # ex. 23 people have commented on your post
+  # ex. User mentioned you in a comment
   class CommentCreate < Base
     def owner_notification
       card = @activity.recipient

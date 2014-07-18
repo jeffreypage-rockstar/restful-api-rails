@@ -15,6 +15,8 @@ require "active_support/core_ext"
 require "dotenv"
 Dotenv.load
 
+I18n.load_path << File.expand_path("../../locales/en.yml", __FILE__)
+
 module Application
   include ActiveSupport::Configurable
 

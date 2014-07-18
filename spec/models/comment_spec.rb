@@ -43,17 +43,6 @@ RSpec.describe Comment, type: :model do
         expect(act.recipient_id).to eql card.id
       end
     end
-
-    it "creates a reply, with an activity entry" do
-      allow(Notifier).to receive(:notify_async)
-      PublicActivity.with_tracking do
-        comment = Comment.create(attrs)
-        reply = create(:comment, replying: comment)
-        act = comment.activities.where(key: "comment.reply").last
-        expect(act.owner_id).to eql reply.user_id
-        expect(act.recipient_id).to eql reply.id
-      end
-    end
   end
 
   describe "#vote_by!" do

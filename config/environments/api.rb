@@ -10,6 +10,7 @@ require "kaminari/grape"
 
 Bundler.require :default, :api
 require "erb"
+require "active_support/core_ext"
 
 require "dotenv"
 Dotenv.load

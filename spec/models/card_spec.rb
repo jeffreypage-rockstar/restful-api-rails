@@ -41,11 +41,13 @@ RSpec.describe Card, type: :model do
     end
 
     it "generates an activity entry for create" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         card = Card.create(attrs)
         act = card.activities.last
         expect(act.key).to eql "card.create"
         expect(act.owner_id).to eql user.id
+        expect(act.recipient_id).to eql card.stack_id
       end
     end
   end
@@ -91,6 +93,7 @@ RSpec.describe Card, type: :model do
     end
 
     it "generates an activity entry for up_vote" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         card.vote_by!(user)
         act = card.activities.where(key: "card.up_vote").last
@@ -99,6 +102,7 @@ RSpec.describe Card, type: :model do
     end
 
     it "generates an activity entry for down_vote" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         card.vote_by!(user, kind: :down)
         act = card.activities.where(key: "card.down_vote").last
@@ -122,6 +126,7 @@ RSpec.describe Card, type: :model do
     end
 
     it "generates an activity entry for flag" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         card.flag_by!(user)
         act = card.activities.where(key: "card.flag").last

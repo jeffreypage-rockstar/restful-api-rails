@@ -34,6 +34,7 @@ RSpec.describe Comment, type: :model do
     end
 
     it "generates an activity entry for create" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         comment = Comment.create(attrs)
         act = comment.activities.last
@@ -44,6 +45,7 @@ RSpec.describe Comment, type: :model do
     end
 
     it "creates a reply, with an activity entry" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         comment = Comment.create(attrs)
         reply = create(:comment, replying: comment)
@@ -84,6 +86,7 @@ RSpec.describe Comment, type: :model do
     end
 
     it "generates an activity entry for up_vote" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         comment.vote_by!(user)
         act = comment.activities.where(key: "comment.up_vote").last
@@ -92,6 +95,7 @@ RSpec.describe Comment, type: :model do
     end
 
     it "generates an activity entry for down_vote" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         comment.vote_by!(user, kind: :down)
         act = comment.activities.where(key: "comment.down_vote").last
@@ -115,6 +119,7 @@ RSpec.describe Comment, type: :model do
     end
 
     it "generates an activity entry for flag" do
+      allow(Notifier).to receive(:notify_async)
       PublicActivity.with_tracking do
         comment.flag_by!(user)
         act = comment.activities.where(key: "comment.flag").last

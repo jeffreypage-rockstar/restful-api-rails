@@ -20,6 +20,10 @@ class Comment < ActiveRecord::Base
 
   after_save :log_reply, on: :create
 
+  def mentions
+    read_attribute(:mentions) || {}
+  end
+
   private # ===============================================================
 
   def extract_mentions

@@ -4,7 +4,7 @@ module Notifier
   class CardCreate < Base
     def owner_notification
       card = @activity.trackable
-      if @activity.owner_id != card.stack.try(:user_id)
+      if card && @activity.owner_id != card.stack.try(:user_id)
         load_notification subject: card,
                           user_id: card.stack.try(:user_id),
                           action: @activity.key
@@ -23,7 +23,7 @@ module Notifier
     def notifications
       all_notifications = subscribers_notifications
       all_notifications << owner_notification
-      all_notifications.uniq { |n| n.user_id  }
+      all_notifications.compact.uniq { |n| n.user_id  }
     end
   end
 end

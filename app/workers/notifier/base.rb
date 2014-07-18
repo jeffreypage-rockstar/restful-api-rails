@@ -3,7 +3,7 @@ module Notifier
     include Sidekiq::Worker
 
     def notifications
-      raise "notifications method needs to be overrided"
+      raise "notifications method needs to be overwritten"
     end
 
     def load_notification(attrs)
@@ -13,12 +13,13 @@ module Notifier
     def perform(activity_id)
       @activity = PublicActivity::Activity.find_by(id: activity_id)
       return if @activity.nil? || @activity.notified?
-      notifications.each do |notification|
+      result = notifications.map do |notification|
         notification.add_sender(@activity.owner)
         notification.send!
+        notification
       end
       @activity.update notified: true
-      notifications
+      result
     end
   end
 end

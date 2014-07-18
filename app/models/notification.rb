@@ -16,9 +16,9 @@ class Notification < ActiveRecord::Base
     read_at.present?
   end
 
-  def add_sender(user)
+  def add_sender(sender_user)
     self.senders ||= {}
-    self.senders[user.username] = user.id
+    self.senders[sender_user.username] = sender_user.id
   end
 
   def senders_count

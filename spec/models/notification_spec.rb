@@ -50,6 +50,8 @@ RSpec.describe Notification, type: :model do
       notification = create(:notification)
       notification.add_sender(user)
       notification.add_sender(user)
+      notification.save
+      notification.reload
       expect(notification.senders_count).to eql 1
       expect(notification.senders[user.username]).to eql user.id
     end

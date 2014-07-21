@@ -36,5 +36,16 @@ describe Hyper::Flags do
       post "/api/flags", { comment_id: comment.id }, @env
       expect(response.status).to eql 204
     end
+
+    it "does not accepts flagging 2 items in a request" do
+      card = create(:card)
+      comment = create(:comment, card: card)
+
+      http_login device.id, device.access_token
+      post "/api/flags", { comment_id: comment.id, card_id: card.id }, @env
+      expect(response.status).to eql 400
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match "mutually exclusive"
+    end
   end
 end

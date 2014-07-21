@@ -79,6 +79,16 @@ describe Hyper::Account do
         expect(response.status).to eql 422
       end
     end
+
+    it "does not accepts facebook_token and password together" do
+      post "/api/user", email: "other@example.com",
+                        username: "otherusername",
+                        password: "123testme",
+                        facebook_token: "validfacebooktoken"
+      expect(response.status).to eql 400
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match "mutually exclusive"
+    end
   end
 
   # ======== GETTING CURRENT USER INFO ==================

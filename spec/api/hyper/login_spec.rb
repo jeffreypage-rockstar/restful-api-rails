@@ -67,5 +67,12 @@ describe Hyper::Login do
       post "/api/login", facebook_token: "facebooktokennotsignedup"
       expect(response.status).to eql 401
     end
+
+    it "does not accepts facebook_token and password together" do
+      post "/api/login", facebook_token: "validfacebooktoken", password: "123"
+      expect(response.status).to eql 400
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match "mutually exclusive"
+    end
   end
 end

@@ -123,6 +123,7 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r.size).to eql(2)
       expect(r.map { |c|c["user_id"] }.uniq).to eql [card.user_id]
+      expect(r.first["user"]["username"]).to eql user.username
     end
 
     it "accepts pagination" do

@@ -12,7 +12,7 @@ module Hyper
         optional :avatar_url, type: String, desc: "User avatar url."
         optional :location, type: String, desc: "User location."
         optional :device_type, type: String, desc: "Current device type."
-        # mutually_exclusive :password, :facebook_token
+        mutually_exclusive :password, :facebook_token
       end
       post do
         user = SignUpService.new(permitted_params).call

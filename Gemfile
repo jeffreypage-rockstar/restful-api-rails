@@ -11,7 +11,7 @@ gem 'devise-async'
 gem 'sidekiq'
 gem 'pg'
 gem 'foreman'
-gem 'koala', '~> 1.10.0rc'
+gem 'koala', '~> 1.10.0'
 gem 'twitter'
 gem 'tumblr-ruby'
 gem 'kaminari'
@@ -24,14 +24,14 @@ gem 'oj'
 gem 'oj_mimic_json'
 
 group :api do
-  gem 'activerecord', '~>4.1.1', require: 'active_record'
-  gem 'actionview', '~>4.1.1', require: 'action_view'
+  gem 'activerecord', '~>4.1.4', require: 'active_record'
+  gem 'actionview', '~>4.1.4', require: 'action_view'
   gem 'goliath'
   gem 'dotenv'
 end
 
 group :admin do
-  gem 'rails', '4.1.1'
+  gem 'rails', '4.1.4'
   gem 'thin'
   gem 'puma'
   gem 'sprockets', '~> 2.11.0'

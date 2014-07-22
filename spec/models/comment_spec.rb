@@ -40,6 +40,7 @@ RSpec.describe Comment, type: :model do
       expect(comment.votes.size).to eql 1
       expect(comment.votes.up_votes.size).to eql 1
       expect(comment.reload.score).to eql 1
+      expect(comment.user.score).to eql 1
     end
 
     it "accepts a downvote, updating score" do
@@ -48,6 +49,7 @@ RSpec.describe Comment, type: :model do
       expect(comment.votes.up_votes.size).to eql 0
       expect(comment.votes.down_votes.size).to eql 1
       expect(comment.reload.score).to eql -1
+      expect(comment.user.score).to eql -1
     end
 
     it "changes the vote if already exists" do
@@ -57,6 +59,7 @@ RSpec.describe Comment, type: :model do
 
       expect(comment.vote_by!(user, kind: :down)).to be_valid
       expect(comment.reload.score).to eql -1
+      expect(comment.user.score).to eql -1
       expect(comment.votes.size).to eql 1
     end
   end

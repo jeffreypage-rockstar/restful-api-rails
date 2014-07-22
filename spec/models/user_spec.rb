@@ -158,4 +158,14 @@ describe User do
     end
   end
 
+  describe "#calculate_score" do
+    it "updates the user score field" do
+      create(:card, user: user).vote_by!(user)
+      create(:comment, user: user).vote_by!(user)
+      expect(user.score).to eql 0
+      user.calculate_score
+      expect(user.score).to eql 2
+    end
+  end
+
 end

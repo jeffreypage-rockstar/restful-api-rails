@@ -58,6 +58,7 @@ RSpec.describe Card, type: :model do
       expect(card.votes.size).to eql 1
       expect(card.votes.up_votes.size).to eql 1
       expect(card.reload.score).to eql 1
+      expect(card.user.score).to eql 1
     end
 
     it "accepts a downvote, updating score" do
@@ -66,6 +67,7 @@ RSpec.describe Card, type: :model do
       expect(card.votes.up_votes.size).to eql 0
       expect(card.votes.down_votes.size).to eql 1
       expect(card.reload.score).to eql -1
+      expect(card.user.score).to eql -1
     end
 
     it "changes the vote if already exists" do
@@ -75,6 +77,7 @@ RSpec.describe Card, type: :model do
 
       expect(card.vote_by!(user, kind: :down)).to be_valid
       expect(card.reload.score).to eql -1
+      expect(card.user.score).to eql -1
       expect(card.votes.size).to eql 1
     end
   end

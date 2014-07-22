@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :subscriptions
   has_many :subscribed_stacks, through: :subscriptions, source: :stack
   has_many :cards
+  has_many :comments
 
   after_save :update_facebook_network
 
@@ -41,6 +42,10 @@ class User < ActiveRecord::Base
 
   def subscribe(stack)
     subscriptions.find_or_create_by(stack: stack)
+  end
+
+  def calculate_score
+    self.score = cards.sum(:score) + comments.sum(:score)
   end
 
   private

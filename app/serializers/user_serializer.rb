@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :avatar_url, :location,
+  attributes :id, :email, :username, :avatar_url, :location, :score,
              :unconfirmed_email, :confirmed, :flags_count, :auth
 
   def confirmed

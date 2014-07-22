@@ -104,6 +104,7 @@ describe Hyper::Account do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(device.user_id)
+      expect(r["score"]).to eql(0)
     end
 
     it "fails authentication for an invalid device id format" do

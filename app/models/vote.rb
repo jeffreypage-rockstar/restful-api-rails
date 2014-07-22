@@ -48,6 +48,9 @@ class Vote < ActiveRecord::Base
   def update_score
     return unless votable.respond_to?("score=")
     votable.class.send(:update_counters, votable.id, score: score_change)
+    if votable.respond_to? :user_id
+      User.send(:update_counters, votable.user_id, score: score_change)
+    end
   end
 
   # keep a flag_changed state to know when flag is changed in a persisted vote

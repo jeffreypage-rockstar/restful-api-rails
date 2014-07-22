@@ -1,7 +1,7 @@
 class CreateReputations < ActiveRecord::Migration
   def change
     create_table :reputations do |t|
-      t.string  :name,         null: false
+      t.string :name,         null: false
       t.integer :min_score,    null: false
 
       t.timestamps

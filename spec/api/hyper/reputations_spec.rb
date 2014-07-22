@@ -3,7 +3,7 @@ require "spec_helper"
 describe Hyper::Reputations do
   let(:device) { create(:device) }
   let(:user) { device.user }
-  
+
   describe "GET /api/reputations" do
     it "requires authentication" do
       get "/api/reputations"

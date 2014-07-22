@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Reputation, :type => :model do
-  
+RSpec.describe Reputation, type: :model do
+
   describe ".create" do
-    let(:attrs) { {name: "Accepted", min_score: 0} }
+    let(:attrs) { { name: "Accepted", min_score: 0 } }
 
     it "creates a valid reputation" do
       expect(Reputation.new(attrs)).to be_valid

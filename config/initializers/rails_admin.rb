@@ -18,6 +18,8 @@ if defined? RailsAdmin
 
     ### More at https://github.com/sferik/rails_admin/wiki/Base-configuration
 
+    config.main_app_name = ["Hyper"]
+
     config.actions do
       dashboard                     # mandatory
       index                         # mandatory
@@ -33,7 +35,7 @@ if defined? RailsAdmin
       # history_index
       # history_show
     end
-    config.included_models = ["Admin", "User", "Stack"]
+    config.included_models = ["Admin", "User", "Stack", "Reputation"]
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -94,6 +96,13 @@ if defined? RailsAdmin
           end
         end
         field :protected
+      end
+    end
+
+    config.model "Reputation" do
+      list do
+        field :name
+        field :min_score
       end
     end
   end

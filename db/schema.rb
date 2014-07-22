@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717140507) do
+ActiveRecord::Schema.define(version: 20140721202339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,16 @@ ActiveRecord::Schema.define(version: 20140717140507) do
 
   add_index "networks", ["provider", "user_id"], name: "index_networks_on_provider_and_user_id", unique: true, using: :btree
   add_index "networks", ["uid"], name: "index_networks_on_uid", using: :btree
+
+  create_table "reputations", force: true do |t|
+    t.string "name",       null: false
+    t.integer "min_score",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reputations", ["min_score"], name: "index_reputations_on_min_score", unique: true, using: :btree
+  add_index "reputations", ["name"], name: "index_reputations_on_name", unique: true, using: :btree
 
   create_table "stacks", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "name",                                null: false

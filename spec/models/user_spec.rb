@@ -168,4 +168,13 @@ describe User do
     end
   end
 
+  describe "#delete" do
+    it "marks the user as deleted" do
+      user.destroy!
+      expect(user).to be_destroyed
+      expect { User.find(user.id) }.to raise_exception
+      expect(User.with_deleted.find(user.id)).to_not be_nil
+    end
+  end
+
 end

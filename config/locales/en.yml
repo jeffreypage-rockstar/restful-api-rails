@@ -21,3 +21,12 @@
 
 en:
   hello: "Hello world"
+
+  admin:
+    actions:
+      restore:
+        title: "Restore %{model_label_plural}"
+        menu: "Restore"
+        breadcrumb: "Restore"
+        bulk_link: "Restore selected %{model_label_plural}"
+        done: restored

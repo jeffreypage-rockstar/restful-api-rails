@@ -1,9 +1,9 @@
 include Warden::Test::Helpers
 Warden.test_mode!
 # Feature: User management
-#   As an user
+#   As an admin
 #   I want to manage users
-#   So I can list add, edit, and delete users
+#   So I can list, add, edit and delete users
 feature "User management", :devise do
   before :each do
     admin = FactoryGirl.create(:admin)

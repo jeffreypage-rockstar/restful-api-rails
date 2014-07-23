@@ -14,5 +14,9 @@ FactoryGirl.define do
       facebook_id Rails.application.secrets.fb_valid_user_id
       facebook_token Rails.application.secrets.fb_valid_token
     end
+
+    factory :user_deleted do
+      deleted_at Time.now.utc
+    end
   end
 end

@@ -63,9 +63,11 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'webmock'
   gem 'vcr'
+  gem 'launchy'
 end
 
 gem 'acts_as_list'

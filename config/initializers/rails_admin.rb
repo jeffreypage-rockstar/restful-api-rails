@@ -1,4 +1,6 @@
 if defined? RailsAdmin
+  require "admin_restore"
+
   RailsAdmin.config do |config|
 
     ### Popular gems integration
@@ -26,16 +28,22 @@ if defined? RailsAdmin
       new do
         except ["User"]
       end
-      bulk_delete
+      bulk_delete do
+        except ["DeletedUser"]
+      end
       show
       edit
-      delete
-
+      delete do
+        except ["DeletedUser"]
+      end
+      restore do
+        only ["DeletedUser"]
+      end
       ## With an audit adapter, you can add:
       # history_index
       # history_show
     end
-    config.included_models = ["Admin", "User", "Stack", "Reputation"]
+    config.included_models = %w(Admin User DeletedUser Stack Reputation)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -50,16 +58,33 @@ if defined? RailsAdmin
       end
       edit do
         field :email
-        field :password
-        field :password_confirmation
         field :username
         field :facebook_token
         field :facebook_id
       end
       show do
         field :email
-        field :password
-        field :password_confirmation
+        field :username
+        field :facebook_token
+        field :facebook_id
+      end
+    end
+
+    config.model "DeletedUser" do
+      list do
+        field :email
+        field :username
+        field :last_sign_in_at
+        field :deleted_at
+      end
+      show do
+        field :email
+        field :username
+        field :facebook_token
+        field :facebook_id
+      end
+      edit do
+        field :email
         field :username
         field :facebook_token
         field :facebook_id

@@ -12,6 +12,7 @@
   <script src='lib/jquery.slideto.min.js' type='text/javascript'></script>
   <script src='lib/jquery.wiggle.min.js' type='text/javascript'></script>
   <script src='lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
+  <script src='lib/jquery.cookie.min.js' type='text/javascript'></script>
   <script src='lib/handlebars-1.0.0.js' type='text/javascript'></script>
   <script src='lib/underscore-min.js' type='text/javascript'></script>
   <script src='lib/backbone-min.js' type='text/javascript'></script>
@@ -54,10 +55,21 @@
       window.authorizations.remove("main");
       var device = $("#input_device")[0].value;
       var token = $("#input_token")[0].value;
-      alert("authenticated as " + device + ":" + token);
+      window.swaggerUi.showMessage("authenticated as " + device + ":" + token);
       window.authorizations.add("main", new PasswordAuthorization("basic", device, token));
-    })
+      $.cookie('auth_device', device, { expires: 365 });
+      $.cookie('auth_token', token, { expires: 365 });
+    });
+    var readAuthCookies = function() {
+      if ($.cookie('auth_device') && $.cookie('auth_token')){
+        $("#input_device").val($.cookie('auth_device'));
+        $("#input_token").val($.cookie('auth_token'));
+        $('#btn_auth').click();
+      }
+    };
+
     window.swaggerUi.load();
+    readAuthCookies();
   });
   </script>
 </head>

@@ -97,7 +97,7 @@ if defined? RailsAdmin
         field :description
         field :user do
           pretty_value do
-            value.username
+            value.try(:username)
           end
         end
         field :protected
@@ -107,7 +107,7 @@ if defined? RailsAdmin
         field :description
         field :user do
           pretty_value do
-            value.username
+            value.try(:username)
           end
         end
         field :protected
@@ -117,7 +117,7 @@ if defined? RailsAdmin
         field :description
         field :user  do
           pretty_value do
-            value.username
+            value.try(:username)
           end
         end
         field :protected

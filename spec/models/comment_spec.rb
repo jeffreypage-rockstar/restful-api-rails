@@ -32,6 +32,17 @@ RSpec.describe Comment, type: :model do
       comment = Comment.create(attrs)
       expect(comment.mentions[user.username]).to eql user.id
     end
+
+    it "generates an activity entry for create" do
+      allow(Notifier).to receive(:notify_async)
+      PublicActivity.with_tracking do
+        comment = Comment.create(attrs)
+        act = comment.activities.last
+        expect(act.key).to eql "comment.create"
+        expect(act.owner_id).to eql user.id
+        expect(act.recipient_id).to eql card.id
+      end
+    end
   end
 
   describe "#vote_by!" do
@@ -62,6 +73,24 @@ RSpec.describe Comment, type: :model do
       expect(comment.user.score).to eql -1
       expect(comment.votes.size).to eql 1
     end
+
+    it "generates an activity entry for up_vote" do
+      allow(Notifier).to receive(:notify_async)
+      PublicActivity.with_tracking do
+        comment.vote_by!(user)
+        act = comment.activities.where(key: "comment.up_vote").last
+        expect(act.owner_id).to eql user.id
+      end
+    end
+
+    it "generates an activity entry for down_vote" do
+      allow(Notifier).to receive(:notify_async)
+      PublicActivity.with_tracking do
+        comment.vote_by!(user, kind: :down)
+        act = comment.activities.where(key: "comment.down_vote").last
+        expect(act.owner_id).to eql user.id
+      end
+    end
   end
 
   describe "#flag_by!" do
@@ -76,6 +105,15 @@ RSpec.describe Comment, type: :model do
       other_flag = comment.flag_by!(user)
       expect(flag.id).to eql other_flag.id
       expect(comment.reload.flags_count).to eql 1
+    end
+
+    it "generates an activity entry for flag" do
+      allow(Notifier).to receive(:notify_async)
+      PublicActivity.with_tracking do
+        comment.flag_by!(user)
+        act = comment.activities.where(key: "comment.flag").last
+        expect(act.owner_id).to eql user.id
+      end
     end
   end
 end

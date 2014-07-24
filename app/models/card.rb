@@ -1,6 +1,8 @@
 class Card < ActiveRecord::Base
   include Votable
   include Flaggable
+  include PublicActivity::Model
+  tracked owner: :user, recipient: :stack
 
   validates :name, :stack, :user, presence: true
   attr_readonly :score

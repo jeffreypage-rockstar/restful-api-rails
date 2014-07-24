@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Stack, type: :model do
+  let(:user) { create(:user) }
 
   describe ".create" do
 
@@ -8,7 +9,7 @@ RSpec.describe Stack, type: :model do
       {
         name: "My Stack Title",
         description: "My stack description",
-        user_id: 1
+        user_id: user.id
       }
     end
 
@@ -42,6 +43,15 @@ RSpec.describe Stack, type: :model do
       stack = Stack.new(attrs.merge(protected: true))
       expect(stack).to be_valid
       expect(stack.protected?).to eql true
+    end
+
+    it "generates an activity entry for create" do
+      PublicActivity.with_tracking do
+        stack = Stack.create(attrs)
+        act = stack.activities.last
+        expect(act.key).to eql "stack.create"
+        expect(act.owner_id).to eql user.id
+      end
     end
   end
 

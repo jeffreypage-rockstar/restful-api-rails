@@ -1,11 +1,13 @@
 class Comment < ActiveRecord::Base
   include Votable
   include Flaggable
+  include PublicActivity::Model
+  tracked owner: :user, recipient: :card
   validates :user, :card, presence: true
 
   belongs_to :user
   belongs_to :card, counter_cache: true
-  belongs_to :replying, class_name: "Card"
+  belongs_to :replying, class_name: "Comment"
 
   store_accessor :mentions
 
@@ -15,6 +17,10 @@ class Comment < ActiveRecord::Base
   scope :newest, -> { order("created_at DESC") }
   scope :oldest, -> { order("created_at ASC") }
   scope :popularity, -> { order("score DESC") }
+
+  def mentions
+    self[:mentions] || {}
+  end
 
   private # ===============================================================
 

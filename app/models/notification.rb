@@ -9,6 +9,8 @@ class Notification < ActiveRecord::Base
   scope :unseen, -> { where(seen_at: nil) }
   scope :recent, -> { order(created_at: :desc) }
 
+  PUSH_VOTES_INTERVAL = 50
+
   def mask_as_read!
     self.read_at = Time.now.utc
     save
@@ -32,13 +34,30 @@ class Notification < ActiveRecord::Base
   end
 
   def send!
-    # TODO: trigger a push notification if necessary
+    if require_push_notification?
+      # TODO: trigger a push notification
+    end
     self.sent_at = Time.now.utc
     save
   end
 
   def sent?
     sent_at.present?
+  end
+
+  def similar_notifications
+    Notification.where(action: action, subject: subject).where.not(id: id)
+  end
+
+  # for upvotes, send a push notification for the first upvote
+  # and then one for every subsequent 50 upvotes
+  def require_push_notification?
+    if action =~ /up_vote/ && subject.respond_to?(:votes)
+      first_notification = !similar_notifications.exists?
+      first_notification || subject.votes.count % PUSH_VOTES_INTERVAL == 0
+    else
+      true
+    end
   end
 
   # CLASS METHODS =======================

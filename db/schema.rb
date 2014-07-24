@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723142831) do
+ActiveRecord::Schema.define(version: 20140724132440) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -148,14 +149,17 @@ ActiveRecord::Schema.define(version: 20140723142831) do
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "seen_at"
   end
 
+  add_index "notifications", ["read_at"], name: "index_notifications_on_read_at", using: :btree
+  add_index "notifications", ["seen_at"], name: "index_notifications_on_seen_at", using: :btree
   add_index "notifications", ["subject_id", "subject_type"], name: "index_notifications_on_subject_id_and_subject_type", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "reputations", force: true do |t|
-    t.string   "name",       null: false
-    t.integer  "min_score",  null: false
+    t.string "name",       null: false
+    t.integer "min_score",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -202,12 +206,12 @@ ActiveRecord::Schema.define(version: 20140723142831) do
     t.string "unconfirmed_email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "avatar_url"
-    t.string   "facebook_token"
-    t.string   "facebook_id"
-    t.string   "location"
-    t.integer  "flags_count",            default: 0
-    t.integer  "score",                  default: 0
+    t.string "avatar_url"
+    t.string "facebook_token"
+    t.string "facebook_id"
+    t.string "location"
+    t.integer "flags_count",            default: 0
+    t.integer "score",                  default: 0
     t.datetime "deleted_at"
   end
 

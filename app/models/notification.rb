@@ -6,6 +6,8 @@ class Notification < ActiveRecord::Base
   belongs_to :subject, polymorphic: true
 
   scope :unread, -> { where(read_at: nil).order(created_at: :desc) }
+  scope :unseen, -> { where(seen_at: nil) }
+  scope :recent, -> { order(created_at: :desc) }
 
   def mask_as_read!
     self.read_at = Time.now.utc
@@ -14,6 +16,10 @@ class Notification < ActiveRecord::Base
 
   def read?
     read_at.present?
+  end
+
+  def seen?
+    seen_at.present?
   end
 
   def add_sender(sender_user)
@@ -37,7 +43,15 @@ class Notification < ActiveRecord::Base
 
   # CLASS METHODS =======================
 
-  def self.mark_all_as_read(user_id)
-    unread.where(user_id: user_id).update_all(read_at: Time.now.utc)
+  def self.mark_all_as_read(user_id, before_notification)
+    unread.where(user_id: user_id).
+           where("created_at <= ?", before_notification.created_at).
+           update_all(read_at: Time.now.utc)
+  end
+
+  def self.mark_all_as_seen(user_id, before_notification)
+    unseen.where(user_id: user_id).
+           where("created_at <= ?", before_notification.created_at).
+           update_all(seen_at: Time.now.utc)
   end
 end

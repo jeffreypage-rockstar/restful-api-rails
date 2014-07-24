@@ -3,7 +3,7 @@ class CardSerializer < ActiveModel::Serializer
              :comments_count, :created_at
 
   has_many :images, serializer: CardImageSerializer
-  has_one :user
+  has_one :user, serializer: UserShortSerializer
 
   def my_vote
     VoteCardSerializer.new object.votes.where(user_id: current_user.id).first

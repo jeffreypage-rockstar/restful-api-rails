@@ -38,10 +38,19 @@ RSpec.describe Notification, type: :model do
 
   describe ".mark_all_as_read" do
     it "marks all user notifications as read" do
-      (1..5).map { create(:notification, user: user) }
+      notifications = (1..5).map { create(:notification, user: user) }
       expect(user.notifications.unread.count).to eql 5
-      Notification.mark_all_as_read(user.id)
+      Notification.mark_all_as_read(user.id, notifications.last)
       expect(user.notifications.unread.count).to eql 0
+    end
+  end
+
+  describe ".mark_all_as_seen" do
+    it "marks all user notifications as seen" do
+      notifications = (1..5).map { create(:notification, user: user) }
+      expect(user.notifications.unseen.count).to eql 5
+      Notification.mark_all_as_seen(user.id, notifications.last)
+      expect(user.notifications.unseen.count).to eql 0
     end
   end
 

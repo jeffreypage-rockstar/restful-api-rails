@@ -4,21 +4,67 @@ describe Hyper::Notifications do
   let(:device) { create(:device) }
   let(:user) { device.user }
   let(:card) { create(:card, user: user) }
+  let(:notification) { create(:notification, user: user) }
 
-  # ======== MARKING AS READ ==================
-  describe "POST /api/notifications" do
+  # ======== MARKING ALL AS SEEN ==================
+  describe "DELETE /api/notifications" do
     it "requires authentication" do
-      post "/api/notifications"
+      delete "/api/notifications/seen", before_id: notification.id
       expect(response.status).to eql 401 # authentication
       realm = "Basic realm=\"Hyper\""
       expect(response.header["WWW-Authenticate"]).to eql realm
     end
 
-    it "marks all notifications as read" do
-      expect(Notification).to receive(:mark_all_as_read).
-                               with(user.id).once
+    it "requires a before_id param" do
       http_login device.id, device.access_token
-      post "/api/notifications", nil, @env
+      delete "/api/notifications/seen", nil, @env
+      expect(response.status).to eql 400
+    end
+
+    it "marks all notifications as read" do
+      http_login device.id, device.access_token
+      delete "/api/notifications/seen", { before_id: notification.id }, @env
+      expect(user.notifications.unseen.count).to eql 0
+      expect(response.status).to eql 204 # empty body
+    end
+  end
+
+  # ======== MARKING ALL AS READ ==================
+  describe "DELETE /api/notifications" do
+    it "requires authentication" do
+      delete "/api/notifications/read", before_id: notification.id
+      expect(response.status).to eql 401 # authentication
+      realm = "Basic realm=\"Hyper\""
+      expect(response.header["WWW-Authenticate"]).to eql realm
+    end
+
+    it "requires a before_id param" do
+      http_login device.id, device.access_token
+      delete "/api/notifications/read", nil, @env
+      expect(response.status).to eql 400
+    end
+
+    it "marks all notifications as read" do
+      http_login device.id, device.access_token
+      delete "/api/notifications/read", { before_id: notification.id }, @env
+      expect(user.notifications.unread.count).to eql 0
+      expect(response.status).to eql 204 # empty body
+    end
+  end
+
+  # ======== MARKING A SINGLE NOTIFICATION AS READ ==================
+  describe "DELETE /api/notifications/:id" do
+    it "requires authentication" do
+      delete "/api/notifications/#{notification.id}"
+      expect(response.status).to eql 401 # authentication
+      realm = "Basic realm=\"Hyper\""
+      expect(response.header["WWW-Authenticate"]).to eql realm
+    end
+
+    it "marks the notification as read" do
+      http_login device.id, device.access_token
+      delete "/api/notifications/#{notification.id}", nil, @env
+      expect(user.notifications.unread.count).to eql 0
       expect(response.status).to eql 204 # empty body
     end
   end
@@ -30,9 +76,12 @@ describe Hyper::Notifications do
       expect(response.status).to eql 401 # authentication
     end
 
-    it "returns unread notifications" do
-      (1..10).map do
-        create(:notification, user: user, subject: card, action: "card.up_vote")
+    it "returns notifications read and unread" do
+      (1..10).map do |i|
+        create(:notification, user: user,
+                              subject: card,
+                              read_at: i.odd? ? Time.now.utc : nil,
+                              action: "card.up_vote")
       end
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
@@ -42,7 +91,7 @@ describe Hyper::Notifications do
       expect(r.first["caption"]).to eql "a person has liked your post"
     end
 
-    it "returns unread notification with few senders" do
+    it "returns notifications with few senders" do
       senders = { "john" => 1, "peter" => 2, "michael" => 3 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
                             senders: senders)
@@ -56,7 +105,7 @@ describe Hyper::Notifications do
       expect(r.first["caption"]).to eql expected_caption
     end
 
-    it "returns unread notification with many senders" do
+    it "returns notifications with many senders" do
       senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
                             senders: senders)

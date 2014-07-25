@@ -226,8 +226,6 @@ GEM
     oj (2.9.9)
     oj_mimic_json (1.0.1)
     orm_adapter (0.5.0)
-    paranoia (2.0.2)
-      activerecord (~> 4.0)
     pg (0.17.1)
     polyglot (0.3.5)
     public_activity (1.4.1)
@@ -408,7 +406,6 @@ DEPENDENCIES
   launchy
   oj
   oj_mimic_json
-  paranoia (~> 2.0)
   pg
   public_activity
   puma

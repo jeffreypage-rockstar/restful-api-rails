@@ -2,7 +2,6 @@ class User < ActiveRecord::Base
   include Flaggable
   include PublicActivity::Model
   activist
-  acts_as_paranoid
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :async, :registerable, :confirmable,
@@ -24,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :notifications
 
   after_save :update_facebook_network
+  before_destroy :move_to_deleted
 
   def sign_in_from_device!(request, device_id, device_attrs = {})
     update_tracked_fields!(request)
@@ -52,7 +52,13 @@ class User < ActiveRecord::Base
     self.score = cards.sum(:score) + comments.sum(:score)
   end
 
-  private
+  protected # ================================================
+
+  def move_to_deleted
+    DeletedUser.create(attributes.merge(deleted_at: Time.now.utc))
+  end
+
+  private # ==================================================
 
   def check_facebook_token
     return unless facebook_token.present? && facebook_id.blank?

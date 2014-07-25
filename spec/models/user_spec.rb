@@ -169,11 +169,11 @@ describe User do
   end
 
   describe "#delete" do
-    it "marks the user as deleted" do
+    it "moved the user to deleted users" do
       user.destroy!
       expect(user).to be_destroyed
       expect { User.find(user.id) }.to raise_exception
-      expect(User.with_deleted.find(user.id)).to_not be_nil
+      expect(DeletedUser.find(user.id)).to_not be_nil
     end
   end
 

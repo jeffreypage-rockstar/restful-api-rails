@@ -71,5 +71,4 @@ group :test do
 end
 
 gem 'acts_as_list'
-gem "paranoia", "~> 2.0"
 gem 'public_activity'

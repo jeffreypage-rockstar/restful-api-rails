@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724132440) do
+ActiveRecord::Schema.define(version: 20140725132444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,34 @@ ActiveRecord::Schema.define(version: 20140724132440) do
   add_index "comments", ["replying_id"], name: "index_comments_on_replying_id", using: :btree
   add_index "comments", ["score"], name: "index_comments_on_score", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "deleted_users", id: false, force: true do |t|
+    t.string "email"
+    t.string "encrypted_password"
+    t.string "username"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "avatar_url"
+    t.uuid "id",                     null: false
+    t.string "facebook_token"
+    t.string "facebook_id"
+    t.string "location"
+    t.integer "flags_count"
+    t.integer "score"
+    t.datetime "deleted_at"
+  end
 
   create_table "devices", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "access_token",    limit: 32, null: false

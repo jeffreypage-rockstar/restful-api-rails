@@ -20,7 +20,7 @@ feature "Deleted User management", :devise do
   #   When I try to edit an deleted user
   #   Then the user gets edited
   scenario "admin can edit a deleted user" do
-    user = FactoryGirl.create(:user_deleted)
+    user = FactoryGirl.create(:deleted_user)
 
     visit rails_admin.edit_path(model_name: "deleted_user", id: user.id)
     fill_in "Username", with: "anotheruser"
@@ -35,7 +35,7 @@ feature "Deleted User management", :devise do
   #   When I try to restore a deleted user
   #   Then the user gets restore to active users list
   scenario "admin can restore a user" do
-    user = FactoryGirl.create(:user_deleted)
+    user = FactoryGirl.create(:deleted_user)
     page.find("[data-model=deleted_user] a").click
     url = rails_admin.index_path(model_name: "deleted_user")
     expect(current_path).to eq url

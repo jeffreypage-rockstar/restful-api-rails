@@ -13,12 +13,11 @@ module Hyper
       end
       post do
         authenticate!
-        User.find(params[:user_id]).flag_by!(current_user) if params[:user_id]
-        Card.find(params[:card_id]).flag_by!(current_user) if params[:card_id]
-        if params[:comment_id]
-          comment = Comment.find(params[:comment_id])
-          comment.flag_by!(current_user)
-        end
+        klass = User if params[:user_id]
+        klass = Card if params[:card_id]
+        klass = Comment if params[:comment_id]
+        authorize!(:flag, klass)
+        klass.find(params["#{klass.name.downcase}_id"]).flag_by!(current_user)
         empty_body!
       end
     end

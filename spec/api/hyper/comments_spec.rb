@@ -38,6 +38,17 @@ describe Hyper::Cards do
       post "/api/cards/#{device.id}/comments", { body: "My card comment" }, @env
       expect(response.status).to eql 404 # not found
     end
+
+    it "requires a confirmed user as owner" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/comments", { body: "My card comment" },
+           @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 403 # forbidden
+      expect(r["error"]).to match "need to confirm your email"
+    end
   end
 
   # ======== GETTING CARD COMMENTS ==================
@@ -174,6 +185,16 @@ describe Hyper::Cards do
       expect(r["user_id"]).to eql user.id
       expect(r["comment_id"]).to eql comment.id
       expect(r["vote_score"]).to eql 1
+    end
+
+    it "requires a confirmed user to vote" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/comments/#{comment.id}/votes", nil, @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 403 # forbidden
+      expect(r["error"]).to match "need to confirm your email"
     end
 
     it "creates a new downvote to the card" do

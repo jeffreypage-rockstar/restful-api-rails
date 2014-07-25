@@ -39,7 +39,7 @@ module Hyper
           end
 
           def authenticate!
-            auth_error! unless current_user
+            current_user || auth_error!
           end
 
           def auth_error!
@@ -48,8 +48,15 @@ module Hyper
                   )
           end
 
-          def forbidden!
-            error!("403 Forbidden", 403)
+          def authorize!(action, _model)
+            actions = [:create, :vote, :flag]
+            if actions.include?(action) && !current_user.confirmed?
+              forbidden! "You need to confirm your email first"
+            end
+          end
+
+          def forbidden!(msg = nil)
+            error!(msg || "403 Forbidden", 403)
           end
 
           def validate_record!(record)

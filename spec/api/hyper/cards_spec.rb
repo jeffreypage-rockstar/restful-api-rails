@@ -14,6 +14,17 @@ describe Hyper::Cards do
       expect(response.header["WWW-Authenticate"]).to eql realm
     end
 
+    it "requires a confirmed user" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/cards", { name: "My card title", stack_id: card.stack_id },
+           @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 403 # forbidden
+      expect(r["error"]).to match "need to confirm your email"
+    end
+
     it "creates a new valid card" do
       http_login device.id, device.access_token
       post "/api/cards", { name: "My card title", stack_id: card.stack_id },
@@ -265,6 +276,16 @@ describe Hyper::Cards do
       http_login device.id, device.access_token
       post "/api/cards/#{user.id}/votes", nil, @env
       expect(response.status).to eql 404 # not found
+    end
+
+    it "requires a confirmed user to vote" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/votes", nil, @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 403 # forbidden
+      expect(r["error"]).to match "need to confirm your email"
     end
 
     it "creates a new up_vote to the card as default" do

@@ -30,6 +30,16 @@ describe Hyper::Flags do
       expect(response.status).to eql 204
     end
 
+    it "requires a confirmed user to flag" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/flags", { user_id: user.id }, @env
+      expect(response.status).to eql 403 # forbidden
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match "need to confirm your email"
+    end
+
     it "flags an existent comment" do
       comment = create(:comment)
       http_login device.id, device.access_token

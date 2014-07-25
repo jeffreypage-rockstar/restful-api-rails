@@ -18,7 +18,7 @@ module Hyper
                                             "the new card"
       end
       post do
-        authenticate!
+        authenticate! && authorize!(:create, Card)
         card_params = permitted_params
         card_params[:images_attributes] = card_params.delete(:images)
         card_params[:user_id] = current_user.id
@@ -94,7 +94,7 @@ module Hyper
       end
       route_param :id do
         post :votes, serializer: VoteCardSerializer do
-          authenticate!
+          authenticate! && authorize!(:vote, Card)
           Card.find(params[:id]).vote_by!(current_user, kind: params[:kind])
         end
       end

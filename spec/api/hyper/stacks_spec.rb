@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe Hyper::Stacks do
   let(:device) { create(:device) }
+  let(:user) { device.user }
 
   # ======== CREATING STACKS ==================
   describe "POST /api/stacks" do
@@ -36,6 +37,20 @@ describe Hyper::Stacks do
       expect(response.status).to eql 409 # conflict
       expect(r["status_code"]).to eql "conflict"
       expect(r["error"]).to match("name has already been taken")
+    end
+
+    it "requires a confirmed user as owner" do
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/stacks", {
+        name: "My Stack Title",
+        description: "My Stack Description",
+        protected: true
+      }, @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 403 # forbidden
+      expect(r["error"]).to match "need to confirm your email"
     end
   end
 

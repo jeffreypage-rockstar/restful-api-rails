@@ -18,7 +18,7 @@ module Hyper
                                  uuid: true
         end
         post do
-          authenticate!
+          authenticate! && authorize!(:create, Comment)
           comment_params = permitted_params
           comment_params[:user_id] = current_user.id
           card = Card.find(params[:card_id])
@@ -98,7 +98,7 @@ module Hyper
       end
       route_param :id do
         post :votes, serializer: VoteCommentSerializer do
-          authenticate!
+          authenticate! && authorize!(:vote, Comment)
           Comment.find(params[:id]).vote_by!(current_user, kind: params[:kind])
         end
       end

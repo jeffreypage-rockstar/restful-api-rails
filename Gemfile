@@ -72,3 +72,4 @@ end
 
 gem 'acts_as_list'
 gem 'public_activity'
+gem 'cancancan', '~> 1.9'

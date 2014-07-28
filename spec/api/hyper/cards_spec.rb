@@ -15,6 +15,7 @@ describe Hyper::Cards do
     end
 
     it "requires a confirmed user" do
+      Setting[:read_only_mode] = "enabled"
       user.confirmed_at = nil
       user.save
       http_login device.id, device.access_token
@@ -25,7 +26,18 @@ describe Hyper::Cards do
       expect(r["error"]).to match "need to confirm your email"
     end
 
+    it "does not require a confirmed user when setting is disabled" do
+      Setting[:read_only_mode] = "disabled"
+      user.confirmed_at = nil
+      user.save
+      http_login device.id, device.access_token
+      post "/api/cards", { name: "My card title", stack_id: card.stack_id },
+           @env
+      expect(response.status).to eql 201 # forbidden
+    end
+
     it "creates a new valid card" do
+      Setting[:read_only_mode] = "enabled"
       http_login device.id, device.access_token
       post "/api/cards", { name: "My card title", stack_id: card.stack_id },
            @env
@@ -279,6 +291,7 @@ describe Hyper::Cards do
     end
 
     it "requires a confirmed user to vote" do
+      Setting[:read_only_mode] = "enabled"
       user.confirmed_at = nil
       user.save
       http_login device.id, device.access_token

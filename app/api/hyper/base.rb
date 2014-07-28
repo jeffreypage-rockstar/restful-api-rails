@@ -48,11 +48,8 @@ module Hyper
                   )
           end
 
-          def authorize!(action, _model)
-            actions = [:create, :vote, :flag]
-            if actions.include?(action) && !current_user.confirmed?
-              forbidden! "You need to confirm your email first"
-            end
+          def authorize!(action, model)
+            ::Ability.new(current_user).authorize!(action, model)
           end
 
           def forbidden!(msg = nil)
@@ -124,7 +121,14 @@ module Hyper
           )
         end
 
-        rescue_from EmptyBodyException do |_e|
+        rescue_from CanCan::AccessDenied do |e|
+          Rack::Response.new({
+            status: 403,
+            error: e.message
+          }.to_json, 403)
+        end
+
+        rescue_from EmptyBodyException do
           Rack::Response.new([""], 204, "Content-Type" => "text/plain")
         end
 

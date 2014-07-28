@@ -40,6 +40,7 @@ describe Hyper::Cards do
     end
 
     it "requires a confirmed user as owner" do
+      Setting[:read_only_mode] = "enabled"
       user.confirmed_at = nil
       user.save
       http_login device.id, device.access_token
@@ -188,6 +189,7 @@ describe Hyper::Cards do
     end
 
     it "requires a confirmed user to vote" do
+      Setting[:read_only_mode] = "enabled"
       user.confirmed_at = nil
       user.save
       http_login device.id, device.access_token

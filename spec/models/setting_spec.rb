@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Setting, :type => :model do
+RSpec.describe Setting, type: :model do
   describe ".create" do
     let(:attrs) do
       {
@@ -28,7 +28,7 @@ RSpec.describe Setting, :type => :model do
       Setting.create(attrs)
       setting = Setting.new(attrs)
       expect(setting).to_not be_valid
-      expect(setting.errors[:key].first).to match 'taken'
+      expect(setting.errors[:key].first).to match "taken"
     end
   end
 

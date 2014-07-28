@@ -3,9 +3,8 @@ class Setting < ActiveRecord::Base
                   uniqueness: true,
                   format: { with: /\A[a-z0-9_]*\z/ }
 
-
   def name
-    key.to_s.humanize    
+    key.to_s.humanize
   end
 
   def value_enum
@@ -21,6 +20,10 @@ class Setting < ActiveRecord::Base
       setting = Setting.find_or_create_by(key: key)
       setting.value = value.to_s
       setting.save!
+    end
+
+    def enabled?(key)
+      self[key].to_s.downcase == "enabled"
     end
   end
 end

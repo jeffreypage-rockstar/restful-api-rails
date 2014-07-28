@@ -16,3 +16,10 @@ en:
       up_vote: liked your comment 
       reply: replied to your comment
       mention: mentioned you in a comment
+  unauthorized:
+    create:
+      all: You need to confirm your email first.
+    vote:
+      all: You need to confirm your email first.
+    flag:
+      all: You need to confirm your email first.

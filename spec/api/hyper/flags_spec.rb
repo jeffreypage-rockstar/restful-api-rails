@@ -31,6 +31,7 @@ describe Hyper::Flags do
     end
 
     it "requires a confirmed user to flag" do
+      Setting[:read_only_mode] = "enabled"
       user.confirmed_at = nil
       user.save
       http_login device.id, device.access_token

@@ -13,7 +13,7 @@ module Hyper
         optional :protected, type: Boolean, desc: "Stack visibility."
       end
       post do
-        authenticate!
+        authenticate! && authorize!(:create, Stack)
         stack = current_user.stacks.create!(permitted_params)
         header "Location", "/stacks/#{stack.id}"
         stack

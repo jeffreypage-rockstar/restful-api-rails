@@ -12,6 +12,7 @@ if defined? RailsAdmin
     # config.current_user_method(&:current_user)
 
     ## == Cancan ==
+    config.authorize_with :cancan, AdminAbility
     # config.authorize_with :cancan
 
     ## == PaperTrail ==
@@ -26,15 +27,15 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ["User"]
+        except ["User", "Setting"]
       end
       bulk_delete do
-        except ["DeletedUser"]
+        except ["DeletedUser", "Setting"]
       end
       show
       edit
       delete do
-        except ["DeletedUser"]
+        except ["DeletedUser", "Setting"]
       end
       restore do
         only ["DeletedUser"]
@@ -43,7 +44,7 @@ if defined? RailsAdmin
       # history_index
       # history_show
     end
-    config.included_models = %w(Admin User DeletedUser Stack Reputation)
+    config.included_models = %w(Admin User DeletedUser Stack Reputation Setting)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -128,6 +129,27 @@ if defined? RailsAdmin
       list do
         field :name
         field :min_score
+      end
+    end
+
+    config.model "Setting" do
+      list do
+        field :name do
+          label "Setting"
+        end
+        field :value
+        field :description
+      end
+
+      edit do
+        field :name do
+          label "Setting"
+          read_only true
+        end
+        field :value
+        field :description do
+          read_only true
+        end
       end
     end
   end

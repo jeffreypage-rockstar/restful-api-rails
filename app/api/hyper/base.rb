@@ -39,7 +39,7 @@ module Hyper
           end
 
           def authenticate!
-            auth_error! unless current_user
+            current_user || auth_error!
           end
 
           def auth_error!
@@ -48,8 +48,12 @@ module Hyper
                   )
           end
 
-          def forbidden!
-            error!("403 Forbidden", 403)
+          def authorize!(action, model)
+            ::Ability.new(current_user).authorize!(action, model)
+          end
+
+          def forbidden!(msg = nil)
+            error!(msg || "403 Forbidden", 403)
           end
 
           def validate_record!(record)
@@ -117,7 +121,14 @@ module Hyper
           )
         end
 
-        rescue_from EmptyBodyException do |_e|
+        rescue_from CanCan::AccessDenied do |e|
+          Rack::Response.new({
+            status: 403,
+            error: e.message
+          }.to_json, 403)
+        end
+
+        rescue_from EmptyBodyException do
           Rack::Response.new([""], 204, "Content-Type" => "text/plain")
         end
 

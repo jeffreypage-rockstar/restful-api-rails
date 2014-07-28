@@ -82,6 +82,7 @@ GEM
     bootstrap_form (2.1.1)
     buftok (0.2.0)
     builder (3.2.2)
+    cancancan (1.9.1)
     capybara (2.4.1)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -384,6 +385,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass
   bootstrap_form
+  cancancan (~> 1.9)
   capybara
   database_cleaner
   devise

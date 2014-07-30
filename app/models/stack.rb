@@ -4,7 +4,8 @@ class Stack < ActiveRecord::Base
 
   validates :name, :user_id, presence: true
 
-  validates_uniqueness_of :name
+  validates :name, uniqueness: { case_sensitive: false },
+                   format: { with: /\A[a-zA-Z0-9_]*\z/ }
 
   belongs_to :user
   has_many :cards, dependent: :restrict_with_exception
@@ -12,6 +13,12 @@ class Stack < ActiveRecord::Base
 
   scope :recent, -> { order("created_at DESC") }
   scope :popular, -> { order("subscriptions_count ASC") }
+
+  before_validation :remove_hashtag
+
+  def display_name
+    "##{name}"
+  end
 
   # TODO: update this to return stacks ordered by points
   # TODO: do not return stacks users created or is already following
@@ -23,5 +30,11 @@ class Stack < ActiveRecord::Base
   def user
     return nil if user_id.blank?
     super
+  end
+
+  private # ================================
+
+  def remove_hashtag
+    self.name = name.to_s.gsub(/^\#/, "")
   end
 end

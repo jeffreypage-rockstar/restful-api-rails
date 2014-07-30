@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140728134801) do
+ActiveRecord::Schema.define(version: 20140730191712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,8 +214,6 @@ ActiveRecord::Schema.define(version: 20140728134801) do
     t.text "description"
     t.integer "subscriptions_count", default: 0
   end
-
-  add_index "stacks", ["name"], name: "index_stacks_on_name", unique: true, using: :btree
 
   create_table "subscriptions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid "user_id",    null: false

@@ -14,13 +14,13 @@ describe Hyper::Stacks do
     it "creates a new valid stack" do
       http_login device.id, device.access_token
       post "/api/stacks", {
-        name: "My Stack Title",
+        name: "MyStackTitle",
         description: "My Stack Description",
         protected: true
       }, @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
-      expect(r["name"]).to eql "My Stack Title"
+      expect(r["name"]).to eql "MyStackTitle"
       expect(r["description"]).to eql "My Stack Description"
       stack_id = r["id"]
       expect(stack_id).to_not be_blank
@@ -45,7 +45,7 @@ describe Hyper::Stacks do
       user.save
       http_login device.id, device.access_token
       post "/api/stacks", {
-        name: "My Stack Title",
+        name: "MyStackTitle",
         description: "My Stack Description",
         protected: true
       }, @env
@@ -112,10 +112,10 @@ describe Hyper::Stacks do
       expect(response.status).to eql 401 # authentication
     end
 
-    it "returns the stacks with name matching the query" do
+    it "returns the stacks with name matching the query, case insensitive" do
       stack = create(:stack)
       http_login device.id, device.access_token
-      get "/api/stacks/names", { q: stack.name[0..2] }, @env
+      get "/api/stacks/names", { q: stack.name[0..2].upcase }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)

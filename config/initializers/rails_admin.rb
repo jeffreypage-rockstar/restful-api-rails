@@ -94,7 +94,7 @@ if defined? RailsAdmin
 
     config.model "Stack" do
       list do
-        field :name
+        field :display_name
         field :description
         field :user do
           pretty_value do
@@ -104,7 +104,7 @@ if defined? RailsAdmin
         field :protected
       end
       show do
-        field :name
+        field :display_name
         field :description
         field :user do
           pretty_value do

@@ -7,7 +7,7 @@ RSpec.describe Stack, type: :model do
 
     let(:attrs) do
       {
-        name: "My Stack Title",
+        name: "#MyStackTitle",
         description: "My stack description",
         user_id: user.id
       }
@@ -27,11 +27,23 @@ RSpec.describe Stack, type: :model do
       expect(stack).to_not be_valid
     end
 
-    it "requires a unique name" do
+    it "requires a unique name, case insensitive" do
       stack = create(:stack)
-      other = Stack.new(attrs.merge(name: stack.name))
+      other = Stack.new(attrs.merge(name: stack.name.upcase))
       expect(other).to_not be_valid
       expect(other.errors[:name].first).to match("taken")
+    end
+
+    it "does allow special chars to stack names" do
+      stack = Stack.new(attrs.merge(name: "Stack name with spaces"))
+      expect(stack).to_not be_valid
+      expect(stack.errors[:name].first).to match("invalid")
+    end
+
+    it "always store the name without the initial hash (#)" do
+      stack = Stack.create(attrs)
+      expect(stack.name).to eql "MyStackTitle"
+      expect(stack.display_name).to eql "#MyStackTitle"
     end
 
     it "sets a default protected as false" do

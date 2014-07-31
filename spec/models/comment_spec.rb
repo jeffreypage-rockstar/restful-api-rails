@@ -125,4 +125,13 @@ RSpec.describe Comment, type: :model do
       end
     end
   end
+
+  describe ".popularity" do
+    it "sorts the comments by popularity" do
+      comment.vote_by! user, kind: :down
+      comment2 = create(:comment, card: card)
+      comment2.vote_by!(user)
+      expect(Comment.popularity.all.map(&:id)).to eql [comment2.id, comment.id]
+    end
+  end
 end

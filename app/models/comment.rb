@@ -16,13 +16,13 @@ class Comment < ActiveRecord::Base
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
   scope :oldest, -> { order("created_at ASC") }
-  
+
   def mentions
     self[:mentions] || {}
   end
 
   def self.popularity
-    self.select("comments.*, ci_lower_bound(comments.up_score, comments.down_score) as rank").order("rank DESC, created_at ASC")
+    select("comments.*, ci_lower_bound(comments.up_score, comments.down_score) as rank").order("rank DESC, created_at ASC")
   end
 
   private # ===============================================================

@@ -3,8 +3,8 @@ class AddCiLowerBoundFunction < ActiveRecord::Migration
     execute <<-SQL
       create or replace function ci_lower_bound(ups integer, downs integer) returns numeric as $$
     select (case($1 + $2) when 0 then 0
-            else (($1 + 1.9208) / ($1 + $2) - 
-                   1.96 * SQRT(($1 * $2) / ($1 + $2) + 0.9604) / 
+            else (($1 + 1.9208) / ($1 + $2) -
+                   1.96 * SQRT(($1 * $2) / ($1 + $2) + 0.9604) /
                           ($1 + $2)) / (1 + 3.8416 / ($1 + $2)) end)
 $$ language sql immutable;
     SQL

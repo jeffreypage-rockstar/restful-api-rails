@@ -66,6 +66,17 @@ CREATE FUNCTION ci_lower_bound(ups integer, downs integer) RETURNS numeric
 $_$;
 
 
+--
+-- Name: hot_score(integer, integer, timestamp with time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION hot_score(ups integer, downs integer, date timestamp with time zone) RETURNS numeric
+    LANGUAGE sql IMMUTABLE
+    AS $_$
+    select round(cast(log(greatest(abs($1 - $2), 1)) * sign($1 - $2) + (date_part('epoch', $3) - 1134028003) / 45000.0 as numeric), 7)
+$_$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -964,4 +975,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140731132617');
 INSERT INTO schema_migrations (version) VALUES ('20140731144746');
 
 INSERT INTO schema_migrations (version) VALUES ('20140731162847');
+
+INSERT INTO schema_migrations (version) VALUES ('20140731190126');
 

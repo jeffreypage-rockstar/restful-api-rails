@@ -18,7 +18,6 @@ class Card < ActiveRecord::Base
 
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
-  scope :popularity, -> { order("score DESC") }
 
   def to_param
     hash_id
@@ -34,5 +33,9 @@ class Card < ActiveRecord::Base
 
   def self.hashids
     @hashids ||= Hashids.new("Hyper card short_id salt")
+  end
+
+  def self.popularity
+    select("cards.*, hot_score(cards.up_score, cards.down_score, cards.created_at) as rank").order("rank DESC, created_at DESC")
   end
 end

@@ -148,4 +148,13 @@ RSpec.describe Card, type: :model do
       expect(Card.find_by_hash_id!(card.hash_id).id).to eql card.id
     end
   end
+
+  describe ".popularity" do
+    it "sorts the cards by popularity" do
+      card.vote_by! user, kind: :down
+      card2 = create(:card)
+      card2.vote_by!(user)
+      expect(Card.popularity.all.map(&:id)).to eql [card2.id, card.id]
+    end
+  end
 end

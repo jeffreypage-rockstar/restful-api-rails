@@ -18,4 +18,11 @@ module Votable
     return unless respond_to? :create_activity
     create_activity("#{kind}_vote", owner: user)
   end
+
+  def update_scores!
+    self.down_score = votes.down_votes.sum(:weight)
+    self.up_score = votes.up_votes.sum(:weight)
+    self.score = up_score - down_score
+    save(validate: false)
+  end
 end

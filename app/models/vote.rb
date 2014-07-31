@@ -41,15 +41,35 @@ class Vote < ActiveRecord::Base
   # if flag column is changed, the parent score needs to remove the old weight
   # and add the new one
   def score_change
-    result = vote_score
-    @flag_changed ? (result * 2) : result
+    # result = vote_score
+    # @flag_changed ? (result * 2) : result
+
+    up_score_change - down_score_change
+  end
+
+  def up_score_change
+    if up_vote?
+      weight
+    else
+      @flag_changed ? weight * -1 : 0
+    end
+  end
+
+  def down_score_change
+    if up_vote?
+      @flag_changed ? weight * -1 : 0
+    else
+      weight
+    end
   end
 
   def update_score
     return unless votable.respond_to?("score=")
-    votable.class.send(:update_counters, votable.id, score: score_change)
+    votable.class.update_counters(votable.id, score: score_change,
+                                              up_score: up_score_change,
+                                              down_score: down_score_change)
     if votable.respond_to? :user_id
-      User.send(:update_counters, votable.user_id, score: score_change)
+      User.update_counters(votable.user_id, score: score_change)
     end
   end
 

@@ -22,7 +22,8 @@ class Comment < ActiveRecord::Base
   end
 
   def self.popularity
-    select("comments.*, ci_lower_bound(comments.up_score, comments.down_score) as rank").order("rank DESC, created_at ASC")
+    select("*, ci_lower_bound(up_score, down_score) as rank").
+      order("rank DESC, created_at ASC")
   end
 
   private # ===============================================================

@@ -73,8 +73,9 @@ $_$;
 CREATE FUNCTION hot_score(ups integer, downs integer, date timestamp with time zone) RETURNS numeric
     LANGUAGE sql IMMUTABLE
     AS $_$
-    select round(cast(log(greatest(abs($1 - $2), 1)) * sign($1 - $2) + (date_part('epoch', $3) - 1134028003) / 45000.0 as numeric), 7)
-$_$;
+        select round(cast(log(greatest(abs($1 - $2), 1)) * sign($1 - $2) + 
+          (date_part('epoch', $3) - 1134028003) / 45000.0 as numeric), 7)
+      $_$;
 
 
 SET default_tablespace = '';

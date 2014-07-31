@@ -36,6 +36,7 @@ class Card < ActiveRecord::Base
   end
 
   def self.popularity
-    select("cards.*, hot_score(cards.up_score, cards.down_score, cards.created_at) as rank").order("rank DESC, created_at DESC")
+    select("*, hot_score(up_score, down_score, created_at) as rank").
+      order("rank DESC, created_at DESC")
   end
 end

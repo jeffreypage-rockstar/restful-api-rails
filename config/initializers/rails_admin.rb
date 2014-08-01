@@ -27,15 +27,17 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ["User", "Setting"]
+        except ["User", "Setting", "Activity", "Notification"]
       end
       bulk_delete do
-        except ["DeletedUser", "Setting"]
+        except ["DeletedUser", "Setting", "Activity", "Notification"]
       end
       show
-      edit
+      edit do
+        except ["Activity", "Notification"]
+      end
       delete do
-        except ["DeletedUser", "Setting"]
+        except ["DeletedUser", "Setting", "Activity", "Notification"]
       end
       restore do
         only ["DeletedUser"]
@@ -44,7 +46,8 @@ if defined? RailsAdmin
       # history_index
       # history_show
     end
-    config.included_models = %w(Admin User DeletedUser Stack Reputation Setting)
+    config.included_models = %w(Admin User DeletedUser Stack Card Comment
+                                Reputation Setting Activity Notification)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -102,6 +105,7 @@ if defined? RailsAdmin
           end
         end
         field :protected
+        field :cards
       end
       show do
         field :display_name
@@ -122,6 +126,65 @@ if defined? RailsAdmin
           end
         end
         field :protected
+      end
+    end
+
+    config.model "Card" do
+      list do
+        field :name
+        field :description
+        field :user
+        field :score
+        field :stack
+        field :comments
+        field :created_at
+      end
+      show do
+        field :name
+        field :description
+        field :user
+        field :score
+        field :stack
+        field :comments
+        field :created_at
+      end
+      edit do
+        field :name
+        field :description
+        field :user
+        field :stack
+        field :score do
+          read_only true
+        end
+      end
+    end
+
+    config.model "Comment" do
+      list do
+        field :body
+        field :score
+        field :replying
+        field :card
+        field :user
+        field :created_at
+      end
+      show do
+        field :body
+        field :score
+        field :replying
+        field :card
+        field :user
+        field :created_at
+      end
+      edit do
+        field :body
+        field :score do
+          read_only true
+        end
+        field :replying
+        field :card
+        field :user
+        field :created_at
       end
     end
 
@@ -150,6 +213,53 @@ if defined? RailsAdmin
         field :description do
           read_only true
         end
+      end
+    end
+
+    config.model "Activity" do
+      list do
+        field :key do
+          pretty_value do
+            case value
+            when /\.destroy/
+              %(<span class='label label-warning'>#{value}</span>)
+            else
+              %(<span class='label label-default'>#{value}</span>)
+            end.html_safe
+          end
+        end
+        field :trackable
+        field :owner
+        field :notified
+        field :created_at
+      end
+
+      show do
+        field :key
+        field :trackable
+        field :owner
+        field :notified
+        field :created_at
+      end
+    end
+
+
+    config.model "Notification" do
+      list do
+        field :senders do
+          formatted_value do
+            value.map do |username, user_id|
+              path = bindings[:view].rails_admin.show_path(model_name: "user", id: user_id)
+              bindings[:view].link_to(username, path)
+            end.join(", ").html_safe
+          end
+        end
+        field :caption
+        field :user
+        field :subject
+        field :sent_at
+        field :seen?, :boolean
+        field :read?, :boolean
       end
     end
   end

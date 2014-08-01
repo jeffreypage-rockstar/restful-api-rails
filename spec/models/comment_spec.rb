@@ -52,6 +52,8 @@ RSpec.describe Comment, type: :model do
       expect(comment.votes.up_votes.size).to eql 1
       expect(comment.reload.score).to eql 1
       expect(comment.user.score).to eql 1
+      expect(comment.up_score).to eql 1
+      expect(comment.down_score).to eql 0
     end
 
     it "accepts a downvote, updating score" do
@@ -61,17 +63,24 @@ RSpec.describe Comment, type: :model do
       expect(comment.votes.down_votes.size).to eql 1
       expect(comment.reload.score).to eql -1
       expect(comment.user.score).to eql -1
+      expect(comment.up_score).to eql 0
+      expect(comment.down_score).to eql 1
     end
 
     it "changes the vote if already exists" do
+      comment.vote_by!(create(:user))
       comment.vote_by!(user)
-      expect(comment.reload.score).to eql 1
-      expect(comment.votes.size).to eql 1
+      expect(comment.reload.score).to eql 2
+      expect(comment.up_score).to eql 2
+      expect(comment.down_score).to eql 0
+      expect(comment.votes.size).to eql 2
 
       expect(comment.vote_by!(user, kind: :down)).to be_valid
-      expect(comment.reload.score).to eql -1
-      expect(comment.user.score).to eql -1
-      expect(comment.votes.size).to eql 1
+      expect(comment.reload.score).to eql 0
+      expect(comment.user.score).to eql 0
+      expect(comment.up_score).to eql 1
+      expect(comment.down_score).to eql 1
+      expect(comment.votes.size).to eql 2
     end
 
     it "generates an activity entry for up_vote" do
@@ -114,6 +123,15 @@ RSpec.describe Comment, type: :model do
         act = comment.activities.where(key: "comment.flag").last
         expect(act.owner_id).to eql user.id
       end
+    end
+  end
+
+  describe ".popularity" do
+    it "sorts the comments by popularity" do
+      comment.vote_by! user, kind: :down
+      comment2 = create(:comment, card: card)
+      comment2.vote_by!(user)
+      expect(Comment.popularity.all.map(&:id)).to eql [comment2.id, comment.id]
     end
   end
 end

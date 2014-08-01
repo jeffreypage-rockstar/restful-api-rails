@@ -70,6 +70,8 @@ RSpec.describe Card, type: :model do
       expect(card.votes.up_votes.size).to eql 1
       expect(card.reload.score).to eql 1
       expect(card.user.score).to eql 1
+      expect(card.up_score).to eql 1
+      expect(card.down_score).to eql 0
     end
 
     it "accepts a downvote, updating score" do
@@ -79,6 +81,8 @@ RSpec.describe Card, type: :model do
       expect(card.votes.down_votes.size).to eql 1
       expect(card.reload.score).to eql -1
       expect(card.user.score).to eql -1
+      expect(card.up_score).to eql 0
+      expect(card.down_score).to eql 1
     end
 
     it "changes the vote if already exists" do
@@ -90,6 +94,8 @@ RSpec.describe Card, type: :model do
       expect(card.reload.score).to eql -1
       expect(card.user.score).to eql -1
       expect(card.votes.size).to eql 1
+      expect(card.up_score).to eql 0
+      expect(card.down_score).to eql 1
     end
 
     it "generates an activity entry for up_vote" do
@@ -140,6 +146,15 @@ RSpec.describe Card, type: :model do
       expect(card.short_id).to be_a(Integer)
       expect(card.hash_id).to match /\w/
       expect(Card.find_by_hash_id!(card.hash_id).id).to eql card.id
+    end
+  end
+
+  describe ".popularity" do
+    it "sorts the cards by popularity" do
+      card.vote_by! user, kind: :down
+      card2 = create(:card)
+      card2.vote_by!(user)
+      expect(Card.popularity.all.map(&:id)).to eql [card2.id, card.id]
     end
   end
 end

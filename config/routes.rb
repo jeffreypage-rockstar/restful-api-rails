@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   mount API => "/api"
   authenticate :admin do
     mount Sidekiq::Web => "/sidekiq"
+    mount PgHero::Engine => "/pghero"
   end
 end

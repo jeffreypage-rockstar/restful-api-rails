@@ -23,6 +23,12 @@ RSpec.describe CardImage, type: :model do
       image = CardImage.new(attrs.merge(image_url: ""))
       expect(image).to_not be_valid
     end
+
+    it "requires a valid image_url" do
+      image = CardImage.new(attrs.merge(image_url: "hyper.is/image.jpg"))
+      expect(image).to_not be_valid
+      expect(image.errors[:image_url].first).to match /is not a valid/
+    end
   end
 
 end

@@ -163,6 +163,24 @@ describe Hyper::Cards do
     end
   end
 
+  # ======== GETTING UPVOTED CARDS ==================
+  describe "GET /api/cards/upvoted" do
+    it "requires authentication" do
+      get "/api/cards/upvoted"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "returns the latest upvoted cards by current user" do
+      card.vote_by!(user)
+      create(:card).vote_by!(user)
+      http_login device.id, device.access_token
+      get "/api/cards/upvoted", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(2)
+    end
+  end
+
   # ======== GETTING A CARD DETAILS ==================
 
   describe "GET /api/cards/:id" do

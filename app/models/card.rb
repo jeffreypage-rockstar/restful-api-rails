@@ -18,6 +18,11 @@ class Card < ActiveRecord::Base
 
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
+  scope :best, -> { order("score DESC") }
+  scope :up_voted_by, ->(user_id) { joins(:up_votes).
+                                    where("votes.user_id = ?", user_id).
+                                    order("votes.created_at DESC")
+                                  }
 
   def to_param
     hash_id

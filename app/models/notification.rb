@@ -10,6 +10,22 @@ class Notification < ActiveRecord::Base
   scope :recent, -> { order(created_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
+  SENDERS_CAPTION_LIMIT = 3
+
+  def caption
+    result = []
+    senders = self[:senders] || {}
+    if senders.empty?
+      result << "a person has"
+    elsif senders.size.to_i > SENDERS_CAPTION_LIMIT
+      result << "#{senders.size} people have"
+    else
+      result << senders.keys.to_sentence(last_word_connector: " and ")
+      result << "have"
+    end
+    result << I18n.t(action, scope: "notifications")
+    result.delete_if(&:blank?).join(" ")
+  end
 
   def mask_as_read!
     self.read_at = Time.now.utc

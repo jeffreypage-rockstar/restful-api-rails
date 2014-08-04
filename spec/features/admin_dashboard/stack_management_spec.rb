@@ -1,6 +1,6 @@
 include Warden::Test::Helpers
 Warden.test_mode!
-# Feature: Stack user management
+# Feature: Stack management
 #   As an admin
 #   I want to manage stacks
 #   So I can list add, edit, and delete stacks

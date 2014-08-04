@@ -11,7 +11,7 @@ class Comment < ActiveRecord::Base
 
   store_accessor :mentions
 
-  before_save :extract_mentions
+  before_save :extract_mentions, :fix_replying_id
 
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
@@ -34,5 +34,9 @@ class Comment < ActiveRecord::Base
     self.mentions = users.each_with_object({}) do |user, hash|
       hash[user.username] = user.id
     end
+  end
+
+  def fix_replying_id
+    self.replying_id = nil if replying_id.blank?
   end
 end

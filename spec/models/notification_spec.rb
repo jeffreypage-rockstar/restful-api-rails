@@ -119,4 +119,24 @@ RSpec.describe Notification, type: :model do
       expect(notification).to be_sent
     end
   end
+
+  describe "#caption" do
+    it "returns notification caption for a single sender" do
+      notification = build(:notification)
+      expect(notification.caption).to eql "a person has liked your post"
+    end
+
+    it "returns notification caption for a few senders" do
+      senders = { "john" => 1, "peter" => 2, "michael" => 3 }
+      notification = create(:notification, senders: senders)
+      expected_caption = "john, peter and michael have liked your post"
+      expect(notification.caption).to eql expected_caption
+    end
+
+    it "returns notification caption with many senders" do
+      senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
+      notification = create(:notification, senders: senders)
+      expect(notification.caption).to eql "4 people have liked your post"
+    end
+  end
 end

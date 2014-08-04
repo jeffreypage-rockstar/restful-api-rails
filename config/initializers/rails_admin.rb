@@ -222,9 +222,9 @@ if defined? RailsAdmin
           pretty_value do
             case value
             when /\.destroy/
-              %(<span class='label label-warning'>#{value}</span>)
+              %{<span class='label label-warning'>#{value}</span>}
             else
-              %(<span class='label label-default'>#{value}</span>)
+              %{<span class='label label-default'>#{value}</span>}
             end.html_safe
           end
         end
@@ -242,7 +242,6 @@ if defined? RailsAdmin
         field :created_at
       end
     end
-
 
     config.model "Notification" do
       list do

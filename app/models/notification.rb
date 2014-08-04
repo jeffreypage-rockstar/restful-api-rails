@@ -10,13 +10,14 @@ class Notification < ActiveRecord::Base
   scope :recent, -> { order(created_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
+  SENDERS_CAPTION_LIMIT = 3
 
   def caption
     result = []
-    senders ||= {}
+    senders = self[:senders] || {}
     if senders.empty?
       result << "a person has"
-    elsif senders.size.to_i > SENDERS_LIMIT
+    elsif senders.size.to_i > SENDERS_CAPTION_LIMIT
       result << "#{senders.size} people have"
     else
       result << senders.keys.to_sentence(last_word_connector: " and ")

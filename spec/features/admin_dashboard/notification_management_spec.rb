@@ -23,7 +23,8 @@ feature "Admin Notification management", :devise do
     notification = FactoryGirl.create(:notification)
 
     page.find("[data-model=notification] a").click
-    expect(current_path).to eq rails_admin.index_path(model_name: "notification")
+    expect(current_path).to eq rails_admin.
+                               index_path(model_name: "notification")
     expect(page).to have_content notification.caption
     expect(page).to have_content notification.user.username
     expect(page).to have_content notification.subject.name
@@ -36,11 +37,13 @@ feature "Admin Notification management", :devise do
   scenario "admin can show notification details" do
     notification = FactoryGirl.create(:notification)
     page.find("[data-model=notification] a").click
-    expect(current_path).to eq rails_admin.index_path(model_name: "notification")
+    expect(current_path).to eq rails_admin.
+                               index_path(model_name: "notification")
 
     page.find(".notification_row[1] .show_member_link a").click
-    expect(current_path).to eq rails_admin.show_path(model_name: "notification",
-                                                     id: notification.id)
+    expect(current_path).to eq rails_admin.
+                               show_path(model_name: "notification",
+                                         id: notification.id)
 
     expect(page).to have_content notification.caption
     expect(page).to have_content notification.user.username
@@ -55,7 +58,8 @@ feature "Admin Notification management", :devise do
     FactoryGirl.create(:notification)
 
     page.find("[data-model=notification] a").click
-    expect(current_path).to eq rails_admin.index_path(model_name: "notification")
+    expect(current_path).to eq rails_admin.
+                               index_path(model_name: "notification")
     expect do
       page.find(".notification_row[1] .delete_member_link a").click
     end.to raise_error

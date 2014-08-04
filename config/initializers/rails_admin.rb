@@ -248,7 +248,8 @@ if defined? RailsAdmin
         field :senders do
           formatted_value do
             (value || {}).map do |username, user_id|
-              path = bindings[:view].rails_admin.show_path(model_name: "user", id: user_id)
+              path = bindings[:view].rails_admin.
+                                     show_path(model_name: "user", id: user_id)
               bindings[:view].link_to(username, path)
             end.join(", ").html_safe
           end
@@ -265,7 +266,8 @@ if defined? RailsAdmin
         field :senders do
           formatted_value do
             (value || {}).map do |username, user_id|
-              path = bindings[:view].rails_admin.show_path(model_name: "user", id: user_id)
+              path = bindings[:view].rails_admin.
+                                     show_path(model_name: "user", id: user_id)
               bindings[:view].link_to(username, path)
             end.join(", ").html_safe
           end

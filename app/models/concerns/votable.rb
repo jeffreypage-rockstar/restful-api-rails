@@ -3,6 +3,7 @@ module Votable
 
   included do
     has_many :votes, as: :votable
+    has_many :up_votes, -> { up_votes }, class_name: "Vote", as: :votable
   end
 
   # if a user vote exists, update it. if not, creates a new vote

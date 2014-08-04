@@ -60,6 +60,14 @@ module Hyper
         paginate klass.send(params[:order_by])
       end
 
+      # GET /cards/upvoted
+      desc "Returns cards upvoted by the current_user, paginated"
+      paginate per_page: PAGE_SIZE
+      get :upvoted do
+        authenticate!
+        paginate Card.up_voted_by(current_user.id).includes(:images)
+      end
+
       # GET /cards/:id
       desc "Returns the card details"
       params do

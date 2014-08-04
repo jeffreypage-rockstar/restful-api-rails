@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   has_many :cards
   has_many :comments
   has_many :notifications
+  has_many :votes
 
   after_save :update_facebook_network
   before_destroy :move_to_deleted

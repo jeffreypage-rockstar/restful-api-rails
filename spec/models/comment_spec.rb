@@ -45,6 +45,20 @@ RSpec.describe Comment, type: :model do
     end
   end
 
+  describe "#update" do
+    it "touches update_at for parent card and stack" do
+      comment = create(:comment)
+      date = 2.days.from_now
+      travel_to date do
+        comment.body = "updated comment"
+        comment.save
+      end
+      expect(comment.updated_at).to within(1.second).of(date)
+      expect(comment.card.updated_at).to within(1.second).of(date)
+      expect(comment.card.stack.updated_at).to within(1.second).of(date)
+    end
+  end
+
   describe "#vote_by!" do
     it "accepts an upvote, updating score" do
       expect(comment.vote_by!(user)).to be_valid

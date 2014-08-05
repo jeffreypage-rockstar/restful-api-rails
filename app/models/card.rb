@@ -7,7 +7,7 @@ class Card < ActiveRecord::Base
   validates :name, :stack, :user, presence: true
   attr_readonly :score
 
-  belongs_to :stack
+  belongs_to :stack, touch: true
   belongs_to :user
   has_many :images, -> { order("position ASC") },
            class_name: "CardImage",

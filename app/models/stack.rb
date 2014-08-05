@@ -12,6 +12,7 @@ class Stack < ActiveRecord::Base
   has_many :subscriptions
 
   scope :recent, -> { order("created_at DESC") }
+  scope :recent_active, -> { order("updated_at DESC") }
   scope :popular, -> { order("subscriptions_count ASC") }
 
   before_validation :remove_hashtag
@@ -20,11 +21,10 @@ class Stack < ActiveRecord::Base
     "##{name}"
   end
 
-  # TODO: update this to return stacks ordered by points
-  # TODO: do not return stacks users created or is already following
-  # TODO: use the decay algorithm to return the sorted list
   def self.trending(user_id)
-    where.not(user_id: user_id).recent
+    subscribed_sql = "NOT stacks.id IN (select stack_id from "\
+                     "subscriptions where user_id = ?)"
+    where.not(user_id: user_id).where(subscribed_sql, user_id).recent_active
   end
 
   def user

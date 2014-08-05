@@ -52,6 +52,19 @@ RSpec.describe Card, type: :model do
     end
   end
 
+  describe "#update" do
+    it "touches update_at for parent stack" do
+      card = create(:card)
+      date = 10.days.from_now
+      travel_to date do
+        card.name = "updated card"
+        card.save
+      end
+      expect(card.updated_at).to within(1.second).of(date)
+      expect(card.stack.updated_at).to within(1.second).of(date)
+    end
+  end
+
   describe "#images" do
     it "accepts images setting positions" do
       card.images << build(:card_image)

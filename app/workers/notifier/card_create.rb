@@ -15,7 +15,9 @@ module Notifier
 
     def subscribers_notifications
       card = @activity.trackable
-      Subscription.where(stack_id: card.stack_id).map do |s|
+      Subscription.where(stack_id: card.stack_id).
+                   where.not(user_id: @activity.owner_id).
+                   map do |s|
         load_notification subject: card,
                           user_id: s.user_id,
                           action: @activity.key

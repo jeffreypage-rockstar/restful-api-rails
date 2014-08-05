@@ -75,4 +75,13 @@ RSpec.describe Stack, type: :model do
       expect(stack.reload.subscriptions_count).to eql 1
     end
   end
+
+  describe ".trending" do
+    it "returns trending stacks for a user" do
+      create(:stack)
+      create(:stack, user: user)
+      create(:subscription, user: user)
+      expect(Stack.trending(user.id).count).to eql 1
+    end
+  end
 end

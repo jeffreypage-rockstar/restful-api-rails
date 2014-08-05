@@ -133,7 +133,7 @@ describe Hyper::Stacks do
 
     it "returns an object with user onwed, subscribed and trending stacks" do
       stack = create(:stack, user: device.user)
-      (1..25).map { create(:stack) } # stacks for trending
+      (1..31).map { create(:stack) } # stacks for trending
       (1..10).map { create(:subscription, user: device.user) }
       http_login device.id, device.access_token
       get "/api/stacks/menu", nil, @env

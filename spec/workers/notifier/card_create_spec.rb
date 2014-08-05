@@ -27,7 +27,7 @@ RSpec.describe Notifier::CardCreate, type: :worker do
                                     and_return("0001")
     PublicActivity.with_tracking do
       user = create(:user)
-      subscription = create(:subscription, stack: stack, user: user)
+      create(:subscription, stack: stack, user: user)
       new_card = create(:card, stack: stack, user: user)
       act = new_card.activities.where(key: "card.create").last
       notifications = worker.perform(act.id)

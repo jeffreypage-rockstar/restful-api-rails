@@ -7,6 +7,6 @@ PublicActivity::Activity.class_eval do
 
   def trigger_notification
     return if notified? || key.blank?
-    Notifier.notify_async(id, key) || self.update_attribute(:notified, true)
+    Notifier.notify_async(id, key) || update_attribute(:notified, true)
   end
 end

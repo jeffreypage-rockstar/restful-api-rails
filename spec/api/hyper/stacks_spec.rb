@@ -70,6 +70,7 @@ describe Hyper::Stacks do
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
       expect(r.first["user_id"]).to eql(device.user_id)
+      expect(r.first["subscribed"]).to be_falsey
     end
 
     it "accepts pagination" do
@@ -119,7 +120,8 @@ describe Hyper::Stacks do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expect(r.first.keys).to eql(["id", "name", "subscriptions_count"])
+      short_keys = ["id", "name", "subscriptions_count", "subscribed"]
+      expect(r.first.keys).to eql(short_keys)
     end
   end
 
@@ -140,11 +142,13 @@ describe Hyper::Stacks do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["subscribed_to"]["stacks"].size).to eql 10
+      expect(r["subscribed_to"]["stacks"].first["subscribed"]).to be_truthy
       expect(r["subscribed_to"]["more"]).to eql false
       expect(r["mine"]["stacks"].size).to eql 1
       expect(r["mine"]["stacks"].first["id"]).to eql stack.id
       expect(r["mine"]["more"]).to eql false
       expect(r["trending"]["stacks"].size).to eql 30
+      expect(r["trending"]["stacks"].first["subscribed"]).to be_falsey
       expect(r["trending"]["more"]).to eql true
     end
   end

@@ -101,6 +101,13 @@ describe Hyper::Cards do
 
   # ======== GETTING CARDS ==================
   describe "GET /api/cards" do
+    let(:card_search_filter){ {include: :images, 
+                               where: {},
+                               order: {created_at: :desc}, 
+                               page: 1,
+                               per_page: nil}
+                             }
+
     it "requires authentication" do
       get "/api/cards"
       expect(response.status).to eql 401 # authentication
@@ -108,6 +115,10 @@ describe Hyper::Cards do
 
     it "returns the newest cards" do
       create(:card, user: device.user)
+      result = double(results: Card.newest)
+      filter = card_search_filter
+      expect(Card).to receive(:search).with('*', filter).and_return(result)
+
       http_login device.id, device.access_token
       get "/api/cards", nil, @env
       expect(response.status).to eql 200
@@ -115,31 +126,28 @@ describe Hyper::Cards do
       expect(r.size).to eql(1)
     end
 
-    it "returns the stack cards" do
-      create(:card, user: device.user, stack: card.stack)
+    it "returns the stack cards, sort by popularity" do
+      stack = card.stack
+      create(:card, user: user, stack: stack)
+      result = double(results: card.stack.cards)
+      filter = card_search_filter.merge(where: {stack_id: stack.id}, 
+                                        order: {hot_score: :desc})
+      expect(Card).to receive(:search).with('*', filter).and_return(result)
+
       http_login device.id, device.access_token
-      get "/api/cards", { stack_id: card.stack_id }, @env
+      get "/api/cards", { stack_id: stack.id, order_by: "popularity" }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(2)
       expect(r.map { |c|c["stack_id"] }.uniq).to eql [card.stack_id]
     end
 
-    it "returns the stack cards ordered by popularity" do
-      new_card = create(:card, user: device.user, stack: card.stack)
-      new_card.vote_by!(device.user)
-      http_login device.id, device.access_token
-      get "/api/cards", { stack_id: card.stack_id, order_by: "popularity" },
-          @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.first["id"]).to eql(new_card.id)
-      expect(r.map { |c|c["score"] }.uniq).to eql [1, 0]
-    end
-
     it "returns the user cards" do
       create(:card, user: device.user, stack: card.stack)
+      result = double(results: user.cards)
+      filter = card_search_filter.merge(where: {user_id: user.id})
+      expect(Card).to receive(:search).with('*', filter).and_return(result)
+
       http_login device.id, device.access_token
       get "/api/cards", { user_id: card.user_id }, @env
       expect(response.status).to eql 200
@@ -151,15 +159,15 @@ describe Hyper::Cards do
 
     it "accepts pagination" do
       (1..10).map { create(:card) }
+      result = double(results: Card.offset(2).limit(3))
+      filter = card_search_filter.merge(page: 2, per_page: 3)
+      expect(Card).to receive(:search).with('*', filter).and_return(result)
+
       http_login device.id, device.access_token
       get "/api/cards", { page: 2, per_page: 3 }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(3)
-      # response headers
-      expect(response.header["Total"]).to eql("10")
-      next_link = 'api/cards?page=3&per_page=3>; rel="next"'
-      expect(response.header["Link"]).to include(next_link)
     end
   end
 

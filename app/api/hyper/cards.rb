@@ -38,7 +38,7 @@ module Hyper
       end
 
       # GET /cards
-      desc "Returns front page cards or the stack cards, paginated"
+      desc "Returns front page cards or the stack cards, paginated with scroll"
       paginate per_page: PAGE_SIZE
       params do
         optional :stack_id, type: String,
@@ -51,13 +51,22 @@ module Hyper
                             values: %w(newest popularity),
                             default: "newest",
                             desc: "Results ordering (newest|popularity)"
+        optional :scroll_id, type: String, 
+                             desc: "Scroll_id is required to get the next "\
+                                   "cards set."
       end
       get do
         authenticate!
-        klass = Card.includes(:images)
-        klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
-        klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-        paginate klass.send(params[:order_by])
+        filter = {include: :images, where: {}, order: {created_at: :desc}}
+        filter[:where][:stack_id] = params[:stack_id] if params[:stack_id]
+        filter[:where][:user_id]  = params[:user_id] if params[:user_id]
+        if params[:order_by] == "popularity"
+          filter[:order] = {hot_score: :desc}
+        end
+        filter[:page] = params[:page]
+        filter[:per_page] = params[:per_page]
+
+        Card.search("*", filter).results
       end
 
       # GET /cards/upvoted

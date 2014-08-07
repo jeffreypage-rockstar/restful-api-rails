@@ -23,6 +23,7 @@ gem 'searchbing'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'smarter_csv'
+gem 'whenever', :require => false
 
 group :api do
   gem 'activerecord', '~>4.1.4', require: 'active_record'
@@ -76,3 +77,4 @@ gem 'public_activity'
 gem 'cancancan', '~> 1.9'
 gem 'pghero'
 gem 'validate_url'
+gem 'searchkick'

@@ -42,7 +42,7 @@ module Hyper
         get do
           authenticate!
           card = Card.find(params[:card_id])
-          comments = card.comments
+          comments = card.comments.includes(:user)
           if params[:user_id]
             comments = comments.where(user_id: params[:user_id])
           end

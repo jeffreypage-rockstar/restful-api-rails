@@ -77,6 +77,7 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r.size).to eql(2)
       expect(r.first["id"]).to eql(new_comment.id)
+      expect(r.first["username"]).to eql(new_comment.user.username)
       expect(r.map { |c|c["score"] }.uniq).to eql [1, 0]
     end
 

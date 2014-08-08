@@ -114,60 +114,59 @@ describe Hyper::Cards do
     end
 
     it "returns the newest cards" do
-      create(:card, user: device.user)
-      result = double(results: Card.newest)
-      filter = card_search_filter
-      expect(Card).to receive(:search).with('*', filter).and_return(result)
-
+      card = create(:card, user: device.user)
+      card.vote_by!(user)
+      stream = mock_card_stream(Card.newest.map)
       http_login device.id, device.access_token
       get "/api/cards", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(1)
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(1)
+      expect(r["cards"].first["my_vote"]["kind"]).to eql("up")
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
     it "returns the stack cards, sort by popularity" do
       stack = card.stack
       create(:card, user: user, stack: stack)
-      result = double(results: card.stack.cards)
-      filter = card_search_filter.merge(where: {stack_id: stack.id}, 
-                                        order: {hot_score: :desc})
-      expect(Card).to receive(:search).with('*', filter).and_return(result)
-
+      stream = mock_card_stream(card.stack.cards, stack_id: stack.id,
+                                                  order_by:"popularity")
       http_login device.id, device.access_token
       get "/api/cards", { stack_id: stack.id, order_by: "popularity" }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.map { |c|c["stack_id"] }.uniq).to eql [card.stack_id]
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(2)
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
     it "returns the user cards" do
       create(:card, user: device.user, stack: card.stack)
-      result = double(results: user.cards)
-      filter = card_search_filter.merge(where: {user_id: user.id})
-      expect(Card).to receive(:search).with('*', filter).and_return(result)
-
+      stream = mock_card_stream(user.cards, user_id: card.user_id)
+      
       http_login device.id, device.access_token
       get "/api/cards", { user_id: card.user_id }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.map { |c|c["user_id"] }.uniq).to eql [card.user_id]
-      expect(r.first["user"]["username"]).to eql user.username
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(2)
+      expect(r["cards"].first["user"]["username"]).to eql user.username
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
-    it "accepts pagination" do
+    it "accepts a scroll_id to get next set" do
       (1..10).map { create(:card) }
-      result = double(results: Card.offset(2).limit(3))
-      filter = card_search_filter.merge(page: 2, per_page: 3)
-      expect(Card).to receive(:search).with('*', filter).and_return(result)
-
+      stream = mock_card_stream(Card.offset(2).limit(3), per_page: 3,
+                                                         scroll_id: "nextid")
+      
       http_login device.id, device.access_token
-      get "/api/cards", { page: 2, per_page: 3 }, @env
+      get "/api/cards", { scroll_id: "nextid", per_page: 3 }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(3)
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(3)
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
   end
 
@@ -376,5 +375,20 @@ describe Hyper::Cards do
       expect(r.map { |v| v["card_id"] }.uniq).to eql [card.id]
       expect(r.map { |v| v["vote_score"] }).to eql [-1, 1]
     end
+  end
+
+  private
+
+  def mock_card_stream(cards, params = {})
+    stream = CardStreamService.new
+    stream.cards = cards
+    stream.total_entries = cards.size
+    stream.scroll_id = "avalidscrollid"
+    params = {order_by: "newest", per_page: 30}.merge(params)
+    expect(stream).to receive(:execute).and_return(stream)
+    expect(CardStreamService).to receive(:new).
+                                 with(params).
+                                 and_return(stream)
+    stream
   end
 end

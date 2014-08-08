@@ -101,16 +101,21 @@ describe Hyper::Cards do
 
   # ======== GETTING CARDS ==================
   describe "GET /api/cards" do
-    let(:card_search_filter){ {include: :images, 
-                               where: {},
-                               order: {created_at: :desc}, 
-                               page: 1,
-                               per_page: nil}
-                             }
-
     it "requires authentication" do
       get "/api/cards"
       expect(response.status).to eql 401 # authentication
+    end
+
+    it "returns 400 for an invalid scroll_id" do
+      stream = double
+      expect(stream).to receive(:execute).and_raise(
+        ArgumentError.new("invalid or expired scroll_id")
+      )
+      expect(CardStreamService).to receive(:new).and_return(stream)
+      http_login device.id, device.access_token
+      get "/api/cards", { scroll_id: "invalidscrollid", per_page: 3 }, @env
+      expect(response.status).to eql 400
+      p response.body.inspect
     end
 
     it "returns the newest cards" do
@@ -131,7 +136,7 @@ describe Hyper::Cards do
       stack = card.stack
       create(:card, user: user, stack: stack)
       stream = mock_card_stream(card.stack.cards, stack_id: stack.id,
-                                                  order_by:"popularity")
+                                                  order_by: "popularity")
       http_login device.id, device.access_token
       get "/api/cards", { stack_id: stack.id, order_by: "popularity" }, @env
       expect(response.status).to eql 200
@@ -144,7 +149,7 @@ describe Hyper::Cards do
     it "returns the user cards" do
       create(:card, user: device.user, stack: card.stack)
       stream = mock_card_stream(user.cards, user_id: card.user_id)
-      
+
       http_login device.id, device.access_token
       get "/api/cards", { user_id: card.user_id }, @env
       expect(response.status).to eql 200
@@ -159,7 +164,7 @@ describe Hyper::Cards do
       (1..10).map { create(:card) }
       stream = mock_card_stream(Card.offset(2).limit(3), per_page: 3,
                                                          scroll_id: "nextid")
-      
+
       http_login device.id, device.access_token
       get "/api/cards", { scroll_id: "nextid", per_page: 3 }, @env
       expect(response.status).to eql 200
@@ -384,7 +389,7 @@ describe Hyper::Cards do
     stream.cards = cards
     stream.total_entries = cards.size
     stream.scroll_id = "avalidscrollid"
-    params = {order_by: "newest", per_page: 30}.merge(params)
+    params = { order_by: "newest", per_page: 30 }.merge(params)
     expect(stream).to receive(:execute).and_return(stream)
     expect(CardStreamService).to receive(:new).
                                  with(params).

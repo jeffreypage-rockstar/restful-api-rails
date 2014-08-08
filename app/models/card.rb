@@ -3,7 +3,7 @@ class Card < ActiveRecord::Base
   include Flaggable
   include PublicActivity::Model
   tracked owner: :user, recipient: :stack
- 
+
   validates :name, :stack, :user, presence: true
   attr_readonly :score
 
@@ -44,7 +44,6 @@ class Card < ActiveRecord::Base
     select("*, hot_score(up_score, down_score, created_at) as rank").
       order("rank DESC, created_at DESC")
   end
-
 
   # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================
   searchkick callbacks: false

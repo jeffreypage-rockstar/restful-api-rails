@@ -50,12 +50,12 @@ module Hyper
                             values: %w(newest popularity),
                             default: "newest",
                             desc: "Results ordering (newest|popularity)"
-        optional :scroll_id, type: String, 
+        optional :scroll_id, type: String,
                              desc: "Scroll_id is required to get the next "\
                                    "cards set."
         optional :per_page, type: Integer,
                             default: PAGE_SIZE,
-                            desc: 'Number of results to return per page.'
+                            desc: "Number of results to return per page."
       end
       get nil, serializer: CardStreamSerializer do
         authenticate!

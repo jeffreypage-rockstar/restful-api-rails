@@ -41,9 +41,12 @@ module Hyper
         end
         get do
           authenticate!
-          klass = Comment
-          klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-          paginate klass.send(params[:order_by])
+          card = Card.find(params[:card_id])
+          comments = card.comments
+          if params[:user_id]
+            comments = comments.where(user_id: params[:user_id])
+          end
+          paginate comments.send(params[:order_by])
         end
       end
     end

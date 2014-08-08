@@ -115,7 +115,8 @@ describe Hyper::Cards do
       http_login device.id, device.access_token
       get "/api/cards", { scroll_id: "invalidscrollid", per_page: 3 }, @env
       expect(response.status).to eql 400
-      p response.body.inspect
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match("invalid or expired scroll_id")
     end
 
     it "returns the newest cards" do

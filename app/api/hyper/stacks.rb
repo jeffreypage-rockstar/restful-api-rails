@@ -42,7 +42,7 @@ module Hyper
       end
       get :names, each_serializer: StackShortSerializer do
         authenticate!
-        Stack.where("name ILIKE ?", "#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
+        Stack.where("name ILIKE ?", "%#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
       end
 
       # GET /stacks/menu

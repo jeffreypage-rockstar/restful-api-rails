@@ -22,6 +22,7 @@ gem 'aws-sdk'
 gem 'searchbing'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'smarter_csv'
 
 group :api do
   gem 'activerecord', '~>4.1.4', require: 'active_record'

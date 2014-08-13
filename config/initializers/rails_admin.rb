@@ -1,5 +1,6 @@
 if defined? RailsAdmin
   require "rails_admin/config/actions/restore"
+  require "rails_admin/config/actions/import"
   require "admin_ability"
 
   RailsAdmin.config do |config|
@@ -29,6 +30,9 @@ if defined? RailsAdmin
       index                         # mandatory
       new do
         except ["User", "Setting", "Activity", "Notification", "Flag"]
+      end
+      import do
+        only ["Stack"]
       end
       bulk_delete do
         except ["DeletedUser", "Setting", "Activity", "Notification"]

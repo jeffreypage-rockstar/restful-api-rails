@@ -1,0 +1,16 @@
+<%= form_tag import_path(model_name: @abstract_model.to_param), 
+                         multipart: true,
+                         class: "form-horizontal denser" do |form| %>
+  <div class="control-group string_type name_field " id="file_field">
+    <label class="control-label" for="file">Choose the CSV File</label>
+    <div class="controls">
+      <%= file_field_tag :file %>
+      <p class="help-block">Please, make sure your CSV file has the fields name, description and user_id</p>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= submit_tag "Import", class: "btn btn-primary"%>
+    <%= button_tag "<i class=\"icon-remove\"></i> Cancel ".html_safe, 
+                    class: "btn", name: "_continue" %>
+  </div>
+<% end -%>

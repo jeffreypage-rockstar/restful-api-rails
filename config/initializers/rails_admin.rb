@@ -1,5 +1,6 @@
 if defined? RailsAdmin
-  require "admin_restore"
+  require "rails_admin/config/actions/restore"
+  require "admin_ability"
 
   RailsAdmin.config do |config|
 
@@ -27,7 +28,7 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ["User", "Setting", "Activity", "Notification"]
+        except ["User", "Setting", "Activity", "Notification", "Flag"]
       end
       bulk_delete do
         except ["DeletedUser", "Setting", "Activity", "Notification"]
@@ -47,30 +48,49 @@ if defined? RailsAdmin
       # history_show
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
-                                Reputation Setting Activity Notification)
+                                Flag Reputation Setting Activity Notification)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
     end
     config.current_user_method(&:current_admin)
+
+    flags_count_field = Proc.new do
+      label "Flags"
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "flag",
+          f: { flaggable_id: { "0001" => { v: bindings[:object].id } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
     config.model "User" do
       list do
         field :email
         field :username
+        field :location
+        field :score
+        field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at
       end
       edit do
         field :email
         field :username
+        field :location
         field :facebook_token
         field :facebook_id
       end
       show do
         field :email
         field :username
-        field :facebook_token
-        field :facebook_id
+        field :location
+        field :score
+        field :flags_count, &flags_count_field
+        field :last_sign_in_at
+        field :confirmed_at
       end
     end
 
@@ -78,18 +98,25 @@ if defined? RailsAdmin
       list do
         field :email
         field :username
+        field :location
+        field :score
+        field :flags_count, &flags_count_field
         field :last_sign_in_at
-        field :deleted_at
+        field :confirmed_at
       end
       show do
         field :email
         field :username
-        field :facebook_token
-        field :facebook_id
+        field :location
+        field :score
+        field :flags_count, &flags_count_field
+        field :last_sign_in_at
+        field :confirmed_at
       end
       edit do
         field :email
         field :username
+        field :location
         field :facebook_token
         field :facebook_id
       end
@@ -105,6 +132,7 @@ if defined? RailsAdmin
           end
         end
         field :protected
+        field :subscriptions_count
         field :cards
       end
       show do
@@ -116,6 +144,8 @@ if defined? RailsAdmin
           end
         end
         field :protected
+        field :subscriptions_count
+        field :cards
       end
       edit do
         field :name
@@ -129,15 +159,28 @@ if defined? RailsAdmin
       end
     end
 
+    comments_count_field = Proc.new do
+      label "Comments"
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "comment",
+          f: { card_id: { "0001" => { v: bindings[:object].id } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
     config.model "Card" do
       list do
         field :name
-        field :description
+        field :stack
         field :user
         field :score
-        field :stack
-        field :comments
+        field :flags_count, &flags_count_field
+        field :comments_count, &comments_count_field
+        field :description
         field :created_at
+        sort_by :created_at
       end
       show do
         field :name
@@ -145,7 +188,17 @@ if defined? RailsAdmin
         field :user
         field :score
         field :stack
-        field :comments
+        field :images do
+          pretty_value do
+            value.map do |image|
+              %{<div class="thumbnail">
+                  <img src="#{image.image_url}" width="160">
+                  <div class="caption">#{image.caption}</div>
+                </div>}
+            end.join.html_safe
+          end
+        end
+        field :comments_count, &comments_count_field
         field :created_at
       end
       edit do
@@ -160,17 +213,29 @@ if defined? RailsAdmin
     end
 
     config.model "Comment" do
+      object_label_method :body
       list do
         field :body
         field :score
+        field :flags_count, &flags_count_field
         field :replying
         field :card
+        field :card_id, :enum do
+          label "For Card"
+          enum do
+            Card.newest.limit(10).map { |c| [c.name, c.id] }
+          end
+          visible false
+          searchable true
+        end
         field :user
         field :created_at
+        sort_by :created_at
       end
       show do
         field :body
         field :score
+        field :flags_count, &flags_count_field
         field :replying
         field :card
         field :user
@@ -185,6 +250,53 @@ if defined? RailsAdmin
         field :card
         field :user
         field :created_at
+      end
+    end
+
+    config.model "Flag" do
+      list do
+        field :flaggable do
+          label "Flagged Item"
+        end
+        field :flaggable_type do
+          label "Type"
+          filterable true
+        end
+        field :flaggable_id, :enum do
+          label "Flags For"
+          enum do
+            []
+          end
+          visible false
+          searchable true
+        end
+        field :user do
+          label "Flagged by"
+          filterable true
+        end
+        field :created_at do
+          label "Flagged at"
+          filterable true
+        end
+        sort_by :created_at
+      end
+
+      show do
+        field :flaggable do
+          label "Flagged Item"
+        end
+        field :flaggable_type do
+          label "Type"
+          filterable true
+        end
+        field :user do
+          label "Flagged by"
+          filterable true
+        end
+        field :created_at do
+          label "Flagged at"
+          filterable true
+        end
       end
     end
 
@@ -232,6 +344,7 @@ if defined? RailsAdmin
         field :owner
         field :notified
         field :created_at
+        sort_by :created_at
       end
 
       show do

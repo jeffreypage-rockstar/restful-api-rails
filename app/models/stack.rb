@@ -1,3 +1,5 @@
+require "smarter_csv"
+
 class Stack < ActiveRecord::Base
   include PublicActivity::Model
   tracked owner: :user
@@ -30,6 +32,12 @@ class Stack < ActiveRecord::Base
   def user
     return nil if user_id.blank?
     super
+  end
+
+  def self.import_csv(csv_file)
+    SmarterCSV.process(csv_file).map do |stack_data|
+      Stack.new(stack_data)
+    end.select(&:save)
   end
 
   private # ================================

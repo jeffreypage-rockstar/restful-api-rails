@@ -68,4 +68,21 @@ feature "Admin Stack management", :devise do
       click_button "Yes, I'm sure"
     end.to change(Stack, :count).by(-1)
   end
+
+  # Scenario: Admin can import stacks from a csv file
+  #   Given I am an admin
+  #   When I try to import stacks
+  #   Then new stacks are created
+  scenario "admin can import stacks from a csv file" do
+    create(:user, id: "3ccf87b1-c3ec-4c94-97f6-bd524ab001a1")
+    file_path = File.expand_path("../../../fixtures/some_stacks.csv", __FILE__)
+    page.find("[data-model=stack] a").click
+    expect(current_path).to eq rails_admin.index_path(model_name: "stack")
+    expect do
+      page.find(".import_collection_link a").click
+      page.find("#file").set(file_path)
+      click_button "Import"
+    end.to change(Stack, :count).by(3)
+  end
+
 end

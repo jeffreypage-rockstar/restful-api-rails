@@ -1,4 +1,4 @@
-require 'smarter_csv'
+require "smarter_csv"
 
 class Stack < ActiveRecord::Base
   include PublicActivity::Model

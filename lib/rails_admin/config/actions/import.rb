@@ -30,8 +30,8 @@ module RailsAdmin
 
               @objects = []
               file = params[:file]
-              if file && @authorization_adapter.try(:authorize, 
-                                                    :import, 
+              if file && @authorization_adapter.try(:authorize,
+                                                    :import,
                                                     @abstract_model)
                 @objects = @abstract_model.model.import_csv(file.tempfile)
               end
@@ -41,9 +41,9 @@ module RailsAdmin
                   format.html { redirect_to_on_success }
                 end
               else
-                flash[:error] = t('admin.flash.error', 
-                                   name: @model_config.label.pluralize,
-                                   action: t("admin.actions.import.done"))
+                flash[:error] = t("admin.flash.error",
+                                  name: @model_config.label.pluralize,
+                                  action: t("admin.actions.import.done"))
                 redirect_to back_or_index
               end
 
@@ -53,7 +53,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-upload'
+          "icon-upload"
         end
       end
     end

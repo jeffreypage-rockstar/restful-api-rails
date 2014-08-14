@@ -132,6 +132,13 @@ module Hyper
           Rack::Response.new([""], 204, "Content-Type" => "text/plain")
         end
 
+        rescue_from ArgumentError do |e|
+          Rack::Response.new({
+            status: 400,
+            error: e.message
+          }.to_json, 400)
+        end
+
         rescue_from Grape::Exceptions::ValidationErrors do |e|
           Rack::Response.new({
             status: e.status,

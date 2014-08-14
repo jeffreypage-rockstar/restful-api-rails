@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '298'
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "status" : 200,
+          "name" : "Porcupine",
+          "version" : {
+            "number" : "1.1.1",
+            "build_hash" : "f1585f096d3f3985e73456debdc1a0745f512bbc",
+            "build_timestamp" : "2014-04-16T14:27:12Z",
+            "build_snapshot" : false,
+            "lucene_version" : "4.7"
+          },
+          "tagline" : "You Know, for Search"
+        }
+    http_version: 
+  recorded_at: Fri, 08 Aug 2014 17:48:08 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/cards_test/_search?scroll=5m
+    body:
+      encoding: UTF-8
+      string: '{"query":{"match_all":{}},"size":30,"from":0,"sort":{"hot_score":"desc"},"fields":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '925'
+    body:
+      encoding: UTF-8
+      string: '{"_scroll_id":"cXVlcnlUaGVuRmV0Y2g7NTsyMTY6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTc6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTg6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTk6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMjA6djA1VHdad29SNUtJdVVPZ1BUakYxZzswOw==","took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":4,"max_score":null,"hits":[{"_index":"cards_test_20140807144933904","_type":"card","_id":"c71d6671-50a1-4218-9dd9-2b4307b75643","_score":null,"sort":[6071.4478567]},{"_index":"cards_test_20140807144933904","_type":"card","_id":"1124aff9-9afe-4c4b-9d06-205eaead1932","_score":null,"sort":[6071.4367989]},{"_index":"cards_test_20140807144933904","_type":"card","_id":"196dac35-299b-4a41-889c-d31fedc9044b","_score":null,"sort":[6063.7888227]},{"_index":"cards_test_20140807144933904","_type":"card","_id":"e0a70962-b80d-490f-8807-f0cdc4b027ed","_score":null,"sort":[6002.8689836]}]}}'
+    http_version: 
+  recorded_at: Fri, 08 Aug 2014 17:59:20 GMT
+recorded_with: VCR 2.9.2

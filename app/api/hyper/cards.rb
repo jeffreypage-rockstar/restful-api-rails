@@ -38,8 +38,7 @@ module Hyper
       end
 
       # GET /cards
-      desc "Returns front page cards or the stack cards, paginated"
-      paginate per_page: PAGE_SIZE
+      desc "Returns front page cards or the stack cards, paginated with scroll"
       params do
         optional :stack_id, type: String,
                             desc: "Stack id to filter cards",
@@ -51,13 +50,16 @@ module Hyper
                             values: %w(newest popularity),
                             default: "newest",
                             desc: "Results ordering (newest|popularity)"
+        optional :scroll_id, type: String,
+                             desc: "Scroll_id is required to get the next "\
+                                   "cards set."
+        optional :per_page, type: Integer,
+                            default: PAGE_SIZE,
+                            desc: "Number of results to return per page."
       end
-      get do
+      get nil, serializer: CardStreamSerializer do
         authenticate!
-        klass = Card.includes(:images)
-        klass = klass.where(stack_id: params[:stack_id]) if params[:stack_id]
-        klass = klass.where(user_id: params[:user_id]) if params[:user_id]
-        paginate klass.send(params[:order_by])
+        CardStreamService.new(permitted_params).execute
       end
 
       # GET /cards/upvoted

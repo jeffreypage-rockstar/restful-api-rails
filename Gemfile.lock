@@ -91,6 +91,7 @@ GEM
       xpath (~> 2.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    chronic (0.10.2)
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -123,6 +124,14 @@ GEM
     dotenv-deployment (0.0.2)
     dotenv-rails (0.11.1)
       dotenv (= 0.11.1)
+    elasticsearch (1.0.4)
+      elasticsearch-api (= 1.0.4)
+      elasticsearch-transport (= 1.0.4)
+    elasticsearch-api (1.0.4)
+      multi_json
+    elasticsearch-transport (1.0.4)
+      faraday
+      multi_json
     em-synchrony (1.0.3)
       eventmachine (>= 1.0.0.beta.1)
     em-websocket (0.3.8)
@@ -301,6 +310,10 @@ GEM
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
     searchbing (0.2.4)
+    searchkick (0.8.0)
+      activemodel
+      elasticsearch (>= 1)
+      hashie
     sendgrid (1.2.0)
       json
       json
@@ -374,6 +387,9 @@ GEM
     webmock (1.18.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+    whenever (0.9.2)
+      activesupport (>= 2.3.4)
+      chronic (>= 0.6.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -425,6 +441,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   searchbing
+  searchkick
   sendgrid
   sentry-raven!
   sidekiq
@@ -439,3 +456,4 @@ DEPENDENCIES
   validate_url
   vcr
   webmock
+  whenever

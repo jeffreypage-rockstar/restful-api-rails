@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/_search/scroll?scroll=5m&scroll_id=cXVlcnlUaGVuRmV0Y2g7NTsyMTY6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTc6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTg6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTk6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMjA6djA1VHdad29SNUtJdVVPZ1BUakYxZzswOw==
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 500
+      message: Internal Server Error
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '828'
+    body:
+      encoding: UTF-8
+      string: '{"_scroll_id":"cXVlcnlUaGVuRmV0Y2g7NTsyMTY6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTc6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTg6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTk6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMjA6djA1VHdad29SNUtJdVVPZ1BUakYxZzswOw==","took":3,"timed_out":false,"_shards":{"total":5,"successful":0,"failed":5,"failures":[{"status":500,"reason":"SearchContextMissingException[No
+        search context found for id [216]]"},{"status":500,"reason":"SearchContextMissingException[No
+        search context found for id [217]]"},{"status":500,"reason":"SearchContextMissingException[No
+        search context found for id [218]]"},{"status":500,"reason":"SearchContextMissingException[No
+        search context found for id [219]]"},{"status":500,"reason":"SearchContextMissingException[No
+        search context found for id [220]]"}]},"hits":{"total":0,"max_score":0.0,"hits":[]}}'
+    http_version: 
+  recorded_at: Fri, 08 Aug 2014 18:05:05 GMT
+recorded_with: VCR 2.9.2

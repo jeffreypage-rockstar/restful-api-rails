@@ -44,4 +44,19 @@ class Card < ActiveRecord::Base
     select("*, hot_score(up_score, down_score, created_at) as rank").
       order("rank DESC, created_at DESC")
   end
+
+  # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================
+  searchkick callbacks: false
+  # callbacks is false to do not update the index when model changes
+
+  def search_data
+    as_json(only: [:name, :stack_id, :user_id, :hot_score, :created_at])
+  end
+
+  # scope used to build the index
+  def self.search_import
+    select("id, name, stack_id, user_id, created_at, "\
+      "hot_score(up_score, down_score, created_at) as hot_score").
+    order("short_id DESC")
+  end
 end

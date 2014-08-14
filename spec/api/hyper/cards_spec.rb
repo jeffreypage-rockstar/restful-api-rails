@@ -106,60 +106,73 @@ describe Hyper::Cards do
       expect(response.status).to eql 401 # authentication
     end
 
+    it "returns 400 for an invalid scroll_id" do
+      stream = double
+      expect(stream).to receive(:execute).and_raise(
+        ArgumentError.new("invalid or expired scroll_id")
+      )
+      expect(CardStreamService).to receive(:new).and_return(stream)
+      http_login device.id, device.access_token
+      get "/api/cards", { scroll_id: "invalidscrollid", per_page: 3 }, @env
+      expect(response.status).to eql 400
+      r = JSON.parse(response.body)
+      expect(r["error"]).to match("invalid or expired scroll_id")
+    end
+
     it "returns the newest cards" do
-      create(:card, user: device.user)
+      card = create(:card, user: device.user)
+      card.vote_by!(user)
+      stream = mock_card_stream(Card.newest.map)
       http_login device.id, device.access_token
       get "/api/cards", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(1)
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(1)
+      expect(r["cards"].first["my_vote"]["kind"]).to eql("up")
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
-    it "returns the stack cards" do
-      create(:card, user: device.user, stack: card.stack)
+    it "returns the stack cards, sort by popularity" do
+      stack = card.stack
+      create(:card, user: user, stack: stack)
+      stream = mock_card_stream(card.stack.cards, stack_id: stack.id,
+                                                  order_by: "popularity")
       http_login device.id, device.access_token
-      get "/api/cards", { stack_id: card.stack_id }, @env
+      get "/api/cards", { stack_id: stack.id, order_by: "popularity" }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.map { |c|c["stack_id"] }.uniq).to eql [card.stack_id]
-    end
-
-    it "returns the stack cards ordered by popularity" do
-      new_card = create(:card, user: device.user, stack: card.stack)
-      new_card.vote_by!(device.user)
-      http_login device.id, device.access_token
-      get "/api/cards", { stack_id: card.stack_id, order_by: "popularity" },
-          @env
-      expect(response.status).to eql 200
-      r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.first["id"]).to eql(new_card.id)
-      expect(r.map { |c|c["score"] }.uniq).to eql [1, 0]
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(2)
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
     it "returns the user cards" do
       create(:card, user: device.user, stack: card.stack)
+      stream = mock_card_stream(user.cards, user_id: card.user_id)
+
       http_login device.id, device.access_token
       get "/api/cards", { user_id: card.user_id }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(2)
-      expect(r.map { |c|c["user_id"] }.uniq).to eql [card.user_id]
-      expect(r.first["user"]["username"]).to eql user.username
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(2)
+      expect(r["cards"].first["user"]["username"]).to eql user.username
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 
-    it "accepts pagination" do
+    it "accepts a scroll_id to get next set" do
       (1..10).map { create(:card) }
+      stream = mock_card_stream(Card.offset(2).limit(3), per_page: 3,
+                                                         scroll_id: "nextid")
+
       http_login device.id, device.access_token
-      get "/api/cards", { page: 2, per_page: 3 }, @env
+      get "/api/cards", { scroll_id: "nextid", per_page: 3 }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r.size).to eql(3)
-      # response headers
-      expect(response.header["Total"]).to eql("10")
-      next_link = 'api/cards?page=3&per_page=3>; rel="next"'
-      expect(response.header["Link"]).to include(next_link)
+      expect(r["total_entries"]).to eql(stream.total_entries)
+      expect(r["cards"].size).to eql(3)
+      expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
   end
 
@@ -368,5 +381,20 @@ describe Hyper::Cards do
       expect(r.map { |v| v["card_id"] }.uniq).to eql [card.id]
       expect(r.map { |v| v["vote_score"] }).to eql [-1, 1]
     end
+  end
+
+  private
+
+  def mock_card_stream(cards, params = {})
+    stream = CardStreamService.new
+    stream.cards = cards
+    stream.total_entries = cards.size
+    stream.scroll_id = "avalidscrollid"
+    params = { order_by: "newest", per_page: 30 }.merge(params)
+    expect(stream).to receive(:execute).and_return(stream)
+    expect(CardStreamService).to receive(:new).
+                                 with(params).
+                                 and_return(stream)
+    stream
   end
 end

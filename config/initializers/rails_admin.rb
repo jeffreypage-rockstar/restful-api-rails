@@ -72,6 +72,7 @@ if defined? RailsAdmin
 
     config.model "User" do
       list do
+        scopes [nil, :flagged]
         field :email
         field :username
         field :location
@@ -100,6 +101,7 @@ if defined? RailsAdmin
 
     config.model "DeletedUser" do
       list do
+        scopes [nil, :flagged]
         field :email
         field :username
         field :location
@@ -176,6 +178,7 @@ if defined? RailsAdmin
 
     config.model "Card" do
       list do
+        scopes [nil, :flagged]
         field :name
         field :stack
         field :user
@@ -219,6 +222,7 @@ if defined? RailsAdmin
     config.model "Comment" do
       object_label_method :body
       list do
+        scopes [nil, :flagged]
         field :body
         field :score
         field :flags_count, &flags_count_field

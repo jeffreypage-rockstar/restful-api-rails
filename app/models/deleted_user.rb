@@ -1,6 +1,7 @@
 require_relative "user"
 
 class DeletedUser < ActiveRecord::Base
+  include Flaggable
   self.primary_key = :id
 
   def restore

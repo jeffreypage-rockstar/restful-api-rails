@@ -3,6 +3,8 @@ module Flaggable
 
   included do
     has_many :flags, as: :flaggable
+
+    scope :flagged, -> { where("flags_count > 0") }
   end
 
   def flag_by!(user)

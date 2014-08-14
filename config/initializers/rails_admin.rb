@@ -29,7 +29,7 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ["User", "Setting", "Activity", "Notification", "Flag"]
+        except ["User", "Setting", "Activity", "Notification", "Flag", "Vote"]
       end
       import do
         only ["Stack"]
@@ -52,7 +52,8 @@ if defined? RailsAdmin
       # history_show
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
-                                Flag Reputation Setting Activity Notification)
+                                Flag Vote Reputation Setting Activity
+                                Notification)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -72,6 +73,7 @@ if defined? RailsAdmin
 
     config.model "User" do
       list do
+        scopes [nil, :flagged]
         field :email
         field :username
         field :location
@@ -100,6 +102,7 @@ if defined? RailsAdmin
 
     config.model "DeletedUser" do
       list do
+        scopes [nil, :flagged]
         field :email
         field :username
         field :location
@@ -174,12 +177,23 @@ if defined? RailsAdmin
       end
     end
 
+    score_field = Proc.new do
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "vote",
+          f: { votable_id: { "0001" => { v: bindings[:object].id } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
     config.model "Card" do
       list do
+        scopes [nil, :flagged]
         field :name
         field :stack
         field :user
-        field :score
+        field :score, &score_field
         field :flags_count, &flags_count_field
         field :comments_count, &comments_count_field
         field :description
@@ -190,7 +204,7 @@ if defined? RailsAdmin
         field :name
         field :description
         field :user
-        field :score
+        field :score, &score_field
         field :stack
         field :images do
           pretty_value do
@@ -219,8 +233,9 @@ if defined? RailsAdmin
     config.model "Comment" do
       object_label_method :body
       list do
+        scopes [nil, :flagged]
         field :body
-        field :score
+        field :score, &score_field
         field :flags_count, &flags_count_field
         field :replying
         field :card
@@ -238,7 +253,7 @@ if defined? RailsAdmin
       end
       show do
         field :body
-        field :score
+        field :score, &score_field
         field :flags_count, &flags_count_field
         field :replying
         field :card
@@ -301,6 +316,74 @@ if defined? RailsAdmin
           label "Flagged at"
           filterable true
         end
+      end
+    end
+
+    config.model "Vote" do
+      list do
+        scopes [nil, :up_votes, :down_votes]
+        field :votable do
+          label "Voted Item"
+        end
+        field :votable_type do
+          label "Type"
+          filterable true
+        end
+        field :flag do
+          label "Up/Down"
+        end
+        field :votable_id, :enum do
+          label "Votes For"
+          enum do
+            []
+          end
+          visible false
+          searchable true
+        end
+        field :user do
+          label "Voted by"
+          filterable true
+        end
+        field :created_at do
+          label "Voted at"
+          filterable true
+        end
+        sort_by :created_at
+      end
+
+      show do
+        field :votable do
+          label "Voted Item"
+        end
+        field :votable_type do
+          label "Type"
+          filterable true
+        end
+        field :flag do
+          label "Up/Down"
+        end
+        field :weight
+        field :user do
+          label "Voted by"
+          filterable true
+        end
+        field :created_at do
+          label "Voted at"
+          filterable true
+        end
+      end
+
+      edit do
+        field :votable do
+          label "Voted Item"
+        end
+        field :flag do
+          label "up?"
+        end
+        field :user do
+          label "Voted by"
+        end
+        field :weight
       end
     end
 

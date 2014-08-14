@@ -123,6 +123,21 @@ describe Hyper::Stacks do
       short_keys = ["id", "name", "subscriptions_count", "subscribed"]
       expect(r.first.keys).to eql(short_keys)
     end
+
+    it "accepts pagination" do
+      stacks = (1..10).map { create(:stack, user: device.user) }
+      stack = stacks.first
+      query = stack.name[0..3].upcase
+      http_login device.id, device.access_token
+      get "/api/stacks/names", { q: query, page: 2, per_page: 3 }, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(3)
+      # response headers
+      expect(response.header["Total"]).to eql("10")
+      next_link = "/stacks/names?page=3&per_page=3&q=#{query}>; rel=\"next\""
+      expect(response.header["Link"]).to include(next_link)
+    end
   end
 
   # ======== GETTING STACK LISTS FOR THE MENU ==================

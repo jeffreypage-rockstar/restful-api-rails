@@ -1,8 +1,7 @@
 module Hyper
   # api to manage stacks
   class Stacks < Base
-    PAGE_SIZE = 30
-    AUTOCOMPLETE_SIZE = 10
+    PAGE_SIZE = 100
 
     resource :stacks do
       # POST /stacks
@@ -40,9 +39,10 @@ module Hyper
       params do
         requires :q, type: String, desc: "The query for stack name lookup."
       end
+      paginate per_page: PAGE_SIZE
       get :names, each_serializer: StackShortSerializer do
         authenticate!
-        Stack.where("name ILIKE ?", "%#{params[:q]}%").limit(AUTOCOMPLETE_SIZE)
+        paginate Stack.where("name ILIKE ?", "#{params[:q]}%")
       end
 
       # GET /stacks/menu

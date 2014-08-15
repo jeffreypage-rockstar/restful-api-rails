@@ -36,4 +36,13 @@ RSpec.describe Notifier::CardCreate, type: :worker do
       expect(user.notifications.unread.count).to eql 0
     end
   end
+
+  it "does not notify for an invalid card" do
+    expect(Notifier::CardCreate).to receive(:perform_async).once.
+                                      and_return("00001")
+    user = create(:user)
+    act = create(:activity, trackable_id: user.id)
+    expect(worker.perform(act.id)).to be_empty
+    expect(act.reload).to be_notified
+  end
 end

@@ -41,6 +41,7 @@ class Notification < ActiveRecord::Base
   end
 
   def add_sender(sender_user)
+    return unless sender_user
     self.senders ||= {}
     self.senders[sender_user.username] = sender_user.id
   end

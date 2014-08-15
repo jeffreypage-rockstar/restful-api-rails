@@ -18,5 +18,15 @@ RSpec.describe Activity, type: :model do
         expect(act).to_not be_notified
       end
     end
+
+    it "does not trigger notifier if already notified" do
+      expect(Notifier).to_not receive(:notify_async)
+      create(:activity, notified: true)
+    end
+
+    it "requires a key" do
+      expect(Notifier).to_not receive(:notify_async)
+      expect(build(:activity, key: "")).to_not be_valid
+    end
   end
 end

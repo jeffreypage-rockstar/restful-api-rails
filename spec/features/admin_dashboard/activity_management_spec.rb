@@ -6,6 +6,7 @@ Warden.test_mode!
 #   So I can list activities
 feature "Admin Activity management", :devise do
   before :each do
+    allow(Notifier::CardCreate).to receive(:perform_async).and_return("00001")
     admin = FactoryGirl.create(:admin)
     login_as(admin, scope: :admin)
     visit rails_admin.dashboard_path

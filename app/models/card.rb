@@ -46,8 +46,7 @@ class Card < ActiveRecord::Base
   end
 
   # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================
-  searchkick callbacks: false
-  # callbacks is false to do not update the index when model changes
+  searchkick
 
   def search_data
     as_json(only: [:name, :stack_id, :user_id, :hot_score, :created_at])

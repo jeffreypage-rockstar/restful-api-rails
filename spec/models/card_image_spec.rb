@@ -29,6 +29,13 @@ RSpec.describe CardImage, type: :model do
       expect(image).to_not be_valid
       expect(image.errors[:image_url].first).to match /is not a valid/
     end
+
+    it "fixes image_url with a facebook invalid format" do
+      url = "https:/hyper-inaka.com/E3C318D0-9948-4EBE-B187-7C4F39E3AEB0.jpg"
+      image = CardImage.new(attrs.merge(image_url: url))
+      expect(image).to be_valid
+      expect(image.image_url).to match "https://hyper-inaka.com"
+    end
   end
 
 end

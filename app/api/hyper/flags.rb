@@ -9,7 +9,7 @@ module Hyper
         optional :card_id, type: String, desc: "Card id", uuid: true
         optional :comment_id, type: String, desc: "Comment id", uuid: true
 
-        mutually_exclusive :user_id, :card_id, :comment_id
+        exactly_one_of :user_id, :card_id, :comment_id
       end
       post do
         authenticate!

@@ -7,8 +7,14 @@ describe Hyper::Flags do
   # ======== FLAGGING ==================
   describe "POST /api/flags" do
     it "requires authentication" do
-      post "/api/flags"
+      post "/api/flags",  user_id: device.id
       expect(response.status).to eql 401 # authentication
+    end
+
+    it "fails when no item id is provided" do
+      http_login device.id, device.access_token
+      post "/api/flags", nil, @env
+      expect(response.status).to eql 400
     end
 
     it "fails for an inexistent item" do

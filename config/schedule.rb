@@ -18,7 +18,8 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-job_type :rake, "cd :path && RAILS_ENV=:environment bundle exec foreman run rake :task"
+job_type :rake, "cd :path && RAILS_ENV=:environment bundle exec foreman run "\
+                "rake :task"
 
 every 5.minutes do
   rake "searchkick:reindex CLASS=Card"

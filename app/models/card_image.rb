@@ -4,4 +4,14 @@ class CardImage < ActiveRecord::Base
 
   belongs_to :card, inverse_of: :images
   acts_as_list scope: :card
+
+  before_validation :fix_image_url
+
+  private
+
+  def fix_image_url
+    if image_url.to_s =~ /^(https?:\/)(\w.*)/
+      self.image_url = "#{$1}/#{$2}"
+    end
+  end
 end

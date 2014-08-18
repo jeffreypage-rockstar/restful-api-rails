@@ -14,9 +14,7 @@ module Hyper
       mutually_exclusive :password, :facebook_token
     end
     post "/login" do
-      user = SignInService.new(env["REMOTE_ADDR"],
-                               declared(params, include_missing: false)
-                              ).call
+      user = SignInService.new(env["REMOTE_ADDR"], permitted_params).call
       user || auth_error!
     end
   end

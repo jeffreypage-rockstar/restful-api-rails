@@ -7,21 +7,20 @@ module Notifier
   class CommentCreate < Base
     def owner_notification
       card = @activity.recipient
-      if card && @activity.owner_id != card.user_id
-        load_notification subject: card,
-                          user_id: card.user_id,
-                          action: @activity.key
-      end
+      return if card.nil? || @activity.owner_id == card.user_id
+      load_notification subject: card,
+                        user_id: card.user_id,
+                        action: @activity.key
     end
 
     def reply_notification
       comment = @activity.trackable
       card = @activity.recipient
-      if comment.replying && comment.replying.user_id != comment.user_id
-        load_notification subject: card,
-                          user_id: comment.replying.user_id,
-                          action: "comment.reply"
-      end
+      valid = comment.replying && comment.user_id != comment.replying.user_id
+      return unless valid
+      load_notification subject: card,
+                        user_id: comment.replying.user_id,
+                        action: "comment.reply"
     end
 
     def mentions_notifications

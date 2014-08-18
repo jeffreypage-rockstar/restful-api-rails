@@ -10,8 +10,6 @@ class CardImage < ActiveRecord::Base
   private
 
   def fix_image_url
-    if image_url.to_s =~ /^(https?:\/)(\w.*)/
-      self.image_url = "#{$1}/#{$2}"
-    end
+    self.image_url = "#{$1}/#{$2}" if image_url.to_s =~ /^(https?:\/)(\w.*)/
   end
 end

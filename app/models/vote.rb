@@ -68,9 +68,8 @@ class Vote < ActiveRecord::Base
     votable.class.update_counters(votable.id, score: score_change,
                                               up_score: up_score_change,
                                               down_score: down_score_change)
-    if votable.respond_to? :user_id
-      User.update_counters(votable.user_id, score: score_change)
-    end
+    return true unless votable.respond_to?(:user_id)
+    User.update_counters(votable.user_id, score: score_change)
   end
 
   # keep a flag_changed state to know when flag is changed in a persisted vote

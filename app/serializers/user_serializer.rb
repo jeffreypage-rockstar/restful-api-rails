@@ -8,9 +8,8 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def auth
-    if device = object.devices.recent.first
-      { device_id: device.id, access_token: device.access_token }
-    end
+    return unless device = object.devices.recent.first
+    { device_id: device.id, access_token: device.access_token }
   end
 
   def unseen_notifications_count

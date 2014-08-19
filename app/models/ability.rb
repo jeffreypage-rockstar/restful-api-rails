@@ -1,3 +1,4 @@
+# rubocop:disable GuardClause
 class Ability
   include CanCan::Ability
 

@@ -9,12 +9,11 @@ class SignInService
   end
 
   def call
-    if user = auth_user
-      user.facebook_token = facebook_token if facebook_token.present?
-      req = Hashie::Mash.new(remote_ip: @remote_ip)
-      user.sign_in_from_device!(req, device_id, device_type: device_type)
-      user
-    end
+    return unless user = auth_user
+    user.facebook_token = facebook_token if facebook_token.present?
+    req = Hashie::Mash.new(remote_ip: @remote_ip)
+    user.sign_in_from_device!(req, device_id, device_type: device_type)
+    user
   end
 
   private

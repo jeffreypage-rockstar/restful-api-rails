@@ -6,11 +6,10 @@ module Notifier
   class CardCreate < Base
     def owner_notification
       card = @activity.trackable
-      if card && @activity.owner_id != card.stack.try(:user_id)
-        load_notification subject: card,
-                          user_id: card.stack.try(:user_id),
-                          action: @activity.key
-      end
+      return nil if card.nil? || @activity.owner_id == card.stack.try(:user_id)
+      load_notification subject: card,
+                        user_id: card.stack.try(:user_id),
+                        action: @activity.key
     end
 
     def subscribers_notifications

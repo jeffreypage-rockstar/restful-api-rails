@@ -5,11 +5,10 @@ module Notifier
   class CommentUpVote < Base
     def owner_notification
       comment = @activity.trackable
-      if comment && @activity.owner_id != comment.user_id
-        load_notification subject: comment,
-                          user_id: comment.user_id,
-                          action: @activity.key
-      end
+      return nil if comment.nil? || @activity.owner_id == comment.user_id
+      load_notification subject: comment,
+                        user_id: comment.user_id,
+                        action: @activity.key
     end
 
     def notifications

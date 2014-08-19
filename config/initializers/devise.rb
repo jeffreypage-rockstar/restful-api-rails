@@ -1,3 +1,4 @@
+# rubocop:disable LineLength
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -24,11 +25,11 @@ Devise.setup do |config|
   # ==> Devise Async
   # Supported options: :resque, :sidekiq, :delayed_job, :queue_classic,
   # :torquebox, :backburner
-  Devise::Async.setup do |config|
-    config.enabled = Rails.env.test? ? false : true
-    config.backend = :sidekiq
-    config.queue   = :default
-    # config.queue   = :my_custom_queue
+  Devise::Async.setup do |async|
+    async.enabled = Rails.env.test? ? false : true
+    async.backend = :sidekiq
+    async.queue   = :default
+    # async.queue   = :my_custom_queue
   end
 
   # ==> Configuration for any authentication mechanism

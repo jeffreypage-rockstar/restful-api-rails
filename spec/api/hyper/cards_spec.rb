@@ -158,6 +158,7 @@ describe Hyper::Cards do
       expect(r["total_entries"]).to eql(stream.total_entries)
       expect(r["cards"].size).to eql(2)
       expect(r["cards"].first["user"]["username"]).to eql user.username
+      expect(r["cards"].first["user"]["score"]).to eql user.score
       expect(r["scroll_id"]).to eql(stream.scroll_id)
     end
 

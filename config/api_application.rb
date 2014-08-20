@@ -4,7 +4,7 @@ require "app/api/hyper/base"
 
 folders = %w(
   models/concerns models helpers workers serializers services
-  workers api/validations api/hyper
+  workers api/validations api/helpers api/hyper
 )
 folders.each do |folder|
   Dir[File.expand_path("../../app/#{folder}/*.rb", __FILE__)].each do |f|

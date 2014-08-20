@@ -236,6 +236,15 @@ describe Hyper::Cards do
       expect(r["my_vote"]["kind"]).to eql "up"
       expect(r["my_vote"]["vote_score"]).to eql 1
     end
+
+    it "returns public_url with the card response" do
+      http_login device.id, device.access_token
+      get "/api/cards/#{card.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(card.id)
+      expect(r["public_url"]).to match "http://hyper.test/c/#{card.hash_id}"
+    end
   end
 
   # ======== UPDATING A CARD ==================

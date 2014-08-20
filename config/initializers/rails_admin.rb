@@ -201,7 +201,15 @@ if defined? RailsAdmin
         sort_by :created_at
       end
       show do
-        field :name
+        field :name do
+          pretty_value do
+            path = bindings[:view].main_app.card_url(bindings[:object])
+            [
+              bindings[:view].link_to(value, path, target: "_blank"),
+              '<span class="label label-default">link to public page</span>'
+            ].join(" ").html_safe
+          end
+        end
         field :description
         field :user
         field :score, &score_field

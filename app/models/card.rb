@@ -29,6 +29,7 @@ class Card < ActiveRecord::Base
   end
 
   def hash_id
+    reload if persisted? && short_id.blank?
     self.class.hashids.encrypt(short_id)
   end
 

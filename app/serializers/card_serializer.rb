@@ -3,13 +3,17 @@ require_relative "user_short_serializer"
 
 class CardSerializer < ActiveModel::Serializer
   attributes :id, :name, :user_id, :stack_id, :score, :flags_count, :my_vote,
-             :comments_count, :created_at, :public_url
+             :comments_count, :created_at, :public_url, :flagged_by_me
 
   has_many :images, serializer: CardImageSerializer
   has_one :user, serializer: UserShortSerializer
 
   def my_vote
     VoteCardSerializer.new object.votes.where(user_id: current_user.id).first
+  end
+
+  def flagged_by_me
+    object.flags.exists? user_id: current_user.id
   end
 
   def public_url

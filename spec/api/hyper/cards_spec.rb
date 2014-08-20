@@ -211,6 +211,7 @@ describe Hyper::Cards do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(card.id)
+      expect(r["flagged_by_me"]).to be_falsey
       expect(r["images"]).to_not be_empty
     end
 
@@ -223,6 +224,7 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(card.id)
       expect(r["flags_count"]).to eql 1
+      expect(r["flagged_by_me"]).to be_truthy
       expect(r["comments_count"]).to eql 1
     end
 

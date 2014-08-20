@@ -121,6 +121,7 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(comment.id)
       expect(r["score"]).to eql 1
+      expect(r["flagged_by_me"]).to be_falsey
       expect(r["my_vote"]["kind"]).to eql "up"
       expect(r["my_vote"]["vote_score"]).to eql 1
     end
@@ -134,6 +135,17 @@ describe Hyper::Cards do
       r = JSON.parse(response.body)
       expect(r["id"]).to eql(comment.id)
       expect(r["mentions"][user.username]).to eql user.id
+    end
+
+    it "returns flags_count and flagged_by_me in response" do
+      http_login device.id, device.access_token
+      comment.flag_by!(user)
+      get "/api/comments/#{comment.id}", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["id"]).to eql(comment.id)
+      expect(r["flags_count"]).to eql 1
+      expect(r["flagged_by_me"]).to be_truthy
     end
   end
 

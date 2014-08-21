@@ -53,7 +53,7 @@ if defined? RailsAdmin
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
-                                Notification)
+                                Notification Subscription)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -130,6 +130,17 @@ if defined? RailsAdmin
       end
     end
 
+    stack_subscriptions_count_field = Proc.new do
+      label "Subscriptions"
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "subscription",
+          f: { stack_id: { "0001" => { v: bindings[:object].id } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
     config.model "Stack" do
       list do
         field :display_name
@@ -141,7 +152,7 @@ if defined? RailsAdmin
         field :description
         field :user
         field :protected
-        field :subscriptions_count
+        field :subscriptions_count, &stack_subscriptions_count_field
         field :cards
       end
       show do
@@ -149,7 +160,7 @@ if defined? RailsAdmin
         field :description
         field :user
         field :protected
-        field :subscriptions_count
+        field :subscriptions_count, &stack_subscriptions_count_field
         field :cards
       end
       edit do
@@ -157,6 +168,32 @@ if defined? RailsAdmin
         field :description
         field :user
         field :protected
+      end
+    end
+
+    config.model "Subscription" do
+      list do
+        field :user
+        field :stack
+        field :stack_id, :enum do
+          label "For Stack"
+          enum do
+            Stack.recent.limit(10).map { |s| [s.name, s.id] }
+          end
+          visible false
+          searchable true
+        end
+        field :created_at
+        sort_by :created_at
+      end
+      show do
+        field :user
+        field :stack
+        field :created_at
+      end
+      edit do
+        field :user
+        field :stack
       end
     end
 

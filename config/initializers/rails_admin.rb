@@ -72,6 +72,7 @@ if defined? RailsAdmin
     end
 
     config.model "User" do
+      object_label_method :username
       list do
         scopes [nil, :flagged]
         field :email
@@ -132,12 +133,13 @@ if defined? RailsAdmin
     config.model "Stack" do
       list do
         field :display_name
-        field :description
-        field :user do
-          pretty_value do
-            value.try(:username)
-          end
+        field :name do
+          label "Stack Name"
+          visible false
+          searchable true
         end
+        field :description
+        field :user
         field :protected
         field :subscriptions_count
         field :cards
@@ -145,11 +147,7 @@ if defined? RailsAdmin
       show do
         field :display_name
         field :description
-        field :user do
-          pretty_value do
-            value.try(:username)
-          end
-        end
+        field :user
         field :protected
         field :subscriptions_count
         field :cards
@@ -157,11 +155,7 @@ if defined? RailsAdmin
       edit do
         field :name
         field :description
-        field :user  do
-          pretty_value do
-            value.try(:username)
-          end
-        end
+        field :user
         field :protected
       end
     end

@@ -54,8 +54,9 @@ class Notification < ActiveRecord::Base
   def send!
     if user.present? && require_push_notification?
       sns = AWS::SNS.new.client
-      user.devices.with_arn.recent.limit(MAX_DEVICES).each do |device|
-        sns.publish(message_attributes.merge(target_arn: device.sns_arn))
+      user.devices.with_arn.recent.limit(MAX_DEVICES).
+      pluck(:sns_arn).uniq.each do |arn|
+        sns.publish(message_attributes.merge(target_arn: arn))
       end
     end
     self.sent_at = Time.now.utc

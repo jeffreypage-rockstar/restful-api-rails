@@ -23,6 +23,4 @@ class DeviceSnsWorker
                                         token: token
     response.fetch(:endpoint_arn, "")
   end
-
-
 end

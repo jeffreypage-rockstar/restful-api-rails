@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe DeviceSnsWorker, type: :worker do
   let(:worker) { DeviceSnsWorker.new }
   let(:device) { create(:device) }
-  
+
   it "performs a device resgitration on sns" do
     device.push_token = "avalidpushtoken"
     device.save
@@ -18,7 +18,7 @@ RSpec.describe DeviceSnsWorker, type: :worker do
     client = double("client")
     sns = double("sns", client: client)
     expect(client).to receive(:create_platform_endpoint).
-                      with(platform_application_arn: "avalidapparn", 
+                      with(platform_application_arn: /arn:aws:sns/,
                            token: device.push_token).
                       and_return(response)
     expect(AWS::SNS).to receive(:new).and_return(sns)

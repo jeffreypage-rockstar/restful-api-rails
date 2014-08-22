@@ -11,6 +11,7 @@ class Notification < ActiveRecord::Base
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
+  MAX_DEVICES = 3
 
   def caption
     result = []
@@ -51,8 +52,11 @@ class Notification < ActiveRecord::Base
   end
 
   def send!
-    if require_push_notification?
-      # TODO: trigger a push notification
+    if user.present? && require_push_notification?
+      sns = AWS::SNS.new.client
+      user.devices.with_arn.recent.limit(MAX_DEVICES).each do |device|
+        sns.publish(message_attributes.merge(target_arn: device.sns_arn))
+      end
     end
     self.sent_at = Time.now.utc
     save
@@ -89,5 +93,17 @@ class Notification < ActiveRecord::Base
     unseen.where(user_id: user_id).
            where("created_at <= ?", before_notification.created_at).
            update_all(seen_at: Time.now.utc)
+  end
+
+  private # =======================================
+
+  def message_attributes
+    @message_attributes ||= {
+      message: caption,
+      message_attributes: {
+        "subject_id" => { data_type: "String", string_value: subject_id },
+        "subject_type" => { data_type: "String", string_value: subject_type }
+      }
+    }
   end
 end

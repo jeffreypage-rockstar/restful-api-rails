@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=Publish&Message=user%20have%20posted%20in%20a%20window%20you%20created&MessageAttributes.entry.1.Name=subject_id&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=c71d6671-50a1-4218-9dd9-2b4307b75643&MessageAttributes.entry.2.Name=subject_type&MessageAttributes.entry.2.Value.DataType=String&MessageAttributes.entry.2.Value.StringValue=Card&TargetArn=arn%3Aaws%3Asns%3Aus-east-1%3A000086100000%3Aendpoint%2FAPNS_SANDBOX%2Fhyper-test%2F8fb4f9e0-298a-38a3-9cf2-47614468d37e&Timestamp=2014-08-22T19%3A09%3A14Z&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '581'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      Host:
+      - sns.us-east-1.amazonaws.com
+      X-Amz-Date:
+      - 20140822T190914Z
+      X-Amz-Content-Sha256:
+      - d57fa4defe533042fae1cef32bf637ab4ecab6e7b49cbe7408b6e597d7aecbcd
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJIQ7JF7B7WVK4CRA/20140822/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=865e185c873d59201d3d3de307b1eae04cdab640f294c3fc5f298b34aae8a694
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 219dd589-1b7b-5d10-887e-99f88ce19a1b
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '294'
+      Date:
+      - Fri, 22 Aug 2014 19:09:14 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <PublishResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <PublishResult>
+            <MessageId>7d2f207b-0ba2-5239-ab96-6c0a9c38d532</MessageId>
+          </PublishResult>
+          <ResponseMetadata>
+            <RequestId>219dd589-1b7b-5d10-887e-99f88ce19a1b</RequestId>
+          </ResponseMetadata>
+        </PublishResponse>
+    http_version: 
+  recorded_at: Fri, 22 Aug 2014 19:09:15 GMT
+recorded_with: VCR 2.9.2

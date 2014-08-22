@@ -4,11 +4,13 @@ class Device < ActiveRecord::Base
   belongs_to :user
 
   before_save :generate_access_token, on: :create
-  after_save  :get_sns_arn
+  after_save :get_sns_arn
 
   scope :recent, -> do
-    where("NOT last_sign_in_at IS NULL").order("last_sign_in_at DESC")
+    where.not(last_sign_in_at: nil).order("last_sign_in_at DESC")
   end
+
+  scope :with_arn, -> { where.not(sns_arn: nil) }
 
   def sign_in!
     self.last_sign_in_at = Time.current

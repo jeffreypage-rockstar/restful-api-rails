@@ -124,6 +124,15 @@ RSpec.describe Notification, type: :model do
       notification.send!
       expect(notification).to be_sent
     end
+
+    it "triggers amazon sns publish api" do
+      VCR.use_cassette("sns_publish_message") do
+        create(:device_with_arn, user: user)
+        notification = create(:notification, user: user)
+        notification.send!
+        expect(notification).to be_sent
+      end
+    end
   end
 
   describe "#caption" do

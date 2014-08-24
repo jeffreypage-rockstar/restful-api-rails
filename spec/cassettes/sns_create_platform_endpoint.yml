@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=CreatePlatformEndpoint&CustomUserData=device_id%3Deb2eefe3-0971-4c0f-9c25-21fa1939185e%26user_id%3D5dc90117-8c9b-4c73-97f0-cc1ec5cdcaf4&PlatformApplicationArn=arn%3Aaws%3Asns%3Aus-east-1%3A462786100731%3Aapp%2FAPNS_SANDBOX%2Fhyper-test&Timestamp=2014-08-22T20%3A48%3A03Z&Token=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6661&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '370'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      Host:
+      - sns.us-east-1.amazonaws.com
+      X-Amz-Date:
+      - 20140822T204803Z
+      X-Amz-Content-Sha256:
+      - f9005a820abff65bfb221edab89a47353fb502c576310e43e83e0880ff23fa28
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJIQ7JF7B7WVK4CRA/20140822/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=aafe42733ae4aea203598f68e4c5d6451fa15b75f400890e9ff670ac38c7b3d1
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 8bc68fce-8f63-5a83-aa27-c3bf21a70986
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '429'
+      Date:
+      - Fri, 22 Aug 2014 20:48:03 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <CreatePlatformEndpointResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <CreatePlatformEndpointResult>
+            <EndpointArn>arn:aws:sns:us-east-1:000086100001:endpoint/APNS_SANDBOX/hyper-staging/c41c7af6-3ade-3c46-a06a-ff100bee0d43</EndpointArn>
+          </CreatePlatformEndpointResult>
+          <ResponseMetadata>
+            <RequestId>8bc68fce-8f63-5a83-aa27-c3bf21a70986</RequestId>
+          </ResponseMetadata>
+        </CreatePlatformEndpointResponse>
+    http_version: 
+  recorded_at: Fri, 22 Aug 2014 20:48:04 GMT
+recorded_with: VCR 2.9.2

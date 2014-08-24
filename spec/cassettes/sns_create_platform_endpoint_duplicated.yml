@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=CreatePlatformEndpoint&CustomUserData=device_id%3Deb2eefe3-0971-4c0f-9c25-21fa1939185e%26user_id%3D5dc90117-8c9b-4c73-97f0-cc1ec5cdcaf4&PlatformApplicationArn=arn%3Aaws%3Asns%3Aus-east-1%3A000086100001%3Aapp%2FAPNS_SANDBOX%2Fhyper-staging&Timestamp=2014-08-22T20%3A44%3A45Z&Token=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '370'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      Host:
+      - sns.us-east-1.amazonaws.com
+      X-Amz-Date:
+      - 20140822T204445Z
+      X-Amz-Content-Sha256:
+      - 532baec720db83fd074533e2263a803922e1e5c0750ba5b594508f89dfa615dc
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJIQ7JF7B7WVK4CRA/20140822/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=fb395b325e8f7ae1cc95f7e8307f6f26623a934a532d7251b3ef4ab2ccfc89e4
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      X-Amzn-Requestid:
+      - b2a189a5-7353-58af-b6ac-c5d4deaec60c
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '458'
+      Date:
+      - Fri, 22 Aug 2014 20:44:45 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <ErrorResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <Error>
+            <Type>Sender</Type>
+            <Code>InvalidParameter</Code>
+            <Message>Invalid parameter: Token Reason: Endpoint arn:aws:sns:us-east-1:000086100001:endpoint/APNS_SANDBOX/hyper-staging/8fb4f9e0-298a-38a3-9cf2-47614468d37e already exists with the same Token, but different attributes.</Message>
+          </Error>
+          <RequestId>b2a189a5-7353-58af-b6ac-c5d4deaec60c</RequestId>
+        </ErrorResponse>
+    http_version: 
+  recorded_at: Fri, 22 Aug 2014 20:44:46 GMT
+recorded_with: VCR 2.9.2

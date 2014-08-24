@@ -12,14 +12,23 @@ describe Device do
     end
 
     it "requires an user_id" do
-      user = Device.new(attrs.merge(user_id: ""))
-      expect(user).to_not be_valid
+      device = Device.new(attrs.merge(user_id: ""))
+      expect(device).to_not be_valid
     end
 
     it "generates an access_token" do
-      user = Device.create(attrs)
-      expect(user).to be_valid
-      expect(user.access_token).to_not be_blank
+      device = Device.create(attrs)
+      expect(device).to be_valid
+      expect(device.access_token).to_not be_blank
+    end
+  end
+
+  describe "#push_token" do
+    it "trigger a sns worker when adding a push token" do
+      device = create(:device)
+      expect(DeviceSnsWorker).to receive(:perform_async).with(device.id)
+      device.push_token = "avavliddevicetoken"
+      expect(device.save).to be_truthy
     end
   end
 

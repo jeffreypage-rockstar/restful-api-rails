@@ -4,10 +4,13 @@ class Device < ActiveRecord::Base
   belongs_to :user
 
   before_save :generate_access_token, on: :create
+  after_save :get_sns_arn
 
   scope :recent, -> do
-    where("NOT last_sign_in_at IS NULL").order("last_sign_in_at DESC")
+    where.not(last_sign_in_at: nil).order("last_sign_in_at DESC")
   end
+
+  scope :with_arn, -> { where.not(sns_arn: nil) }
 
   def sign_in!
     self.last_sign_in_at = Time.current
@@ -20,5 +23,9 @@ class Device < ActiveRecord::Base
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(access_token: access_token)
+  end
+
+  def get_sns_arn
+    DeviceSnsWorker.perform_async(id) if push_token_changed?
   end
 end

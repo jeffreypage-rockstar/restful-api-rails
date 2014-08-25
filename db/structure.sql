@@ -291,7 +291,7 @@ CREATE TABLE networks (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     provider character varying(255) NOT NULL,
     uid character varying(255) NOT NULL,
-    token character varying(255) NOT NULL,
+    token text NOT NULL,
     user_id uuid NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
@@ -445,7 +445,7 @@ CREATE TABLE users (
     updated_at timestamp without time zone,
     avatar_url character varying(255),
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
-    facebook_token character varying(255),
+    facebook_token text,
     facebook_id character varying(255),
     location character varying(255),
     flags_count integer DEFAULT 0,
@@ -978,4 +978,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140731144746');
 INSERT INTO schema_migrations (version) VALUES ('20140731162847');
 
 INSERT INTO schema_migrations (version) VALUES ('20140731190126');
+
+INSERT INTO schema_migrations (version) VALUES ('20140825201347');
 

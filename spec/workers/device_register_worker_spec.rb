@@ -1,8 +1,12 @@
 require "rails_helper"
 
-RSpec.describe DeviceSnsWorker, type: :worker do
-  let(:worker) { DeviceSnsWorker.new }
+RSpec.describe DeviceRegisterWorker, type: :worker do
+  let(:worker) { DeviceRegisterWorker.new }
   let(:device) { create(:device_with_arn) }
+
+  before do
+    allow(DeviceRegisterWorker).to receive(:perform_async)
+  end
 
   it "performs a device resgitration on sns" do
     VCR.use_cassette("sns_create_platform_endpoint") do

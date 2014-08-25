@@ -31,6 +31,17 @@ RSpec.describe Subscription, type: :model do
       expect(other).to_not be_valid
       expect(other.errors[:stack_id].first).to match("taken")
     end
-  end
 
+    it "removes old subscriptions if user reaches the maximum" do
+      user = create(:user)
+      first_sub = create(:subscription, user: user)
+      stub_const("Subscription::MAX_USER_SUBSCRIPTIONS", 5)
+      max = Subscription::MAX_USER_SUBSCRIPTIONS
+      (2..max).each { create(:subscription, user: user) }
+      expect(user.reload.subscriptions.count).to eql max
+      create(:subscription, user: user)
+      expect(user.reload.subscriptions.count).to eql max
+      expect { first_sub.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end

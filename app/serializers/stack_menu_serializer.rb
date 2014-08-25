@@ -6,7 +6,7 @@ class StackMenuSerializer < ActiveModel::Serializer
       stacks: object.subscribed_stacks.map do |s|
         StackShortSerializer.new(s, scope: current_user)
       end,
-      more: object.subscribed_stacks.next_page.present?
+      more: false
     }
   end
 

@@ -7,7 +7,7 @@ class StackMenu
 
   def load(user)
     self.owner_stacks = user.stacks.recent.page(PAGE).per(LIMIT)
-    self.subscribed_stacks = user.subscribed_stacks.recent.page(PAGE).per(LIMIT)
+    self.subscribed_stacks = user.subscribed_stacks.recent
     self.trending_stacks = Stack.trending(user.id).page(PAGE).
                                                    per(TRENDING_LIMIT)
     self

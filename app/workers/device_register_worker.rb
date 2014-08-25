@@ -1,5 +1,5 @@
 # register the device in amazon sns to receive push notifications
-class DeviceSnsWorker
+class DeviceRegisterWorker
   include Sidekiq::Worker
 
   def perform(device_id)
@@ -29,6 +29,8 @@ class DeviceSnsWorker
     # deal with already registered device
     if e.message =~ /already exists with the same Token/
       Device.find_by(push_token: token).try(:sns_arn)
+    else
+      raise e
     end
   end
 end

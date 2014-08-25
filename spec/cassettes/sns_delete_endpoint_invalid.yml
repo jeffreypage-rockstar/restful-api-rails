@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=DeleteEndpoint&EndpointArn=arn%3Aaws%3Asns%3Aus-east-1%3A000086100000%3Aendpoint%2FAPNS_SANDBOX%2Fhyper-staging%2Finvalid&Timestamp=2014-08-25T21%3A27%3A27Z&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '182'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      Host:
+      - sns.us-east-1.amazonaws.com
+      X-Amz-Date:
+      - 20140825T212727Z
+      X-Amz-Content-Sha256:
+      - 89f8cd9c03348c2cfdc3c46f802fea946c46d780e294261edb467fe9b4440a8d
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAJIQ7JF7B7WVK4CRA/20140825/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=e84883b605aeaea136e76a3e5e4c362e74794116bdb832e11a067c0dfded53e3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      X-Amzn-Requestid:
+      - 681a290b-9c8c-5def-ba61-657e30f35963
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '369'
+      Date:
+      - Mon, 25 Aug 2014 21:27:27 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <ErrorResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <Error>
+            <Type>Sender</Type>
+            <Code>InvalidParameter</Code>
+            <Message>Invalid parameter: EndpointArn Reason: ARN specifies an invalid endpointId: UUID must be encoded in exactly 36 characters.</Message>
+          </Error>
+          <RequestId>681a290b-9c8c-5def-ba61-657e30f35963</RequestId>
+        </ErrorResponse>
+    http_version: 
+  recorded_at: Mon, 25 Aug 2014 21:27:28 GMT
+recorded_with: VCR 2.9.2

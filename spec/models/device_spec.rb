@@ -26,7 +26,7 @@ describe Device do
   describe "#push_token" do
     it "trigger a sns worker when adding a push token" do
       device = create(:device)
-      expect(DeviceSnsWorker).to receive(:perform_async).with(device.id)
+      expect(DeviceRegisterWorker).to receive(:perform_async).with(device.id)
       device.push_token = "avavliddevicetoken"
       expect(device.save).to be_truthy
     end
@@ -39,6 +39,22 @@ describe Device do
       expect(device.last_sign_in_at).to be_blank
       device.sign_in!
       expect(device.last_sign_in_at).to_not be_blank
+    end
+  end
+
+  describe "#destroy" do
+    it "trigger an unregister worker job if arn exists" do
+      allow(DeviceRegisterWorker).to receive(:perform_async)
+      device = create(:device_with_arn)
+      expect(DeviceUnregisterWorker).to receive(:perform_async).
+                                        with(device.sns_arn)
+      device.destroy
+    end
+
+    it "does not trigger the unregister worker job if arn is blank" do
+      device = create(:device)
+      expect(DeviceUnregisterWorker).to_not receive(:perform_async)
+      device.destroy
     end
   end
 

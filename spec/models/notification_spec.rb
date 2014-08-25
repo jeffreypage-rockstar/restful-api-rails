@@ -126,6 +126,7 @@ RSpec.describe Notification, type: :model do
     end
 
     it "triggers amazon sns publish api" do
+      expect(DeviceRegisterWorker).to receive(:perform_async).once
       VCR.use_cassette("sns_publish_message") do
         create(:device_with_arn, user: user)
         notification = create(:notification, user: user)

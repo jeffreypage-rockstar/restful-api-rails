@@ -5,7 +5,7 @@ http_interactions:
     uri: https://sns.us-east-1.amazonaws.com/
     body:
       encoding: UTF-8
-      string: Action=CreatePlatformEndpoint&CustomUserData=device_id%3Deb2eefe3-0971-4c0f-9c25-21fa1939185e%26user_id%3D5dc90117-8c9b-4c73-97f0-cc1ec5cdcaf4&PlatformApplicationArn=arn%3Aaws%3Asns%3Aus-east-1%3A462786100731%3Aapp%2FAPNS_SANDBOX%2Fhyper-test&Timestamp=2014-08-22T20%3A48%3A03Z&Token=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6661&Version=2010-03-31
+      string: Action=CreatePlatformEndpoint&CustomUserData=device_id%3Deb2eefe3-0971-4c0f-9c25-21fa1939185e%26user_id%3D5dc90117-8c9b-4c73-97f0-cc1ec5cdcaf4&PlatformApplicationArn=arn%3Aaws%3Asns%3Aus-east-1%3A000086100000%3Aapp%2FAPNS_SANDBOX%2Fhyper-test&Timestamp=2014-08-22T20%3A48%3A03Z&Token=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6661&Version=2010-03-31
     headers:
       Content-Type:
       - application/x-www-form-urlencoded; charset=utf-8

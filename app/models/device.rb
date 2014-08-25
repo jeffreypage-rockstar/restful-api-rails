@@ -4,7 +4,8 @@ class Device < ActiveRecord::Base
   belongs_to :user
 
   before_save :generate_access_token, on: :create
-  after_save :get_sns_arn
+  after_save :register_sns
+  after_destroy :unregister_sns
 
   scope :recent, -> do
     where.not(last_sign_in_at: nil).order("last_sign_in_at DESC")
@@ -25,7 +26,11 @@ class Device < ActiveRecord::Base
     end while self.class.exists?(access_token: access_token)
   end
 
-  def get_sns_arn
-    DeviceSnsWorker.perform_async(id) if push_token_changed?
+  def register_sns
+    DeviceRegisterWorker.perform_async(id) if push_token_changed?
+  end
+
+  def unregister_sns
+    DeviceUnregisterWorker.perform_async(sns_arn) if sns_arn.present?
   end
 end

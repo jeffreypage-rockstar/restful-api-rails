@@ -37,11 +37,11 @@ describe Hyper::Devices do
     end
 
     it "updates an existent device" do
+      expect(DeviceRegisterWorker).to receive(:perform_async).once
       http_login device.id, device.access_token
       put "/api/devices/#{device.id}", {
         push_token: "a-valid-device-token"
-      },
-          @env
+      }, @env
       expect(response.status).to eql 204
     end
 

@@ -182,6 +182,7 @@ if defined? RailsAdmin
           end
           visible false
           searchable true
+          queryable false
         end
         field :created_at
         sort_by :created_at
@@ -285,6 +286,7 @@ if defined? RailsAdmin
           end
           visible false
           searchable true
+          queryable false
         end
         field :user
         field :created_at
@@ -327,6 +329,7 @@ if defined? RailsAdmin
           end
           visible false
           searchable true
+          queryable false
         end
         field :user do
           label "Flagged by"
@@ -378,6 +381,7 @@ if defined? RailsAdmin
           end
           visible false
           searchable true
+          queryable false
         end
         field :user do
           label "Voted by"

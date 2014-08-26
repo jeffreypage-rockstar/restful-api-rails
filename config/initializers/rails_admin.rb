@@ -40,7 +40,7 @@ if defined? RailsAdmin
       end
       show
       edit do
-        except ["Activity", "Notification"]
+        except ["Activity", "Notification", "Device"]
       end
       delete do
         except ["DeletedUser", "Setting", "Activity", "Notification"]
@@ -99,6 +99,16 @@ if defined? RailsAdmin
         field :score
         field :bio
         field :flags_count, &flags_count_field
+        field :devices_count do
+          label "Registered Devices"
+          pretty_value do
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "device",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to("#{value} devices", path).html_safe
+          end
+        end
         field :last_sign_in_at
         field :confirmed_at
         field :networks do
@@ -142,11 +152,11 @@ if defined? RailsAdmin
 
     config.model "Device" do
       list do
-        scopes [nil, :with_arn]
+        scopes [nil, :accepting_notification]
         field :user
         field :device_type
         field :push_token
-        field :has_arn?, :boolean
+        field :accept_notification?, :boolean
         field :last_sign_in_at
         field :created_at
         sort_by :last_sign_in_at
@@ -166,6 +176,7 @@ if defined? RailsAdmin
         field :sns_arn
       end
     end
+
 
     stack_subscriptions_count_field = Proc.new do
       label "Subscriptions"

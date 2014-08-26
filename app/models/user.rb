@@ -37,6 +37,10 @@ class User < ActiveRecord::Base
     username
   end
 
+  def devices_count
+    @devices_count ||= devices.count
+  end
+
   def add_facebook_network
     return if facebook_token.blank?
     networks.find_or_initialize_by(provider: "facebook").tap do |network|

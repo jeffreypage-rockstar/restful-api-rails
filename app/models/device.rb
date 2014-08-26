@@ -12,13 +12,14 @@ class Device < ActiveRecord::Base
   end
 
   scope :with_arn, -> { where.not(sns_arn: nil) }
+  scope :accepting_notification, -> { with_arn }
 
   def sign_in!
     self.last_sign_in_at = Time.current
     self.save!
   end
 
-  def has_arn?
+  def accept_notification?
     sns_arn.present?
   end
 

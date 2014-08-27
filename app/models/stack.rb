@@ -10,7 +10,7 @@ class Stack < ActiveRecord::Base
                    format: { with: /\A[a-zA-Z0-9_]*\z/ }
 
   belongs_to :user
-  has_many :cards, dependent: :restrict_with_exception
+  has_many :cards, dependent: :restrict_with_error
   has_many :subscriptions, dependent: :destroy
 
   scope :recent, -> { order("created_at DESC") }

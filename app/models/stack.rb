@@ -11,7 +11,7 @@ class Stack < ActiveRecord::Base
 
   belongs_to :user
   has_many :cards, dependent: :restrict_with_exception
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
 
   scope :recent, -> { order("created_at DESC") }
   scope :recent_active, -> { order("updated_at DESC") }

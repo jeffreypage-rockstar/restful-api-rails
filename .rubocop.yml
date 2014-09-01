@@ -237,5 +237,5 @@ UnderscorePrefixedVariableName:
 Void:
   Enabled: false
 
-Style/InlineComment:
+InlineComment:
   Enabled: false

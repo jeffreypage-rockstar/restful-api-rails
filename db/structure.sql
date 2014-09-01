@@ -247,7 +247,8 @@ CREATE TABLE deleted_users (
     location character varying(255),
     flags_count integer,
     score integer,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    bio text
 );
 
 
@@ -450,7 +451,8 @@ CREATE TABLE users (
     location character varying(255),
     flags_count integer DEFAULT 0,
     score integer DEFAULT 0,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    bio text
 );
 
 
@@ -980,4 +982,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140731162847');
 INSERT INTO schema_migrations (version) VALUES ('20140731190126');
 
 INSERT INTO schema_migrations (version) VALUES ('20140825201347');
+
+INSERT INTO schema_migrations (version) VALUES ('20140901123045');
 

@@ -2,7 +2,7 @@ module Hyper
   class EmptyBodyException < StandardError; end
 
   class Base < Grape::API
-    def self.inherited(subclass)
+    def self.inherited(subclass) # rubocop:disable PerceivedComplexity
       super
       subclass.instance_eval do
         version "v1", using: :accept_version_header

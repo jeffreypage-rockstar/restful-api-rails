@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CardStreamService, type: :service do
-  let(:scroll_id)do "cXVlcnlUaGVuRmV0Y2g7NTsyMTY6djA1VHdad29SNUtJdVVPZ1BUakYxZ"\
+  let(:scroll_id)do
+    "cXVlcnlUaGVuRmV0Y2g7NTsyMTY6djA1VHdad29SNUtJdVVPZ1BUakYxZ"\
     "zsyMTc6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMTg6djA1VHdad29SNUtJdVVPZ1BUakYxZ"\
     "zsyMTk6djA1VHdad29SNUtJdVVPZ1BUakYxZzsyMjA6djA1VHdad29SNUtJdVVPZ1BUakYxZ"\
     "zswOw=="

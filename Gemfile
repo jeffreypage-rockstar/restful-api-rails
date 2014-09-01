@@ -1,29 +1,32 @@
 source "https://rubygems.org"
 ruby "2.1.2"
 
-gem "rack"
-gem "grape"
-gem "grape-active_model_serializers"
-gem "grape-swagger"
-gem "encode_with_alphabet"
-gem "devise"
-gem "devise-async"
-gem "sidekiq"
-gem "pg"
-gem "foreman"
-gem "koala", "~> 1.10.0"
-gem "twitter"
-gem "tumblr-ruby"
-gem "kaminari"
-gem "api-pagination"
-gem "sentry-raven", git: "https://github.com/getsentry/raven-ruby.git"
-gem "hashids"
-gem "aws-sdk"
-gem "searchbing"
-gem "oj"
-gem "oj_mimic_json"
-gem "smarter_csv"
-gem "whenever", require: false
+gem 'rack'
+gem 'grape'
+gem 'grape-active_model_serializers'
+gem 'grape-swagger'
+gem 'encode_with_alphabet'
+gem 'devise'
+gem 'devise-async'
+gem 'sidekiq'
+gem 'pg'
+gem 'foreman'
+gem 'koala', '~> 1.10.0'
+gem 'twitter'
+gem 'tumblr-ruby'
+gem 'kaminari'
+gem 'api-pagination'
+gem 'sentry-raven', :git => "https://github.com/getsentry/raven-ruby.git"
+gem 'hashids'
+gem 'aws-sdk'
+gem 'searchbing'
+gem 'oj'
+gem 'oj_mimic_json'
+gem 'smarter_csv'
+gem 'whenever', :require => false
+gem 'fog'
+gem 'carrierwave'
+gem 'mini_magick'
 
 group :api do
   gem "activerecord", "~>4.1.4", require: "active_record"

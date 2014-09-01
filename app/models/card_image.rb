@@ -4,6 +4,7 @@ class CardImage < ActiveRecord::Base
 
   belongs_to :card, inverse_of: :images
   acts_as_list scope: :card
+  mount_uploader :image, CardImageUploader
 
   before_validation :fix_image_url
 

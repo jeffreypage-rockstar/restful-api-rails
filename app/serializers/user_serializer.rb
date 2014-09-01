@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :avatar_url, :location, :score,
+  attributes :id, :email, :username, :avatar_url, :location, :score, :bio,
              :unseen_notifications_count, :unconfirmed_email, :confirmed,
              :flags_count, :auth
 

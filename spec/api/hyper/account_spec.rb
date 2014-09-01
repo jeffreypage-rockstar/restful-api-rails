@@ -11,7 +11,8 @@ describe Hyper::Account do
       post "/api/user", email: "user@example.com",
                         username: "username",
                         password: "123testme",
-                        location: "New York"
+                        location: "New York",
+                        bio: "my bio text"
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r["email"]).to eql "user@example.com"
@@ -20,6 +21,7 @@ describe Hyper::Account do
       expect(r["auth"]["device_id"]).to_not be_blank
       expect(r["auth"]["access_token"]).to_not be_blank
       expect(r["location"]).to eql "New York"
+      expect(r["bio"]).to eql "my bio text"
       expect(response.header["Location"]).to match "\/user"
     end
 

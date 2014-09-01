@@ -87,6 +87,7 @@ if defined? RailsAdmin
         field :email
         field :username
         field :location
+        field :bio
         field :facebook_token
         field :facebook_id
       end
@@ -95,6 +96,7 @@ if defined? RailsAdmin
         field :username
         field :location
         field :score
+        field :bio
         field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at

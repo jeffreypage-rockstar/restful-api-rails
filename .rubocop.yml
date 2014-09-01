@@ -236,3 +236,6 @@ UnderscorePrefixedVariableName:
 
 Void:
   Enabled: false
+
+Style/InlineComment:
+  Enabled: false

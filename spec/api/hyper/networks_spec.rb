@@ -82,7 +82,9 @@ describe Hyper::Networks do
     it "updates the network details" do
       http_login device.id, device.access_token
       put "/api/networks/#{network.provider}", { uid: "newuid" }, @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["uid"]).to eql "newuid"
     end
   end
 

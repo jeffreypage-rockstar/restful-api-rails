@@ -43,7 +43,7 @@ module Hyper
       put do
         authenticate!
         current_user.update_attributes!(permitted_params)
-        empty_body!
+        current_user
       end
 
       # DELETE /user

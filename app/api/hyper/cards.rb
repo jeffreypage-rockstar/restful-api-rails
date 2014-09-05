@@ -133,7 +133,7 @@ module Hyper
           card_params[:images_attributes] = card_params.delete(:images)
           card_params[:stack] = stack
           card.update_attributes!(card_params.compact)
-          empty_body!
+          card
         end
       end
 

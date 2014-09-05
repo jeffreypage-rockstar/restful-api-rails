@@ -143,14 +143,20 @@ describe Hyper::Account do
             location: "New York, NY",
             facebook_token: "valid_facebook_token"
           }, @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["avatar_url"]).to eql "http://new_avatar_url"
+      expect(r["location"]).to eql "New York, NY"
     end
 
     it "updates current user e-mail, requiring new confirmation" do
       expect(user).to be_confirmed
       http_login device.id, device.access_token
       put "/api/user", { email: "newemail@example.com" }, @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["unconfirmed_email"]).to eql "newemail@example.com"
+      expect(r["confirmed"]).to be_falsey
     end
   end
 

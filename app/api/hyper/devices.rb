@@ -25,7 +25,7 @@ module Hyper
           device = Device.find(params[:id])
           forbidden! if device.user_id != current_user.id
           device.update_attributes!(permitted_params)
-          empty_body!
+          device
         end
       end
 

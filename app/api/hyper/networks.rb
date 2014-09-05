@@ -61,7 +61,7 @@ module Hyper
           network = current_user.networks.find_by!(provider: provider)
 
           network.update_attributes!(permitted_params)
-          empty_body!
+          network
         end
       end
 

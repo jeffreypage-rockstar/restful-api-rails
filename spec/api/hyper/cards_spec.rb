@@ -265,7 +265,10 @@ describe Hyper::Cards do
       put "/api/cards/#{card.id}", { name: "new card title",
                                      stack_id: new_stack.id },
           @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["name"]).to eql "new card title"
+      expect(r["stack_id"]).to eql new_stack.id
     end
 
     it "does not allow other user update the card" do
@@ -285,7 +288,10 @@ describe Hyper::Cards do
         }
       ]
         }, @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["images"].last["image_url"]).to match \
+      "http://example.com/new_image.jpg"
       card.images.reload
       expect(card.images.size).to eql 2
     end

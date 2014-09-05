@@ -42,7 +42,9 @@ describe Hyper::Devices do
       put "/api/devices/#{device.id}", {
         push_token: "a-valid-device-token"
       }, @env
-      expect(response.status).to eql 204
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["push_token"]).to eql("a-valid-device-token")
     end
 
     it "does not allow other user put the device" do

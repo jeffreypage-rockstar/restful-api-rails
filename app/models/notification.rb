@@ -38,7 +38,7 @@ class Notification < ActiveRecord::Base
       if subject.respond_to? :card
         subject.card.images.first.try(:image_url)
       else
-        raise 'Subject most have a card relationship'
+        raise "Subject most have a card relationship"
       end
     end
   end

@@ -160,7 +160,7 @@ RSpec.describe Notification, type: :model do
 
     it "returns notification caption for a few senders" do
       user = create :user
-      senders = { user.username => user.id}
+      senders = { user.username => user.id }
       notification = create(:notification, senders: senders)
       expect(notification.image_url).to eql user.avatar_url
     end

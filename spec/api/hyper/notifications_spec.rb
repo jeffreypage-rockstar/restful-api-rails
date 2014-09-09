@@ -119,14 +119,13 @@ describe Hyper::Notifications do
     end
 
     it "sends counts in header" do
-      senders = { "john" => 1, "peter" => 2}
+      senders = { "john" => 1, "peter" => 2 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
              senders: senders)
 
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
-      r = JSON.parse(response.body)
       expect(response.header["Total"]).to eq "1"
       expect(response.header["unseen_count"]).to match "1"
     end

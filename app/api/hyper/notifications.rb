@@ -51,9 +51,7 @@ module Hyper
       paginate per_page: PAGE_SIZE
       get do
         authenticate!
-        notifications = current_user.notifications.recent
-        header "unseen_count", notifications.unseen.count.to_s
-        paginate notifications
+        paginate current_user.notifications.recent
       end
     end
   end

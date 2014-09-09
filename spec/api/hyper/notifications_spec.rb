@@ -127,7 +127,6 @@ describe Hyper::Notifications do
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
       expect(response.header["Total"]).to eq "1"
-      expect(response.header["unseen_count"]).to match "1"
     end
   end
 end

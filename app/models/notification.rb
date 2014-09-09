@@ -35,7 +35,11 @@ class Notification < ActiveRecord::Base
     elsif senders.one?
       User.find_by_id(senders.values.first).avatar_url
     else
-      subject.card.images.first.try(:image_url)
+      if subject.respond_to? :card
+        subject.card.images.first.try(:image_url)
+      else
+        raise 'Subject most have a card relationship'
+      end
     end
   end
 

@@ -33,6 +33,10 @@ class Card < ActiveRecord::Base
     self.class.hashids.encrypt(short_id)
   end
 
+  def card
+    self
+  end
+
   def self.find_by_hash_id!(hash_id)
     self.find_by! short_id: hashids.decrypt(hash_id)
   end

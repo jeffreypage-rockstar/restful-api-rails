@@ -28,6 +28,17 @@ class Notification < ActiveRecord::Base
     result.delete_if(&:blank?).join(" ")
   end
 
+  def image_url
+    senders = self[:senders] || {}
+    if senders.empty?
+      nil
+    elsif senders.one?
+      User.find_by_id(senders.values.first).avatar_url
+    else
+      subject.card.images.first.try(:image_url)
+    end
+  end
+
   def mask_as_read!
     self.read_at = Time.now.utc
     save

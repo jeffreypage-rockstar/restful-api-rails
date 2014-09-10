@@ -46,6 +46,10 @@ class Card < ActiveRecord::Base
       order("rank DESC, created_at DESC")
   end
 
+  def notification_image_url
+    images.first.try(:image_url)
+  end
+
   # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================
   searchkick
 

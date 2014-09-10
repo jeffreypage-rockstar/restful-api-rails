@@ -26,6 +26,10 @@ class Comment < ActiveRecord::Base
       order("rank DESC, created_at ASC")
   end
 
+  def notification_image_url
+    card.notification_image_url
+  end
+
   private # ===============================================================
 
   def extract_mentions

@@ -1,3 +1,4 @@
 class NotificationSerializer < ActiveModel::Serializer
-  attributes :caption, :subject_id, :subject_type, :senders, :sent_at, :read?
+  attributes :caption, :subject_id, :subject_type, :senders, :sent_at,
+             :read?, :seen?, :action, :image_url
 end

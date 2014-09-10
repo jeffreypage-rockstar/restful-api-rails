@@ -95,7 +95,7 @@ describe Hyper::Notifications do
       senders = { "john" => 1, "peter" => 2, "michael" => 3 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
                             senders: senders)
-
+      create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
@@ -108,14 +108,25 @@ describe Hyper::Notifications do
     it "returns notifications with many senders" do
       senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
-                            senders: senders)
-
+             senders: senders)
+      create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
       expect(r.first["caption"]).to eql "4 people have liked your post"
+    end
+
+    it "sends counts in header" do
+      senders = { "john" => 1, "peter" => 2 }
+      create(:notification, user: user, subject: card, action: "card.up_vote",
+             senders: senders)
+      create :card_image, card: card
+      http_login device.id, device.access_token
+      get "/api/notifications", nil, @env
+      expect(response.status).to eql 200
+      expect(response.header["Total"]).to eq "1"
     end
   end
 end

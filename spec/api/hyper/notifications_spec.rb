@@ -95,7 +95,7 @@ describe Hyper::Notifications do
       senders = { "john" => 1, "peter" => 2, "michael" => 3 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
                             senders: senders)
-
+      create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
@@ -109,7 +109,7 @@ describe Hyper::Notifications do
       senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
              senders: senders)
-
+      create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
@@ -122,7 +122,7 @@ describe Hyper::Notifications do
       senders = { "john" => 1, "peter" => 2 }
       create(:notification, user: user, subject: card, action: "card.up_vote",
              senders: senders)
-
+      create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200

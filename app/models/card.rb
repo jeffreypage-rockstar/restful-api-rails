@@ -33,10 +33,6 @@ class Card < ActiveRecord::Base
     self.class.hashids.encrypt(short_id)
   end
 
-  def card
-    self
-  end
-
   def self.find_by_hash_id!(hash_id)
     self.find_by! short_id: hashids.decrypt(hash_id)
   end
@@ -48,6 +44,10 @@ class Card < ActiveRecord::Base
   def self.popularity
     select("*, hot_score(up_score, down_score, created_at) as rank").
       order("rank DESC, created_at DESC")
+  end
+
+  def notification_image_url
+    images.first.image_url
   end
 
   # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================

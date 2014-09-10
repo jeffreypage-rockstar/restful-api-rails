@@ -47,7 +47,7 @@ class Card < ActiveRecord::Base
   end
 
   def notification_image_url
-    images.first.image_url
+    images.first.try(:image_url)
   end
 
   # ======= SEARCHKICK (ELASTICSEARCH) SETTINGS =========================

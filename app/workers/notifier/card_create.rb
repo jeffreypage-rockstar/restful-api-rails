@@ -5,10 +5,10 @@ module Notifier
   # ex. 7 people have posted in a window you follow
   class CardCreate < Base
     def owner_notification
-      stack = @activity.trackable
-      return nil if stack.nil? || @activity.owner_id == stack.stack.try(:user_id)
-      load_notification subject: stack,
-                        user_id: stack.stack.try(:user_id),
+      card = @activity.trackable
+      return nil if card.nil? || @activity.owner_id == card.stack.try(:user_id)
+      load_notification subject: card,
+                        user_id: card.stack.try(:user_id),
                         action: @activity.key
     end
 

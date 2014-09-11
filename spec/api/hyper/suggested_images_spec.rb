@@ -36,5 +36,17 @@ describe Hyper::SuggestedImages do
         expect(response.header["Link"]).to include(link)
       end
     end
+
+    it "return empty for a out of bounds page" do
+      VCR.use_cassette("bing_image_search_xbox_page100") do
+        http_login device.id, device.access_token
+        get "/api/suggested_images?q=xbox&page=746&per_page=100", nil, @env
+        expect(response.status).to eql 200
+        r = JSON.parse(response.body)
+        expect(r.size).to eql(0)
+        # response headers
+        expect(response.header["Total"]).to eql("74400")
+      end
+    end
   end
 end

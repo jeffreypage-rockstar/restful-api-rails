@@ -9,7 +9,7 @@ class ImageSearchService
 
   def paginated_images
     results = client.search(@query, offset).first
-    images, total_count = load_images(results)
+    images, total_count = load_images(results, offset)
     Kaminari.paginate_array(images, total_count: total_count,
                                     limit: @per_page,
                                     offset: 0,
@@ -40,9 +40,12 @@ class ImageSearchService
                         )
   end
 
-  def load_images(results)
+  def load_images(results, offset)
     total_count = results[:ImageTotal].to_i
-    images = results[:Image].map { |result| BingImage.new(result) }
+    images = []
+    if results[:ImageOffset].to_i >= offset # to prevent duplicated pages
+      images = results[:Image].map { |result| BingImage.new(result) }
+    end
     [images, total_count]
   end
 end

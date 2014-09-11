@@ -1,4 +1,7 @@
 class Subscription < ActiveRecord::Base
+  include PublicActivity::Model
+  tracked owner: :user, recipient: :stack
+
   validates :user_id, :stack_id, presence: true
   validates_uniqueness_of :stack_id, scope: :user_id, allow_blank: true,
                                      if: Proc.new { |u| u.user_id.present? }
@@ -12,6 +15,10 @@ class Subscription < ActiveRecord::Base
   MAX_USER_SUBSCRIPTIONS = 50
 
   after_create :check_max_user_subscriptions
+
+  def notification_image_url
+    stack.cards.best.first.try(:notification_image_url)
+  end
 
   private # ================================================
 

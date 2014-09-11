@@ -9,6 +9,7 @@ PublicActivity::Activity.class_eval do
 
   def trigger_notification
     return if notified?
+    API.logger.info "===> trigger_notification for #{[id, key]}"
     Notifier.notify_async(id, key) || update_attribute(:notified, true)
   end
 end

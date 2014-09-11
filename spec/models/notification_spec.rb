@@ -159,8 +159,8 @@ RSpec.describe Notification, type: :model do
   describe "#image_url" do
 
     [
-        :card_create_notification,
-        :subscription_create_notification
+      :card_create_notification,
+      :subscription_create_notification
     ].each do |notification_type|
       it "returns notification image_url for only one sender" \
              " in #{notification_type.to_s.humanize}" do
@@ -168,21 +168,20 @@ RSpec.describe Notification, type: :model do
         card = card_image.card
         senders = { user.username => user.id }
         notification = create(notification_type, senders: senders,
-                              subject: card)
+                                                 subject: card)
         expect(notification.image_url).to eql card_image.image_url
       end
     end
 
     [
-        :card_up_vote_notification,
-        :comment_create_notification,
-        :comment_reply_notification,
-        :comment_mention_notification,
-        :comment_up_vote_notification
+      :card_up_vote_notification,
+      :comment_create_notification,
+      :comment_reply_notification,
+      :comment_mention_notification,
+      :comment_up_vote_notification
     ].each do |notification_type|
       it "returns user's avater for only one sender" \
              " in #{notification_type.to_s.humanize}" do
-        card = create :card
         senders = { user.username => user.id }
         notification = create(notification_type, senders: senders)
         expect(notification.image_url).to eql user.avatar_url

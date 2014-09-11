@@ -33,13 +33,9 @@ class Notification < ActiveRecord::Base
     if senders.empty?
       nil
     elsif senders.one?
-      User.find_by_id(senders.values.first).avatar_url
+      single_sender_image_url(senders.values.first)
     else
-      if subject.respond_to? :notification_image_url
-        subject.try(:notification_image_url)
-      else
-        raise "Subject most have notification_image_url method"
-      end
+      multiple_senders_image_url
     end
   end
 
@@ -121,5 +117,25 @@ class Notification < ActiveRecord::Base
         "subject_type" => { data_type: "String", string_value: subject_type }
       }
     }
+  end
+
+  def single_sender_image_url(sender_id)
+    if shows_user_for_single_notification?
+      User.find_by_id(sender_id).avatar_url
+    else
+      multiple_senders_image_url
+    end
+  end
+
+  def shows_user_for_single_notification?
+    !["subscription.create", "card.create"].include?(action)
+  end
+
+  def multiple_senders_image_url
+    if subject.respond_to? :notification_image_url
+      subject.try(:notification_image_url)
+    else
+      raise "Subject most have notification_image_url method"
+    end
   end
 end

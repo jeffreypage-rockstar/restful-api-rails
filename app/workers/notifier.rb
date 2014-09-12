@@ -3,6 +3,7 @@ require_relative "notifier/card_create"
 require_relative "notifier/comment_create"
 require_relative "notifier/card_up_vote"
 require_relative "notifier/comment_up_vote"
+require_relative "notifier/subscription_create"
 
 module Notifier
   def self.notify_async(activity_id, activity_key)

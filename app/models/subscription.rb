@@ -16,10 +16,6 @@ class Subscription < ActiveRecord::Base
 
   after_create :check_max_user_subscriptions
 
-  def notification_image_url
-    stack.cards.best.first.try(:notification_image_url)
-  end
-
   private # ================================================
 
   def check_max_user_subscriptions

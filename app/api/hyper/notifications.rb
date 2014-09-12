@@ -35,7 +35,7 @@ module Hyper
       # DELETE /notifications/:id
       desc "Mark a single user notification as read"
       params do
-        requires :id, type: String, desc: "Notification id."
+        requires :id, type: String, desc: "Notification id.", uuid: true
       end
       route_param :id do
         delete do

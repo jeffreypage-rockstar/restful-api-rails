@@ -40,6 +40,10 @@ class Stack < ActiveRecord::Base
     end.select(&:save)
   end
 
+  def notification_image_url
+    cards.best.first.try(:notification_image_url)
+  end
+
   private # ================================
 
   def remove_hashtag

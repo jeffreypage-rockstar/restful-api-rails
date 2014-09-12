@@ -1,6 +1,7 @@
 class Notification < ActiveRecord::Base
   validates :user, :subject, :action, presence: true
   store_accessor :senders
+  store_accessor :extra
 
   belongs_to :user
   belongs_to :subject, polymorphic: true
@@ -70,8 +71,7 @@ class Notification < ActiveRecord::Base
         sns.publish(message_attributes.merge(target_arn: arn))
       end
     end
-    self.sent_at = Time.now.utc
-    save
+    self.update!(sent_at: Time.now.utc)
   end
 
   def sent?

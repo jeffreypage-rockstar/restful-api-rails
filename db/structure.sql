@@ -315,7 +315,8 @@ CREATE TABLE notifications (
     sent_at timestamp without time zone,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    seen_at timestamp without time zone
+    seen_at timestamp without time zone,
+    extra hstore
 );
 
 

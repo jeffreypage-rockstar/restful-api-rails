@@ -8,7 +8,12 @@ module Notifier
       return nil if comment.nil? || @activity.owner_id == comment.user_id
       load_notification subject: comment,
                         user_id: comment.user_id,
-                        action: @activity.key
+                        action: @activity.key,
+                        extra: {
+                          comment_id: comment.id,
+                          card_id: comment.card_id,
+                          stack_id: comment.card.try(:stack_id)
+                        }
     end
 
     def notifications

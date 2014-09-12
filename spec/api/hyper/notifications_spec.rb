@@ -76,12 +76,16 @@ describe Hyper::Notifications do
       expect(response.status).to eql 401 # authentication
     end
 
-    it "returns notifications read and unread" do
+    it "returns notifications read and unread, with extras" do
       (1..10).map do |i|
         create(:notification, user: user,
                               subject: card,
                               read_at: i.odd? ? Time.now.utc : nil,
-                              action: "card.up_vote")
+                              action: "card.up_vote",
+                              extra: {
+                                card_id: card.id,
+                                stack_id: card.stack_id
+                              })
       end
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
@@ -89,6 +93,8 @@ describe Hyper::Notifications do
       r = JSON.parse(response.body)
       expect(r.size).to eql(10)
       expect(r.first["caption"]).to eql "a person has liked your post"
+      expect(r.first["card_id"]).to eql card.id
+      expect(r.first["stack_id"]).to eql card.stack_id
     end
 
     it "returns notifications with few senders" do
@@ -127,6 +133,7 @@ describe Hyper::Notifications do
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
       expect(response.header["Total"]).to eq "1"
+      expect(response.header["TotalUnseen"]).to eq "1"
     end
   end
 end

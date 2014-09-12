@@ -233,7 +233,10 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name commented on your post \"card_name\"" }
+        it do
+          is_expected.to eql "user_name commented on your "\
+        "post \"card_name\""
+        end
       end
 
       context "three senders" do
@@ -246,7 +249,10 @@ RSpec.describe Notification, type: :model do
 
       context "four senders" do
         let(:senders) { four_senders }
-        it { is_expected.to eql "4 people commented on your post \"card_name\"" }
+        it do
+          is_expected.to eql "4 people commented on your post "\
+        "\"card_name\""
+        end
       end
     end
 

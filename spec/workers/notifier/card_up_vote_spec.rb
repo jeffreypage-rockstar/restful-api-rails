@@ -43,6 +43,7 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
       expect(notifications.first.senders_count).to eql 2
       expect(notifications.first.senders.keys).to match([user1.username,
                                                          user2.username])
+      expect(notifications.first.extra.keys).to match(["stack_id", "card_id"])
     end
   end
 end

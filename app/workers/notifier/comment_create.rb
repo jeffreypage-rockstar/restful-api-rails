@@ -6,11 +6,13 @@ module Notifier
   # ex. Plotchman1 replied to your comment
   class CommentCreate < Base
     def owner_notification
+      comment = @activity.trackable
       card = @activity.recipient
       return if card.nil? || @activity.owner_id == card.user_id
       load_notification subject: card,
                         user_id: card.user_id,
-                        action: @activity.key
+                        action: @activity.key,
+                        extra: extra_for(comment, card)
     end
 
     def reply_notification
@@ -20,7 +22,8 @@ module Notifier
       return unless valid
       load_notification subject: card,
                         user_id: comment.replying.user_id,
-                        action: "comment.reply"
+                        action: "comment.reply",
+                        extra: extra_for(comment, card)
     end
 
     def mentions_notifications
@@ -29,8 +32,17 @@ module Notifier
       comment.mentions.map do |_username, user_id|
         load_notification subject: card,
                           user_id: user_id,
-                          action: "comment.mention"
+                          action: "comment.mention",
+                          extra: extra_for(comment, card)
       end
+    end
+
+    def extra_for(comment, card)
+      {
+        comment_id: comment.id,
+        card_id: card.id,
+        stack_id: card.stack_id
+      }
     end
 
     def notifications

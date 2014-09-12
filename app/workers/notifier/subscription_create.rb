@@ -8,7 +8,10 @@ module Notifier
       return if stack.nil? || @activity.owner_id == stack.user_id
       load_notification subject: stack,
                         user_id: stack.user_id,
-                        action: @activity.key
+                        action: @activity.key,
+                        extra: {
+                          stack_id: stack.id
+                        }
     end
 
     def notifications

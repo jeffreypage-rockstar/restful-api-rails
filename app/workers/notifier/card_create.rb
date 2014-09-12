@@ -9,7 +9,8 @@ module Notifier
       return nil if card.nil? || @activity.owner_id == card.stack.try(:user_id)
       load_notification subject: card,
                         user_id: card.stack.try(:user_id),
-                        action: @activity.key
+                        action: @activity.key,
+                        extra: extra_for(card)
     end
 
     def subscribers_notifications
@@ -20,8 +21,16 @@ module Notifier
                    map do |s|
         load_notification subject: card,
                           user_id: s.user_id,
-                          action: @activity.key
+                          action: @activity.key,
+                          extra: extra_for(card)
       end
+    end
+
+    def extra_for(card)
+      {
+        stack_id: card.stack_id,
+        card_id: card.id
+      }
     end
 
     def notifications

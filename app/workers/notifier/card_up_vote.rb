@@ -8,7 +8,11 @@ module Notifier
       return nil if card.nil? || @activity.owner_id == card.user_id
       load_notification subject: card,
                         user_id: card.user_id,
-                        action: @activity.key
+                        action: @activity.key,
+                        extra: {
+                          stack_id: card.stack_id,
+                          card_id: card.id
+                        }
     end
 
     def notifications

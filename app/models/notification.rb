@@ -1,6 +1,7 @@
 class Notification < ActiveRecord::Base
   validates :user, :subject, :action, presence: true
   store_accessor :senders
+  store_accessor :extra
 
   belongs_to :user
   belongs_to :subject, polymorphic: true

@@ -7,7 +7,10 @@ module Notifier
     end
 
     def load_notification(attrs)
-      Notification.unread.find_or_initialize_by(attrs)
+      extra = attrs.delete(:extra)
+      Notification.unread.find_or_initialize_by(attrs).tap do |notification|
+        notification.extra = extra
+      end
     end
 
     def perform(activity_id)

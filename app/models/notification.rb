@@ -71,8 +71,7 @@ class Notification < ActiveRecord::Base
         sns.publish(message_attributes.merge(target_arn: arn))
       end
     end
-    self.sent_at = Time.now.utc
-    save
+    self.update!(sent_at: Time.now.utc)
   end
 
   def sent?

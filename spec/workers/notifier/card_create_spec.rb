@@ -5,6 +5,10 @@ RSpec.describe Notifier::CardCreate, type: :worker do
   let(:card) { create(:card) }
   let(:stack) { card.stack }
 
+  before do
+    allow(Notifier::SubscriptionCreate).to receive(:perform_async)
+  end
+
   it "performs generating notifications for stack subscribers" do
     expect(Notifier::CardCreate).to receive(:perform_async).twice.
                                     and_return("0001")

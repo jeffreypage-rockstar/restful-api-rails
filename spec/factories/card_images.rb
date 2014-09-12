@@ -2,8 +2,9 @@
 
 FactoryGirl.define do
   factory :card_image do
-    image_url "http://placehold.it/480x320"
+    original_image_url "http://placehold.it/480x320"
     caption "a image caption"
+    image_processing true
     card
   end
 end

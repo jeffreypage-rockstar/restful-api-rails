@@ -149,12 +149,14 @@ ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
 
 CREATE TABLE card_images (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
-    image_url character varying(255) NOT NULL,
+    original_image_url character varying(255) NOT NULL,
     caption text,
     card_id uuid NOT NULL,
     "position" integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    image character varying(255),
+    image_processing boolean DEFAULT false
 );
 
 
@@ -985,4 +987,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140731190126');
 INSERT INTO schema_migrations (version) VALUES ('20140825201347');
 
 INSERT INTO schema_migrations (version) VALUES ('20140901123045');
+
+INSERT INTO schema_migrations (version) VALUES ('20140901183704');
+
+INSERT INTO schema_migrations (version) VALUES ('20140911201247');
 

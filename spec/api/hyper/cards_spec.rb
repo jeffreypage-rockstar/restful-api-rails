@@ -53,6 +53,8 @@ describe Hyper::Cards do
     end
 
     it "creates a card with images" do
+      expect(ImageProcessWorker).to receive(:perform_async).twice
+
       http_login device.id, device.access_token
       post "/api/cards", { name: "My card with images",
                            stack_id: card.stack_id,
@@ -279,11 +281,15 @@ describe Hyper::Cards do
     end
 
     it "allows images inclusion" do
+      image_url = "http://example.com/new_image.jpg"
+      expect(ImageProcessWorker).to receive(:perform_async).
+                                    with(/\w/, image_url).once
+
       card.images << build(:card_image)
       card.save
       http_login device.id, device.access_token
       put "/api/cards/#{card.id}", { images: [
-        { image_url: "http://example.com/new_image.jpg",
+        { image_url: image_url,
           caption: "New Image"
         }
       ]

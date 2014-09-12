@@ -158,14 +158,37 @@ RSpec.describe Notification, type: :model do
 
   describe "#image_url" do
 
-    it "returns notification caption for a few senders" do
-      user = create :user
-      senders = { user.username => user.id }
-      notification = create(:notification, senders: senders)
-      expect(notification.image_url).to eql user.avatar_url
+    [
+      :card_create_notification,
+      :subscription_create_notification
+    ].each do |notification_type|
+      it "returns notification image_url for only one sender" \
+             " in #{notification_type.to_s.humanize}" do
+        card_image = create :card_image
+        card = card_image.card
+        senders = { user.username => user.id }
+        notification = create(notification_type, senders: senders,
+                                                 subject: card)
+        expect(notification.image_url).to eql card_image.image_url
+      end
     end
 
-    it "returns notification caption with many senders" do
+    [
+      :card_up_vote_notification,
+      :comment_create_notification,
+      :comment_reply_notification,
+      :comment_mention_notification,
+      :comment_up_vote_notification
+    ].each do |notification_type|
+      it "returns user's avater for only one sender" \
+             " in #{notification_type.to_s.humanize}" do
+        senders = { user.username => user.id }
+        notification = create(notification_type, senders: senders)
+        expect(notification.image_url).to eql user.avatar_url
+      end
+    end
+
+    it "returns notification image_url por more than one sender" do
       card_image = create :card_image
       card = card_image.card
       senders = { "john" => 1, "peter" => 2 }

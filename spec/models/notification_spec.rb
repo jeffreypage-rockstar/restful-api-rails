@@ -157,7 +157,6 @@ RSpec.describe Notification, type: :model do
   end
 
   describe "#image_url" do
-
     [
       :card_create_notification,
       :subscription_create_notification

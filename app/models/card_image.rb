@@ -11,6 +11,21 @@ class CardImage < ActiveRecord::Base
 
   URL_REGEX = /^(https?:\/)(\w.*)/
 
+  def image_url
+    url = super
+    url = original_image_url if url.blank?
+    url
+  end
+
+  def image_url=(value)
+    self.original_image_url = value
+  end
+
+  def thumbnail_url
+    return nil unless image
+    image.thumbnail.try(:url)
+  end
+
   private
 
   def fix_original_image_url

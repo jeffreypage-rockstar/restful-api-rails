@@ -3,7 +3,7 @@ require "spec_helper"
 describe Hyper::Notifications do
   let(:device) { create(:device) }
   let(:user) { device.user }
-  let(:card) { create(:card, user: user) }
+  let(:card) { create(:card, user: user, name: "card_name") }
   let(:notification) { create(:notification, user: user) }
 
   # ======== MARKING ALL AS SEEN ==================
@@ -92,7 +92,7 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(10)
-      expect(r.first["caption"]).to eql "A person upvoted your post \"A Card 75\""
+      expect(r.first["caption"]).to eql "A person upvoted your post \"card_name\""
       expect(r.first["card_id"]).to eql card.id
       expect(r.first["stack_id"]).to eql card.stack_id
     end
@@ -107,7 +107,7 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expected_caption = "john, peter and michael have liked your post"
+      expected_caption = "john, peter and michael upvoted your post \"card_name\""
       expect(r.first["caption"]).to eql expected_caption
     end
 
@@ -121,7 +121,7 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expect(r.first["caption"]).to eql "4 people have liked your post"
+      expect(r.first["caption"]).to eql "4 people upvoted your post \"card_name\""
     end
 
     it "sends counts in header" do

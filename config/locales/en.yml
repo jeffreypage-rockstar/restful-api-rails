@@ -32,7 +32,7 @@ en:
           zero: "A person upvoted your post \"%{subject_name}\""
           one: "%{user_names} upvoted your post \"%{subject_name}\""
           other: "%{user_names} upvoted your post \"%{subject_name}\""
-        with_numbers: "%{count} people upvoted your post \"%{card_name}\""
+        with_numbers: "%{count} people upvoted your post \"%{subject_name}\""
     comment:
       create:
         with_user_names:

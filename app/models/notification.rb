@@ -19,11 +19,11 @@ class Notification < ActiveRecord::Base
     if senders_count < SENDERS_CAPTION_LIMIT
       user_names = senders.keys.to_sentence(last_word_connector: " and ")
       subject_name = subject.try(:name)
-      I18n.t(action".with_names", scope: "notifications",
+      I18n.t("#{action}.with_user_names", scope: "notifications",
                    count: senders_count, user_names: user_names,
                    subject_name: subject_name)
     else
-      I18n.t(action".with_numbers", scope: "notifications",
+      I18n.t("#{action}.with_numbers", scope: "notifications",
                    count: senders_count)
     end
   end

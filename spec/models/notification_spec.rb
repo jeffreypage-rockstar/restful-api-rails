@@ -163,10 +163,24 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:sender_user) { create :user }
-        let(:senders) { { sender_user.username => sender_user.id } }
+        let(:senders) { { "user_name" => sender_user.id } }
 
-        it { is_expected.to eql "" }
+        it { is_expected.to eql "user_name posted in \"card_name\"" }
+      end
 
+      context "three senders" do
+        let(:senders) { {"user_name_1" => 1, "user_name_2" => 2,
+                         "user_name_3" => 3} }
+
+        it { is_expected.to eql "user_name_1, user_name_2 and user_name_3 "
+        "posted in \"card_name\"" }
+      end
+
+      context "four senders" do
+        let(:senders) { { "user_name_1" => 1, "user_name_2" => 2,
+                          "user_name_3" => 3, "user_name_4" => 4 } }
+
+        it { is_expected.to eql "4 posts were made in \"card_name\"" }
       end
     end
   end

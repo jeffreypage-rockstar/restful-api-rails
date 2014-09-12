@@ -92,7 +92,7 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(10)
-      expect(r.first["caption"]).to eql "a person has liked your post"
+      expect(r.first["caption"]).to eql "A person upvoted your post \"A Card 75\""
       expect(r.first["card_id"]).to eql card.id
       expect(r.first["stack_id"]).to eql card.stack_id
     end

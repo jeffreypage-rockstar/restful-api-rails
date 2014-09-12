@@ -12,22 +12,27 @@ FactoryGirl.define do
 
     factory :subscription_create_notification do
       action "subscription.create"
+      subject { build(:subscription) }
     end
 
     factory :comment_create_notification do
       action "comment.create"
+      subject { build(:comment) }
     end
 
     factory :comment_reply_notification do
       action "comment.reply"
+      subject { build(:comment) }
     end
 
     factory :comment_mention_notification do
       action "comment.mention"
+      subject { build(:comment) }
     end
 
     factory :comment_up_vote_notification do
       action "comment.up_vote"
+      subject { build(:comment) }
     end
   end
 end

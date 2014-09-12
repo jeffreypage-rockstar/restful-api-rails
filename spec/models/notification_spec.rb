@@ -154,6 +154,21 @@ RSpec.describe Notification, type: :model do
       notification = create(:notification, senders: senders)
       expect(notification.caption).to eql "4 people have liked your post"
     end
+
+    describe "card.create" do
+      let(:card) { create :card, name: "card_name" }
+      let(:notification) { build :card_create_notification, senders: senders,
+                                 subject: card }
+      subject(:caption) { notification.caption }
+
+      context "single sender" do
+        let(:sender_user) { create :user }
+        let(:senders) { { sender_user.username => sender_user.id } }
+
+        it { is_expected.to eql "" }
+
+      end
+    end
   end
 
   describe "#image_url" do

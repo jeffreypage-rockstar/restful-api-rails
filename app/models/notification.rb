@@ -15,18 +15,17 @@ class Notification < ActiveRecord::Base
   MAX_DEVICES = 3
 
   def caption
-    result = []
     senders = self[:senders] || {}
-    if senders.empty?
-      result << "a person has"
-    elsif senders.size.to_i > SENDERS_CAPTION_LIMIT
-      result << "#{senders.size} people have"
+    if senders_count < SENDERS_CAPTION_LIMIT
+      user_names = senders.keys.to_sentence(last_word_connector: " and ")
+      subject_name = subject.try(:name)
+      I18n.t(action".with_names", scope: "notifications",
+                   count: senders_count, user_names: user_names,
+                   subject_name: subject_name)
     else
-      result << senders.keys.to_sentence(last_word_connector: " and ")
-      result << "have"
+      I18n.t(action".with_numbers", scope: "notifications",
+                   count: senders_count)
     end
-    result << I18n.t(action, scope: "notifications")
-    result.delete_if(&:blank?).join(" ")
   end
 
   def image_url

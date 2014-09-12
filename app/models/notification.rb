@@ -132,10 +132,6 @@ class Notification < ActiveRecord::Base
   end
 
   def multiple_senders_image_url
-    if subject.respond_to? :notification_image_url
-      subject.try(:notification_image_url)
-    else
-      raise "Subject most have notification_image_url method"
-    end
+    subject.try(:notification_image_url)
   end
 end

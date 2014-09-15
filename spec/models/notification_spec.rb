@@ -137,7 +137,8 @@ RSpec.describe Notification, type: :model do
   end
 
   describe "#caption" do
-    let(:card) { build :card, name: "card_name" }
+    let(:stack) { build :stack, name: "stack_name" }
+    let(:card) { build :card, name: "card_name", stack: stack }
     let(:sender_user) { create :user }
     let(:one_sender) { { "user_name" => sender_user.id } }
     let(:three_senders) do
@@ -158,20 +159,20 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name posted in \"card_name\"" }
+        it { is_expected.to eql "user_name posted in #stack_name" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
           is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "posted in \"card_name\""
+        "posted in #stack_name"
         end
       end
 
       context "four senders" do
         let(:senders) { four_senders }
-        it { is_expected.to eql "4 posts were made in \"card_name\"" }
+        it { is_expected.to eql "4 posts were made in #stack_name" }
       end
     end
 

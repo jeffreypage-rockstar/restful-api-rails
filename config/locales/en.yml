@@ -23,10 +23,10 @@ en:
     card:
       create:
         with_user_names:
-          zero: "A person posted in \"%{subject_name}\""
-          one: "%{user_names} posted in \"%{subject_name}\""
-          other: "%{user_names} posted in \"%{subject_name}\""
-        with_numbers: "%{count} posts were made in \"%{subject_name}\""
+          zero: "A person posted in #%{stack_name}"
+          one: "%{user_names} posted in #%{stack_name}"
+          other: "%{user_names} posted in #%{stack_name}"
+        with_numbers: "%{count} posts were made in #%{stack_name}"
       up_vote:
         with_user_names:
           zero: "A person upvoted your post \"%{subject_name}\""

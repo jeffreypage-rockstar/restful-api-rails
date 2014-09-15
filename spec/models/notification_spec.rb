@@ -137,22 +137,198 @@ RSpec.describe Notification, type: :model do
   end
 
   describe "#caption" do
-    it "returns notification caption for a single sender" do
-      notification = build(:notification)
-      expect(notification.caption).to eql "a person has liked your post"
+    let(:card) { build :card, name: "card_name" }
+    let(:sender_user) { create :user }
+    let(:one_sender) { { "user_name" => sender_user.id } }
+    let(:three_senders) do
+      { "user_name_1" => 1, "user_name_2" => 2,
+                           "user_name_3" => 3 }
+    end
+    let(:four_senders) do
+      { "user_name_1" => 1, "user_name_2" => 2,
+                           "user_name_3" => 3, "user_name_4" => 4 }
+    end
+    subject(:caption) { notification.caption }
+
+    describe "card.create" do
+      let(:notification) do
+        build :card_create_notification, senders: senders,
+                                         subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name posted in \"card_name\"" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "posted in \"card_name\""
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 posts were made in \"card_name\"" }
+      end
     end
 
-    it "returns notification caption for a few senders" do
-      senders = { "john" => 1, "peter" => 2, "michael" => 3 }
-      notification = create(:notification, senders: senders)
-      expected_caption = "john, peter and michael have liked your post"
-      expect(notification.caption).to eql expected_caption
+    describe "card.up_vote" do
+      let(:notification) do
+        build :card_up_vote_notification, senders: senders,
+                                          subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name upvoted your post \"card_name\"" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "upvoted your post \"card_name\""
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 people upvoted your post \"card_name\"" }
+      end
     end
 
-    it "returns notification caption with many senders" do
-      senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
-      notification = create(:notification, senders: senders)
-      expect(notification.caption).to eql "4 people have liked your post"
+    describe "subscription.create" do
+      let(:notification) do
+        build :subscription_create_notification, senders: senders,
+                                                 subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name started following #card_name" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "started following #card_name"
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 people have started following #card_name" }
+      end
+    end
+
+    describe "comment.create" do
+      let(:notification) do
+        build :comment_create_notification, senders: senders,
+                                            subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it do
+          is_expected.to eql "user_name commented on your "\
+        "post \"card_name\""
+        end
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "commented on your post \"card_name\""
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it do
+          is_expected.to eql "4 people commented on your post "\
+        "\"card_name\""
+        end
+      end
+    end
+
+    describe "comment.upvote" do
+      let(:notification) do
+        build :comment_up_vote_notification, senders: senders,
+                                             subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name upvoted your comment" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "upvoted your comment"
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 people upvoted your comment" }
+      end
+    end
+
+    describe "comment.reply" do
+      let(:notification) do
+        build :comment_reply_notification, senders: senders,
+                                           subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name replied to your comment" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "replied to your comment"
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 people replied to your comment" }
+      end
+    end
+
+    describe "comment.mention" do
+      let(:notification) do
+        build :comment_mention_notification, senders: senders,
+                                             subject: card
+      end
+
+      context "single sender" do
+        let(:senders) { one_sender }
+        it { is_expected.to eql "user_name tagged you in a comment" }
+      end
+
+      context "three senders" do
+        let(:senders) { three_senders }
+        it do
+          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
+        "tagged you in a comment"
+        end
+      end
+
+      context "four senders" do
+        let(:senders) { four_senders }
+        it { is_expected.to eql "4 people tagged you in a comment" }
+      end
     end
   end
 

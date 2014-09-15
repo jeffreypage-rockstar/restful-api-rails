@@ -13,14 +13,51 @@ en:
         breadcrumb: "Import"
         done: imported
   notifications:
+    subscription:
+      create:
+        with_user_names:
+          zero: "A person started following #%{subject_name}"
+          one: "%{user_names} started following #%{subject_name}"
+          other: "%{user_names} started following #%{subject_name}"
+        with_numbers: "%{count} people have started following #%{subject_name}"
     card:
-      create: posted in a window you created
-      up_vote: liked your post
+      create:
+        with_user_names:
+          zero: "A person posted in \"%{subject_name}\""
+          one: "%{user_names} posted in \"%{subject_name}\""
+          other: "%{user_names} posted in \"%{subject_name}\""
+        with_numbers: "%{count} posts were made in \"%{subject_name}\""
+      up_vote:
+        with_user_names:
+          zero: "A person upvoted your post \"%{subject_name}\""
+          one: "%{user_names} upvoted your post \"%{subject_name}\""
+          other: "%{user_names} upvoted your post \"%{subject_name}\""
+        with_numbers: "%{count} people upvoted your post \"%{subject_name}\""
     comment:
-      create: commented on your post
-      up_vote: liked your comment 
-      reply: replied to your comment
-      mention: mentioned you in a comment
+      create:
+        with_user_names:
+          zero: "A person commented on your post \"%{subject_name}\""
+          one: "%{user_names} commented on your post \"%{subject_name}\""
+          other: "%{user_names} commented on your post \"%{subject_name}\""
+        with_numbers: "%{count} people commented on your post \"%{subject_name}\""
+      up_vote:
+        with_user_names:
+          zero: "A person upvoted your comment"
+          one: "%{user_names} upvoted your comment"
+          other: "%{user_names} upvoted your comment"
+        with_numbers: "%{count} people upvoted your comment"
+      reply:
+        with_user_names:
+          zero: "A person replied to your comment"
+          one: "%{user_names} replied to your comment"
+          other: "%{user_names} replied to your comment"
+        with_numbers: "%{count} people replied to your comment"
+      mention:
+        with_user_names:
+          zero: "A person tagged you in a comment"
+          one: "%{user_names} tagged you in a comment"
+          other: "%{user_names} tagged you in a comment"
+        with_numbers: "%{count} people tagged you in a comment"
   unauthorized:
     create:
       all: You need to confirm your email first.

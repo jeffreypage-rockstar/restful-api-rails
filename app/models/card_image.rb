@@ -12,13 +12,15 @@ class CardImage < ActiveRecord::Base
   URL_REGEX = /^(https?:\/)(\w.*)/
 
   def image_url
-    url = super
-    url = original_image_url if url.blank?
-    url
+    original_image_url
   end
 
   def image_url=(value)
     self.original_image_url = value
+  end
+
+  def retina_thumbnail_url
+    image.try(:url)
   end
 
   def thumbnail_url

@@ -123,7 +123,8 @@ describe Hyper::Notifications do
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expect(r.first["caption"]).to eql "4 people upvoted your post \"card_name\""
+      expected_caption = "4 people upvoted your post \"card_name\""
+      expect(r.first["caption"]).to eql expected_caption
     end
 
     it "sends counts in header" do

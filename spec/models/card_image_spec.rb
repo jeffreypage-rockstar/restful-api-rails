@@ -57,9 +57,9 @@ RSpec.describe CardImage, type: :model do
       expect(card_image.save).to be_truthy
       expected_image_url = "/uploads/#{card_image.id}/image.jpg"
       expected_thumbnail_url = "/uploads/#{card_image.id}/thumbnail_image.jpg"
-      expect(card_image.image_url).to eql expected_image_url
+      expect(card_image.image_url).to eql card_image.original_image_url
+      expect(card_image.retina_thumbnail_url).to eql expected_image_url
       expect(card_image.thumbnail_url).to eql expected_thumbnail_url
     end
   end
-
 end

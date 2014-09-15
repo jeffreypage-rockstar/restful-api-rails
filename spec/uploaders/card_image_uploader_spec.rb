@@ -19,4 +19,8 @@ describe CardImageUploader do
   it "should generate a thumbnail with maximum 320px width" do
     expect(@uploader.thumbnail).to have_dimensions(320, 320)
   end
+
+  it "should process the image to 640px width" do
+    expect(@uploader).to have_dimensions(640, 640)
+  end
 end

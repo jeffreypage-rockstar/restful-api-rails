@@ -18,6 +18,10 @@ class Device < ActiveRecord::Base
     self.save!
   end
 
+  def has_arn?
+    sns_arn.present?
+  end
+
   private
 
   def generate_access_token

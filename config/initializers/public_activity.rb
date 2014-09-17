@@ -3,12 +3,12 @@ require "public_activity"
 PublicActivity::Activity.class_eval do
   validates :key, presence: true
 
-  after_save :trigger_notification
+  after_commit :trigger_notification
 
   private
 
   def trigger_notification
-    return if notified?
-    Notifier.notify_async(id, key) || update_attribute(:notified, true)
+    return if notified? || !persisted?
+    Notifier.notify_async(id, key) || update_column(:notified, true)
   end
 end

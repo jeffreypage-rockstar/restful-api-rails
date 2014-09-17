@@ -11,7 +11,7 @@ class Notification < ActiveRecord::Base
   scope :seen, -> { where.not(seen_at: nil) }
   scope :not_sent, -> { where(sent_at: nil) }
   scope :sent, -> { where.not(sent_at: nil) }
-  scope :recent, -> { order(created_at: :desc) }
+  scope :recent, -> { sent.order(sent_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3

@@ -125,6 +125,15 @@ RSpec.describe Notification, type: :model do
       expect(notification).to be_sent
     end
 
+    it "resets the notification state to unseen and unread" do
+      notification = create(:notification, seen_at: Time.now, read_at: Time.now)
+      expect(notification).to be_seen
+      expect(notification).to be_read
+      notification.send!
+      expect(notification).to_not be_seen
+      expect(notification).to_not be_read
+    end
+
     it "triggers amazon sns publish api" do
       expect(DeviceRegisterWorker).to receive(:perform_async).once
       VCR.use_cassette("sns_publish_message") do

@@ -462,6 +462,7 @@ if defined? RailsAdmin
 
     config.model "Activity" do
       list do
+        scopes [nil, :notified, :not_notified]
         field :key do
           pretty_value do
             case value
@@ -490,6 +491,7 @@ if defined? RailsAdmin
 
     config.model "Notification" do
       list do
+        scopes [nil, :sent, :not_sent, :seen, :unseen]
         field :senders do
           formatted_value do
             (value || {}).map do |username, user_id|
@@ -502,9 +504,12 @@ if defined? RailsAdmin
         field :caption
         field :user
         field :subject
-        field :sent_at
+        field :created_at
+        field :sent?, :boolean
         field :seen?, :boolean
         field :read?, :boolean
+        field :sent_at
+        sort_by :created_at
       end
 
       show do
@@ -520,6 +525,7 @@ if defined? RailsAdmin
         field :caption
         field :user
         field :subject
+        field :created_at
         field :sent_at
         field :seen_at
         field :read_at

@@ -22,7 +22,7 @@ module Notifier
         notification.send!
         notification
       end
-      @activity.update notified: true
+      @activity.update_column :notified, true
       result
     end
   end

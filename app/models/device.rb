@@ -4,7 +4,7 @@ class Device < ActiveRecord::Base
   belongs_to :user
 
   before_save :generate_access_token, on: :create
-  after_save :register_sns
+  after_commit :register_sns
   after_destroy :unregister_sns
 
   scope :recent, -> do
@@ -31,7 +31,8 @@ class Device < ActiveRecord::Base
   end
 
   def register_sns
-    DeviceRegisterWorker.perform_async(id) if push_token_changed?
+    return unless previous_changes.has_key?(:push_token) && persisted?
+    DeviceRegisterWorker.perform_async(id)
   end
 
   def unregister_sns

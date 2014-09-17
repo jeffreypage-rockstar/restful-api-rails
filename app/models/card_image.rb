@@ -7,7 +7,7 @@ class CardImage < ActiveRecord::Base
   mount_uploader :image, CardImageUploader
 
   before_validation :fix_original_image_url
-  after_save :process_image
+  after_commit :process_image
 
   URL_REGEX = /^(https?:\/)(\w.*)/
 
@@ -34,8 +34,12 @@ class CardImage < ActiveRecord::Base
     self.original_image_url = "#{$1}/#{$2}" if image_url.to_s =~ URL_REGEX
   end
 
+  def require_image_processing?
+    previous_changes.has_key?(:original_image_url) && !image_processing
+  end
+
   def process_image
-    return true if !original_image_url_changed? || image_processing
+    return unless require_image_processing?
     ImageProcessWorker.perform_async(id, original_image_url)
     update_column :image_processing, true
   end

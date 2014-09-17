@@ -101,6 +101,13 @@ if defined? RailsAdmin
         field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at
+        field :networks do
+          pretty_value do
+            value.map do |network|
+              "<span class=\"label label-default\">#{network.provider}</span>"
+            end.join(" ").html_safe
+          end
+        end
       end
     end
 

@@ -280,7 +280,7 @@ if defined? RailsAdmin
           pretty_value do
             value.map do |image|
               %{<div class="thumbnail">
-                  <img src="#{image.image_url}" width="160">
+                  <img src="#{image.thumbnail_url}" width="160">
                   <div class="caption">#{image.caption}</div>
                 </div>}
             end.join.html_safe

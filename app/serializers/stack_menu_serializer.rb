@@ -1,5 +1,5 @@
 class StackMenuSerializer < ActiveModel::Serializer
-  attributes :subscribed_to, :mine, :trending
+  attributes :subscribed_to, :mine, :trending, :popular
 
   def subscribed_to
     {
@@ -19,12 +19,20 @@ class StackMenuSerializer < ActiveModel::Serializer
     }
   end
 
-  def trending
+  def popular
     {
-      stacks: object.trending_stacks.map do |s|
+      stacks: object.popular_stacks.map do |s|
         StackShortSerializer.new(s, scope: current_user)
       end,
-      more: object.trending_stacks.next_page.present?
+      more: object.popular_stacks.next_page.present?
+    }
+  end
+
+  # DEPRECATED: remove later
+  def trending
+    {
+      stacks: [],
+      more: false
     }
   end
 end

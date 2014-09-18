@@ -182,9 +182,11 @@ describe Hyper::Stacks do
       expect(r["mine"]["stacks"].size).to eql 1
       expect(r["mine"]["stacks"].first["id"]).to eql stack.id
       expect(r["mine"]["more"]).to eql false
-      expect(r["trending"]["stacks"].size).to eql 30
-      expect(r["trending"]["stacks"].first["subscribed"]).to be_falsey
-      expect(r["trending"]["more"]).to eql true
+      expect(r["trending"]["stacks"].size).to eql 0
+      expect(r["trending"]["more"]).to eql false
+      expect(r["popular"]["stacks"].size).to eql 30
+      expect(r["popular"]["stacks"].first["subscribed"]).to be_falsey
+      expect(r["popular"]["more"]).to eql true
     end
   end
 

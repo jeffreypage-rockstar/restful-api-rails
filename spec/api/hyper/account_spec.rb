@@ -40,7 +40,7 @@ describe Hyper::Account do
                         username: "otherusername",
                         password: "123testme"
       r = JSON.parse(response.body)
-      expect(response.status).to eql 409 # invalid
+      expect(response.status).to eql 409 # conflict
       expect(r["status_code"]).to eql "conflict"
       expect(r["error"]).to match("email has already been taken")
     end

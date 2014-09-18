@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Network, type: :model do
-  describe ".create" do
-    let(:user) { create(:user) }
+  let(:user) { create(:user) }
 
+  describe ".create" do
     let(:attrs) { attributes_for(:network).merge(user_id: user.id) }
 
     it "creates a valid network" do
@@ -57,6 +57,35 @@ RSpec.describe Network, type: :model do
       other_network = Network.new(attrs)
       expect(other_network).to_not be_valid
       expect(other_network.errors[:provider].first).to match "taken"
+    end
+
+    it "updates the user with facebook credentials if provider is facebook" do
+      user = create(:user, facebook_id: nil, facebook_token: nil)
+      network = create(:network, provider: "facebook", user: user)
+      expect(network).to be_valid
+      expect(user.reload.facebook_id).to eql network.uid
+      expect(user.facebook_token).to eql network.token
+    end
+
+    it "requires a unique facebook network uid" do
+      other_user = create(:user)
+      network = Network.new(attrs.merge(provider: "facebook",
+                                        uid: user.facebook_id,
+                                        token: user.facebook_token,
+                                        user: other_user))
+      expect(network).to_not be_valid
+      expect(network.errors[:uid].first).to match "taken"
+    end
+  end
+
+  describe "#destroy" do
+    describe "facebook network" do
+      let(:network) { create(:network, user: user, provider: "facebook") }
+      it "removes the user facebook credentials" do
+        network.destroy
+        expect(user.reload.facebook_id).to be_nil
+        expect(user.facebook_token).to be_nil
+      end
     end
   end
 end

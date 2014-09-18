@@ -34,6 +34,14 @@ describe Hyper::Networks do
       post "/api/networks", attrs.merge(provider: network.provider), @env
       expect(response.status).to eql 409 # conflict
     end
+
+    it "fails for an existent user with the same facebook id" do
+      user_with_fb = create(:user_with_valid_fb)
+      http_login device.id, device.access_token
+      post "/api/networks", attrs.merge(provider: network.provider,
+                                        uid: user_with_fb.facebook_id), @env
+      expect(response.status).to eql 409 # conflict
+    end
   end
 
   # ======== GETTING USER ASSOCIATED NETWORKS ==================

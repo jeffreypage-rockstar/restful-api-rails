@@ -69,6 +69,6 @@ class User < ActiveRecord::Base
   def update_facebook_network
     return unless facebook_token_changed?
     network = networks.find_by(provider: "facebook")
-    network.update_attribute(:token, facebook_token) if network
+    network.update_column(:token, facebook_token) if network
   end
 end

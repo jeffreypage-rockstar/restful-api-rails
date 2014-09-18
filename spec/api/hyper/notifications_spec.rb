@@ -78,14 +78,14 @@ describe Hyper::Notifications do
 
     it "returns notifications read and unread, with extras" do
       (1..10).map do |i|
-        create(:notification, user: user,
-                              subject: card,
-                              read_at: i.odd? ? Time.now.utc : nil,
-                              action: "card.up_vote",
-                              extra: {
-                                card_id: card.id,
-                                stack_id: card.stack_id
-                              })
+        create(:sent_notification,  user: user,
+                                    subject: card,
+                                    read_at: i.odd? ? Time.now.utc : nil,
+                                    action: "card.up_vote",
+                                    extra: {
+                                      card_id: card.id,
+                                      stack_id: card.stack_id
+                                    })
       end
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
@@ -98,10 +98,20 @@ describe Hyper::Notifications do
       expect(r.first["stack_id"]).to eql card.stack_id
     end
 
+    it "does not return not sent notifications" do
+      create(:notification, user: user, subject: card)
+      create(:sent_notification, user: user, subject: card)
+      http_login device.id, device.access_token
+      get "/api/notifications", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(1)
+    end
+
     it "returns notifications with few senders" do
       senders = { "john" => 1, "peter" => 2, "michael" => 3 }
-      create(:notification, user: user, subject: card, action: "card.up_vote",
-                            senders: senders)
+      create(:sent_notification, user: user, subject: card,
+             senders: senders)
       create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
@@ -115,7 +125,7 @@ describe Hyper::Notifications do
 
     it "returns notifications with many senders" do
       senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
-      create(:notification, user: user, subject: card, action: "card.up_vote",
+      create(:sent_notification, user: user, subject: card,
              senders: senders)
       create :card_image, card: card
       http_login device.id, device.access_token
@@ -129,7 +139,7 @@ describe Hyper::Notifications do
 
     it "sends counts in header" do
       senders = { "john" => 1, "peter" => 2 }
-      create(:notification, user: user, subject: card, action: "card.up_vote",
+      create(:sent_notification, user: user, subject: card,
              senders: senders)
       create :card_image, card: card
       http_login device.id, device.access_token

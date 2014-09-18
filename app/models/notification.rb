@@ -11,7 +11,7 @@ class Notification < ActiveRecord::Base
   scope :seen, -> { where.not(seen_at: nil) }
   scope :not_sent, -> { where(sent_at: nil) }
   scope :sent, -> { where.not(sent_at: nil) }
-  scope :recent, -> { order(created_at: :desc) }
+  scope :recent, -> { sent.order(sent_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
@@ -75,7 +75,10 @@ class Notification < ActiveRecord::Base
         sns.publish(message_attributes.merge(target_arn: arn))
       end
     end
-    self.update!(sent_at: Time.now.utc)
+    self.sent_at = Time.now.utc
+    self.seen_at = nil
+    self.read_at = nil
+    self.save!
   end
 
   def sent?

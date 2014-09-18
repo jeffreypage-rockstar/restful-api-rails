@@ -6,6 +6,10 @@ FactoryGirl.define do
     subject { build(:card) }
     action "card.up_vote"
 
+    factory :sent_notification do
+      sent_at Time.current
+    end
+
     factory :card_create_notification do
       action "card.create"
     end

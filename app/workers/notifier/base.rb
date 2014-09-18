@@ -18,7 +18,6 @@ module Notifier
       return if @activity.nil? || @activity.notified?
       result = notifications.map do |notification|
         notification.add_sender(@activity.owner)
-        notification.save!
         notification.send!
         notification
       end

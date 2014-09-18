@@ -15,7 +15,7 @@ class Stack < ActiveRecord::Base
 
   scope :recent, -> { order("created_at DESC") }
   scope :recent_active, -> { order("updated_at DESC") }
-  scope :popular, -> { order("subscriptions_count ASC") }
+  scope :most_popular, -> { order("subscriptions_count DESC") }
 
   before_validation :remove_hashtag
 
@@ -24,9 +24,16 @@ class Stack < ActiveRecord::Base
   end
 
   def self.trending(user_id)
-    subscribed_sql = "NOT stacks.id IN (select stack_id from "\
-                     "subscriptions where user_id = ?)"
-    where.not(user_id: user_id).where(subscribed_sql, user_id).recent_active
+    not_subscribed_by(user_id).where.not(user_id: user_id).recent_active
+  end
+
+  def self.popular(user_id)
+    not_subscribed_by(user_id).where.not(user_id: user_id).most_popular
+  end
+
+  def self.not_subscribed_by(user_id)
+    sql = "stacks.id IN (select stack_id from subscriptions where user_id = ?)"
+    where.not(sql, user_id)
   end
 
   def user

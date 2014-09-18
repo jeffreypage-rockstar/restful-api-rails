@@ -106,6 +106,26 @@ describe Hyper::Stacks do
     end
   end
 
+  # ======== GETTING POPULAR STACKS ==================
+  describe "GET /api/stacks/popular" do
+    it "requires authentication" do
+      get "/api/stacks/popular", stacks: ["invalid"]
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "returns the popular stacks for the current user" do
+      create(:stack, user: device.user)
+      other_stack = create(:stack, subscriptions_count: 10)
+      create(:stack, subscriptions_count: 9)
+      http_login device.id, device.access_token
+      get "/api/stacks/popular", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(2)
+      expect(r.first["id"]).to eql other_stack.id
+    end
+  end
+
   # ======== GETTING STACKS FOR AUTOCOMPLETE ==================
   describe "GET /api/stacks/names" do
     it "requires authentication" do
@@ -162,9 +182,11 @@ describe Hyper::Stacks do
       expect(r["mine"]["stacks"].size).to eql 1
       expect(r["mine"]["stacks"].first["id"]).to eql stack.id
       expect(r["mine"]["more"]).to eql false
-      expect(r["trending"]["stacks"].size).to eql 30
-      expect(r["trending"]["stacks"].first["subscribed"]).to be_falsey
-      expect(r["trending"]["more"]).to eql true
+      expect(r["trending"]["stacks"].size).to eql 0
+      expect(r["trending"]["more"]).to eql false
+      expect(r["popular"]["stacks"].size).to eql 30
+      expect(r["popular"]["stacks"].first["subscribed"]).to be_falsey
+      expect(r["popular"]["more"]).to eql true
     end
   end
 

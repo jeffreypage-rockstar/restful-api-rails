@@ -34,6 +34,14 @@ module Hyper
         paginate Stack.trending(current_user.id)
       end
 
+      # GET /stacks/popular
+      desc "Returns trending stacks, paginated"
+      paginate per_page: PAGE_SIZE
+      get :popular do
+        authenticate!
+        paginate Stack.popular(current_user.id)
+      end
+
       # GET /stacks/names
       desc "Returns stacks for an autocomplete box"
       params do

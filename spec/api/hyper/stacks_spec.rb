@@ -106,6 +106,26 @@ describe Hyper::Stacks do
     end
   end
 
+  # ======== GETTING POPULAR STACKS ==================
+  describe "GET /api/stacks/popular" do
+    it "requires authentication" do
+      get "/api/stacks/popular", stacks: ["invalid"]
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "returns the popular stacks for the current user" do
+      create(:stack, user: device.user)
+      other_stack = create(:stack, subscriptions_count: 10)
+      create(:stack, subscriptions_count: 9)
+      http_login device.id, device.access_token
+      get "/api/stacks/popular", nil, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r.size).to eql(2)
+      expect(r.first["id"]).to eql other_stack.id
+    end
+  end
+
   # ======== GETTING STACKS FOR AUTOCOMPLETE ==================
   describe "GET /api/stacks/names" do
     it "requires authentication" do

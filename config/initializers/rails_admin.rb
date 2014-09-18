@@ -29,7 +29,8 @@ if defined? RailsAdmin
       dashboard                     # mandatory
       index                         # mandatory
       new do
-        except ["User", "Setting", "Activity", "Notification", "Flag", "Vote"]
+        except ["User", "Setting", "Activity", "Notification", "Flag", "Vote",
+                "Device"]
       end
       import do
         only ["Stack"]
@@ -53,7 +54,7 @@ if defined? RailsAdmin
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
-                                Notification Subscription)
+                                Notification Subscription Device)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -100,6 +101,13 @@ if defined? RailsAdmin
         field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at
+        field :networks do
+          pretty_value do
+            value.map do |network|
+              "<span class=\"label label-default\">#{network.provider}</span>"
+            end.join(" ").html_safe
+          end
+        end
       end
     end
 
@@ -129,6 +137,33 @@ if defined? RailsAdmin
         field :location
         field :facebook_token
         field :facebook_id
+      end
+    end
+
+    config.model "Device" do
+      list do
+        scopes [nil, :with_arn]
+        field :user
+        field :device_type
+        field :push_token
+        field :has_arn?, :boolean
+        field :last_sign_in_at
+        field :created_at
+        sort_by :last_sign_in_at
+      end
+      show do
+        field :user
+        field :device_type
+        field :push_token
+        field :sns_arn
+        field :last_sign_in_at
+        field :created_at
+      end
+      edit do
+        field :user
+        field :device_type
+        field :push_token
+        field :sns_arn
       end
     end
 
@@ -252,7 +287,7 @@ if defined? RailsAdmin
           pretty_value do
             value.map do |image|
               %{<div class="thumbnail">
-                  <img src="#{image.image_url}" width="160">
+                  <img src="#{image.thumbnail_url}" width="160">
                   <div class="caption">#{image.caption}</div>
                 </div>}
             end.join.html_safe

@@ -20,13 +20,13 @@
 
   <div class="row">
     <% if @card.user.avatar_url.present? %>
-      <div class="col-sm-6 col-md-4 col-lg-4">
+      <div class="col-sm-6 col-md-2 col-lg-4">
         <p class="pull-left">
-          <%= image_tag(@card.user.avatar_url, class: "img-circle avatar") %>
+          <img class="img-circle avatar" src="<%= @card.user.avatar_url %>"/>
         </p>
       </div>
     <% end %>
-    <div class="col-sm-6 col-md-4 col-lg-6 pull-right">
+    <div class="col-sm-6 col-md-10 col-lg-6 pull-right">
       <p class="text-right">
         <strong><%= @card.user.title %></strong>
         <%= "of #{@card.user.location}" if @card.user.location.present? %>

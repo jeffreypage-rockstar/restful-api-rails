@@ -1,4 +1,15 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class=" col-xs-1 col-md-1">
+       <%= image_tag ("hyper_icon.png"), class: "hyper-icon" %>
+    </div>
+  </div>
+</div>
+
+
 <div class="container-fluid main">
+
   <div class="row">
     <div class="col-md-8">
      <h4><%= @card.name %></h4>
@@ -6,13 +17,13 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-12">
-      <% @card.images.each do |image| %>
-        <img src="<%= image.image_url %>" alt="<%= image.caption %>">
-        <div class="caption top10">
-          <%= image.caption %>
-        </div>
-      <% end %>
+    <div class="col-xs-12 col-md-12 col-lg-12 center-block" style="float:none">
+       <% @card.images.each do |image| %>
+         <img src="<%= image.image_url %>" alt="<%= image.caption %>">
+         <div class="caption top10">
+           <%= image.caption %>
+         </div>
+       <% end %>
     </div>
   </div>
 

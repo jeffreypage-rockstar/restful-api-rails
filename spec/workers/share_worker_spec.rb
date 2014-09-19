@@ -20,18 +20,10 @@ RSpec.describe ShareWorker, type: :worker do
   end
 
   it "performs a twitter share" do
-    network = create(:network, provider: "twitter", user: user)
+    create(:network, provider: "twitter", user: user)
     VCR.use_cassette("sharing_twitter") do
       worker.perform(user.id, card.id, ["twitter"])
     end
-    # client = double("client")
-    # expect(client).to receive(:consumer_key=)
-    # expect(client).to receive(:consumer_secret=)
-    # expect(client).to receive(:oauth_token=).with(network.token)
-    # expect(client).to receive(:oauth_token_secret=).with(network.secret)
-    # expect(client).to receive(:update)
-    # expect(Twitter::Client).to receive(:new).and_return(client)
-    
   end
 
   it "performs a tumblr share" do

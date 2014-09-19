@@ -3,7 +3,7 @@ class Device < ActiveRecord::Base
 
   belongs_to :user
 
-  before_save :generate_access_token, on: :create
+  before_save :generate_access_token
   after_commit :register_sns
   after_destroy :unregister_sns
 
@@ -25,6 +25,7 @@ class Device < ActiveRecord::Base
   private
 
   def generate_access_token
+    return if access_token.present?
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(access_token: access_token)

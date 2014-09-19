@@ -21,6 +21,16 @@ describe Device do
       expect(device).to be_valid
       expect(device.access_token).to_not be_blank
     end
+
+  end
+
+  describe "#update" do
+    it "does not regenerate access_token" do
+      device = create(:device)
+      old_access_token = device.access_token
+      device.save
+      expect(device.access_token).to eql old_access_token
+    end
   end
 
   describe "#push_token" do

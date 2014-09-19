@@ -1,0 +1,47 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.twitter.com/1.1/statuses/update.json
+    body:
+      encoding: UTF-8
+      string: status=Check+my+new+card+on+%23Hyper%3A+http%3A%2F%2Fhyper.test%2Fc%2F4z
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Twitter Ruby Gem 5.11.0
+      Authorization:
+      - OAuth oauth_consumer_key="0BJUxiEmDNqTe357r62QBSAAA", oauth_nonce="103289b7996201c7721319ff2a5c7a70",
+        oauth_signature="NvOxHURmoi6Fi8isaKWDpHVQE3g%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1411142326", oauth_token="abdcef2", oauth_version="1.0"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: Created
+    headers:
+      Content-Length:
+      - '86'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 19 Sep 2014 15:58:47 UTC
+      Server:
+      - tsa_c
+      Set-Cookie:
+      - guest_id=v1%3A141114232703812689; Domain=.twitter.com; Path=/; Expires=Sun,
+        18-Sep-2016 15:58:47 UTC
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Connection-Hash:
+      - 0565f6df02285913f332485f4e4615bf
+    body:
+      encoding: UTF-8
+      string: '{"coordinates":null,"favorited":false,"created_at":"Wed Sep 05 00:37:15 +0000 2012","truncated":false,"id_str":"243145735212777472","entities":{"urls":[],"hashtags":[],"user_mentions":[]},"in_reply_to_user_id_str":null,"text":"I have created a card","contributors":null,"retweet_count":0,"id":243145735212777470,"in_reply_to_status_id_str":null,"geo":null,"retweeted":false,"in_reply_to_user_id":null,"place":null}'
+    http_version: 
+  recorded_at: Fri, 19 Sep 2014 15:58:47 GMT
+recorded_with: VCR 2.9.2

@@ -16,11 +16,12 @@ class ShareWorker
   end
 
   def share_twitter(card, network)
-    client = Twitter::Client.new
-    client.consumer_key       = Rails.application.secrets.twitter_api_key
-    client.consumer_secret    = Rails.application.secrets.twitter_api_secret
-    client.oauth_token        = network.token
-    client.oauth_token_secret = network.secret
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = Rails.application.secrets.twitter_api_key
+      config.consumer_secret     = Rails.application.secrets.twitter_api_secret
+      config.access_token        = network.token
+      config.access_token_secret = network.secret
+    end
     client.update("Check my new card on #Hyper: #{h.card_url(card)}")
   end
 

@@ -6,6 +6,7 @@ feature "Card page" do
   before do
     @card = create(:card)
     (1..2).each { create(:card_image, card: @card) }
+    (1..2).each { create(:comment, card: @card) }
   end
 
   # Scenario: Visit a card page
@@ -16,12 +17,16 @@ feature "Card page" do
   scenario "visit a card page" do
     visit card_path(@card)
     expect(page).to have_content @card.name
-    expect(page).to have_content @card.description
     expect(page).to have_content @card.user.username
     @card.images.each do |image|
       expect(page).to have_xpath("//img[@src='#{image.image_url}']")
       expect(page).to have_content image.caption
     end
+
+    @card.comments.each do |comment|
+      expect(page).to have_content comment.body
+    end
+
   end
 
 end

@@ -1,0 +1,35 @@
+.dark-grey{color: #909090;}
+.light-grey{color: #C2C2C2;}
+
+@media (max-width: 480px) {
+
+  body {
+    font-size: 9px;
+  }
+
+  .main{
+    width: 100%;
+  }
+
+  .avatar{
+    width: 30px;
+  }
+
+  .messages {
+    margin-top:40px;
+  }
+}
+
+@media(min-width:600px){
+  .main{
+    width: 800px;
+  }
+
+  .avatar{
+    width: 50px;
+  }
+
+  .messages {
+    margin-top:70px;
+  }
+}

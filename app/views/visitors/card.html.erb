@@ -1,26 +1,62 @@
-<div class="row-fluid">
-  <div class="jumbotron">
-    <h2><%= @card.name %>
-      <span class="label label-success"><%= @card.score %> points</span>
-      <span class="label label-info"><%= @card.comments_count %> comments</span>
-    </h2>
-    <p><%= @card.description %></p>
-    <p>
-      <span class="glyphicon glyphicon-user"></span>
-      <%= @card.user.try(:username) %>
-    </p>
-  </div>
-</div>
-
-<div class="row-fluid">
-  <% @card.images.each do |image| %>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="thumbnail">
-        <img src="<%= image.image_url %>" alt="<%= image.caption %>">
-        <div class="caption">
-          <p><%= image.caption %></p>
-        </div>
-      </div>
+<div class="container-fluid main">
+  <div class="row">
+    <div class="col-md-8">
+     <h4><%= @card.name %></h4>
     </div>
-  <% end %>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-12">
+      <% @card.images.each do |image| %>
+        <img src="<%= image.image_url %>" alt="<%= image.caption %>">
+        <div class="caption top10">
+          <%= image.caption %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <% if @card.user.avatar_url.present? %>
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <p class="pull-left">
+          <%= image_tag(@card.user.avatar_url, class: "img-circle avatar") %>
+        </p>
+      </div>
+    <% end %>
+    <div class="col-sm-6 col-md-4 col-lg-6 pull-right">
+      <p class="text-right">
+        <strong><%= @card.user.title %></strong>
+        <%= "of #{@card.user.location}" if @card.user.location.present? %>
+      </p>
+      <span class="light-grey pull-right">
+        posted
+        <span class="dark-grey">
+          <%= @card.created_at.
+                    strftime("%B #{@card.created_at.day.ordinalize}, %Y") %>
+        </span>
+        in
+        <span class="text-muted">
+          <strong><%= "##{@card.stack.name}" %></strong>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <hr>
+
+
+  <div class="row messages">
+   <div class="col-sm-6 col-md-4 col-lg-12">
+     <p>
+       <span class="text-muted">
+         <strong><%= pluralize @card.comments_count, 'Comment' %></strong>
+       </span>
+     <hr>
+
+     <%= render partial: "comment", collection: @card.comments %>
+    </div>
+  </div>
 </div>

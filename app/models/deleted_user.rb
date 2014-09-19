@@ -4,6 +4,12 @@ class DeletedUser < ActiveRecord::Base
   include Flaggable
   self.primary_key = :id
 
+  scope :signup_with_facebook, -> { where.not(facebook_id: [nil, ""]) }
+
+  def fb_signup?
+    facebook_id.present?
+  end
+
   def restore
     user_id = self.class._restore_users(id).first
     destroy if user_id

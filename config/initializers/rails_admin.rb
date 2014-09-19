@@ -15,7 +15,6 @@ if defined? RailsAdmin
 
     ## == Cancan ==
     config.authorize_with :cancan, AdminAbility
-    # config.authorize_with :cancan
 
     ## == PaperTrail ==
     # config.audit_with :paper_trail, 'User',
@@ -72,17 +71,43 @@ if defined? RailsAdmin
       end
     end
 
+    devices_count_field = Proc.new do
+      label "Registered Devices"
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "device",
+          f: { user: { "0001" => { v: bindings[:object].username } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
+    networks_field = Proc.new do
+      pretty_value do
+        value.map do |network|
+          "<span class=\"label label-default\">#{network.provider}</span>"
+        end.join(" ").html_safe
+      end
+    end
+
     config.model "User" do
       object_label_method :username
       list do
-        scopes [nil, :flagged]
+        scopes [nil, :flagged, :signup_with_facebook]
         field :email
         field :username
         field :location
         field :score
+        field :fb_signup?, :boolean
+        field :last_sign_in_at do
+          filterable true
+        end
         field :flags_count, &flags_count_field
-        field :last_sign_in_at
         field :confirmed_at
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       edit do
         field :email
@@ -98,48 +123,74 @@ if defined? RailsAdmin
         field :location
         field :score
         field :bio
-        field :flags_count, &flags_count_field
-        field :devices_count do
-          label "Registered Devices"
+        field :stacks_count do
+          label "Created Stacks"
           pretty_value do
             path = bindings[:view].rails_admin.index_path(
-              model_name: "device",
+              model_name: "stack",
               f: { user: { "0001" => { v: bindings[:object].username } } }
             )
-            bindings[:view].link_to("#{value} devices", path).html_safe
+            bindings[:view].link_to(value, path).html_safe
           end
         end
+        field :cards_count do
+          label "Created Cards"
+          pretty_value do
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "card",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to(value, path).html_safe
+          end
+        end
+        field :comments_count do
+          label "Created Comments"
+          pretty_value do
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "comment",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to(value, path).html_safe
+          end
+        end
+        field :flags_count, &flags_count_field
+        field :devices_count, &devices_count_field
         field :last_sign_in_at
         field :confirmed_at
-        field :networks do
-          pretty_value do
-            value.map do |network|
-              "<span class=\"label label-default\">#{network.provider}</span>"
-            end.join(" ").html_safe
-          end
-        end
+        field :networks, &networks_field
+        field :created_at
       end
     end
 
     config.model "DeletedUser" do
+      object_label_method :username
       list do
-        scopes [nil, :flagged]
+        scopes [nil, :flagged, :signup_with_facebook]
         field :email
         field :username
         field :location
         field :score
+        field :fb_signup?, :boolean
+        field :last_sign_in_at do
+          filterable true
+        end
         field :flags_count, &flags_count_field
-        field :last_sign_in_at
         field :confirmed_at
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       show do
         field :email
         field :username
         field :location
         field :score
+        field :bio
         field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at
+        field :created_at
       end
       edit do
         field :email
@@ -157,8 +208,12 @@ if defined? RailsAdmin
         field :device_type
         field :push_token
         field :accept_notification?, :boolean
-        field :last_sign_in_at
-        field :created_at
+        field :last_sign_in_at do
+          filterable true
+        end
+        field :created_at do
+          filterable true
+        end
         sort_by :last_sign_in_at
       end
       show do
@@ -176,7 +231,6 @@ if defined? RailsAdmin
         field :sns_arn
       end
     end
-
 
     stack_subscriptions_count_field = Proc.new do
       label "Subscriptions"
@@ -202,6 +256,10 @@ if defined? RailsAdmin
         field :protected
         field :subscriptions_count, &stack_subscriptions_count_field
         field :cards
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       show do
         field :display_name
@@ -232,7 +290,9 @@ if defined? RailsAdmin
           searchable true
           queryable false
         end
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -282,7 +342,9 @@ if defined? RailsAdmin
         field :flags_count, &flags_count_field
         field :comments_count, &comments_count_field
         field :description
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -346,7 +408,9 @@ if defined? RailsAdmin
           queryable false
         end
         field :user
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -375,8 +439,11 @@ if defined? RailsAdmin
         field :flaggable do
           label "Flagged Item"
         end
-        field :flaggable_type do
+        field :flaggable_type, :enum do
           label "Type"
+          enum do
+            ["User", "Card", "Comment"]
+          end
           filterable true
         end
         field :flaggable_id, :enum do
@@ -531,7 +598,9 @@ if defined? RailsAdmin
         field :trackable
         field :owner
         field :notified
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
 
@@ -559,11 +628,15 @@ if defined? RailsAdmin
         field :caption
         field :user
         field :subject
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         field :sent?, :boolean
         field :seen?, :boolean
         field :read?, :boolean
-        field :sent_at
+        field :sent_at do
+          filterable true
+        end
         sort_by :created_at
       end
 

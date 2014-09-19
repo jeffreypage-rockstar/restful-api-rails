@@ -39,7 +39,7 @@
     <% end %>
     <div class="col-sm-6 col-md-10 col-lg-6 pull-right">
       <p class="text-right">
-        <strong><%= @card.user.title %></strong>
+        <strong><%= @card.user.username %></strong>
         <%= "of #{@card.user.location}" if @card.user.location.present? %>
       </p>
       <span class="light-grey pull-right">

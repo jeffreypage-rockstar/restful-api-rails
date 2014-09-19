@@ -1,4 +1,15 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class=" col-xs-1 col-md-1">
+       <%= image_tag ("hyper_icon.png"), class: "hyper-icon" %>
+    </div>
+  </div>
+</div>
+
+
 <div class="container-fluid main">
+
   <div class="row">
     <div class="col-md-8">
      <h4><%= @card.name %></h4>
@@ -6,13 +17,13 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-12">
-      <% @card.images.each do |image| %>
-        <img src="<%= image.image_url %>" alt="<%= image.caption %>">
-        <div class="caption top10">
-          <%= image.caption %>
-        </div>
-      <% end %>
+    <div class="col-xs-12 col-md-12 col-lg-12 center-block" style="float:none">
+       <% @card.images.each do |image| %>
+         <img src="<%= image.image_url %>" alt="<%= image.caption %>">
+         <div class="caption top10">
+           <%= image.caption %>
+         </div>
+       <% end %>
     </div>
   </div>
 
@@ -20,13 +31,13 @@
 
   <div class="row">
     <% if @card.user.avatar_url.present? %>
-      <div class="col-sm-6 col-md-4 col-lg-4">
+      <div class="col-sm-6 col-md-2 col-lg-4">
         <p class="pull-left">
-          <%= image_tag(@card.user.avatar_url, class: "img-circle avatar") %>
+          <img class="img-circle avatar" src="<%= @card.user.avatar_url %>"/>
         </p>
       </div>
     <% end %>
-    <div class="col-sm-6 col-md-4 col-lg-6 pull-right">
+    <div class="col-sm-6 col-md-10 col-lg-6 pull-right">
       <p class="text-right">
         <strong><%= @card.user.title %></strong>
         <%= "of #{@card.user.location}" if @card.user.location.present? %>
@@ -38,7 +49,7 @@
                     strftime("%B #{@card.created_at.day.ordinalize}, %Y") %>
         </span>
         in
-        <span class="text-muted">
+        <span class="text-primary">
           <strong><%= "##{@card.stack.name}" %></strong>
         </span>
       </span>

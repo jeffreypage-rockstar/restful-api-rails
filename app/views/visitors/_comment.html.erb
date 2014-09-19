@@ -1,0 +1,11 @@
+<p>
+  <%= comment.body.gsub(/(\@[a-z0-9_]*)/, '<strong>\1</strong>').html_safe %>
+</p>
+<span class="dark-grey">
+  <%= "#{comment.created_at.
+                 strftime("%B #{comment.created_at.day.ordinalize}, %Y")} by" %>
+  <strong><%=  comment.user.username %></strong>
+</span>
+
+<hr>
+

@@ -22,6 +22,11 @@ class Device < ActiveRecord::Base
     sns_arn.present?
   end
 
+  def clear_push_token!
+    unregister_sns
+    update_attributes! push_token: nil, sns_arn: nil
+  end
+
   private
 
   def generate_access_token

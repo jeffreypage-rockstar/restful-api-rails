@@ -29,6 +29,21 @@ module Hyper
         end
       end
 
+      # DELETE /devices/:id/push_token
+      desc "Unsubscribe device from push notifications"
+      params do
+        requires :id, type: String, desc: "Device id", uuid: true
+      end
+      route_param :id do
+        delete :push_token do
+          authenticate!
+          device = Device.find(params[:id])
+          forbidden! if device.user_id != current_user.id
+          device.clear_push_token!
+          empty_body!
+        end
+      end
+
       # DELETE /devices/:id
       desc "Deletes a user device"
       params do

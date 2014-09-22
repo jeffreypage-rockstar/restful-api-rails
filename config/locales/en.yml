@@ -1,4 +1,54 @@
 en:
+  activerecord:
+    models:
+      card: 
+        one: Post
+        plural: "%{count} posts"
+        other: Posts
+      stack: 
+        one: Hashtag
+        plural: "%{count} hashtags"
+        other: Hashtags
+    attributes:
+      card:
+        stack: Hashtag
+        flags_count: Flags
+        comments_count: Comments
+      subscription:
+        stack: Hashtag
+        stack_id: For Hashtag
+      comment:
+        card: Post
+        card_id: For Post
+        flags_count: Flags
+      stack:
+        cards: Posts
+        name: Hashtag
+        subscriptions_count: Subscriptions
+      user:
+        flags_count: Flags
+        devices_count: Registered Devices
+        stacks_count: Created Stacks
+        cards_count: Created Cards
+        comments_count: Created Comments
+      deleted_user:
+        flags_count: Flags
+      flag:
+        flaggable: Flagged Item
+        flaggable_type: Type
+        flaggable_id: Flags For
+        user: Flagged by
+        created_at: Flagged at
+      vote:
+        votable: Voted Item
+        votable_type: Type
+        flag: Up/Down
+        votable_id: Votes For
+        user: Voted by
+        created_at: Voted at
+      setting:
+        name: Setting
+        
   admin:
     actions:
       restore:

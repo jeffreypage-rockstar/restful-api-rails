@@ -61,7 +61,6 @@ if defined? RailsAdmin
     config.current_user_method(&:current_admin)
 
     flags_count_field = Proc.new do
-      label "Flags"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "flag",
@@ -72,7 +71,6 @@ if defined? RailsAdmin
     end
 
     devices_count_field = Proc.new do
-      label "Registered Devices"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "device",
@@ -124,7 +122,6 @@ if defined? RailsAdmin
         field :score
         field :bio
         field :stacks_count do
-          label "Created Stacks"
           pretty_value do
             path = bindings[:view].rails_admin.index_path(
               model_name: "stack",
@@ -134,7 +131,6 @@ if defined? RailsAdmin
           end
         end
         field :cards_count do
-          label "Created Cards"
           pretty_value do
             path = bindings[:view].rails_admin.index_path(
               model_name: "card",
@@ -144,7 +140,6 @@ if defined? RailsAdmin
           end
         end
         field :comments_count do
-          label "Created Comments"
           pretty_value do
             path = bindings[:view].rails_admin.index_path(
               model_name: "comment",
@@ -233,7 +228,6 @@ if defined? RailsAdmin
     end
 
     stack_subscriptions_count_field = Proc.new do
-      label "Subscriptions"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "subscription",
@@ -247,7 +241,6 @@ if defined? RailsAdmin
       list do
         field :display_name
         field :name do
-          label "Stack Name"
           visible false
           searchable true
         end
@@ -282,7 +275,6 @@ if defined? RailsAdmin
         field :user
         field :stack
         field :stack_id, :enum do
-          label "For Stack"
           enum do
             Stack.recent.limit(10).map { |s| [s.name, s.id] }
           end
@@ -307,7 +299,6 @@ if defined? RailsAdmin
     end
 
     comments_count_field = Proc.new do
-      label "Comments"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "comment",
@@ -399,7 +390,6 @@ if defined? RailsAdmin
         field :replying
         field :card
         field :card_id, :enum do
-          label "For Card"
           enum do
             Card.newest.limit(10).map { |c| [c.name, c.id] }
           end
@@ -436,18 +426,14 @@ if defined? RailsAdmin
 
     config.model "Flag" do
       list do
-        field :flaggable do
-          label "Flagged Item"
-        end
+        field :flaggable
         field :flaggable_type, :enum do
-          label "Type"
           enum do
             ["User", "Card", "Comment"]
           end
           filterable true
         end
         field :flaggable_id, :enum do
-          label "Flags For"
           enum do
             []
           end
@@ -456,50 +442,31 @@ if defined? RailsAdmin
           queryable false
         end
         field :user do
-          label "Flagged by"
           filterable true
         end
         field :created_at do
-          label "Flagged at"
           filterable true
         end
         sort_by :created_at
       end
 
       show do
-        field :flaggable do
-          label "Flagged Item"
-        end
-        field :flaggable_type do
-          label "Type"
-          filterable true
-        end
-        field :user do
-          label "Flagged by"
-          filterable true
-        end
-        field :created_at do
-          label "Flagged at"
-          filterable true
-        end
+        field :flaggable
+        field :flaggable_type
+        field :user
+        field :created_at
       end
     end
 
     config.model "Vote" do
       list do
         scopes [nil, :up_votes, :down_votes]
-        field :votable do
-          label "Voted Item"
-        end
+        field :votable
         field :votable_type do
-          label "Type"
           filterable true
         end
-        field :flag do
-          label "Up/Down"
-        end
+        field :flag
         field :votable_id, :enum do
-          label "Votes For"
           enum do
             []
           end
@@ -508,48 +475,27 @@ if defined? RailsAdmin
           queryable false
         end
         field :user do
-          label "Voted by"
           filterable true
         end
         field :created_at do
-          label "Voted at"
           filterable true
         end
         sort_by :created_at
       end
 
       show do
-        field :votable do
-          label "Voted Item"
-        end
-        field :votable_type do
-          label "Type"
-          filterable true
-        end
-        field :flag do
-          label "Up/Down"
-        end
+        field :votable
+        field :votable_type
+        field :flag
         field :weight
-        field :user do
-          label "Voted by"
-          filterable true
-        end
-        field :created_at do
-          label "Voted at"
-          filterable true
-        end
+        field :user
+        field :created_at
       end
 
       edit do
-        field :votable do
-          label "Voted Item"
-        end
-        field :flag do
-          label "up?"
-        end
-        field :user do
-          label "Voted by"
-        end
+        field :votable
+        field :flag
+        field :user
         field :weight
       end
     end
@@ -563,16 +509,13 @@ if defined? RailsAdmin
 
     config.model "Setting" do
       list do
-        field :name do
-          label "Setting"
-        end
+        field :name
         field :value
         field :description
       end
 
       edit do
         field :name do
-          label "Setting"
           read_only true
         end
         field :value

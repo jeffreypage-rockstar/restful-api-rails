@@ -75,20 +75,4 @@ describe Hyper::Login do
       expect(r["error"]).to match "mutually exclusive"
     end
   end
-
-  # ======== LOGOUT ==================
-
-  describe "POST /api/logout" do
-    it "requires authentication" do
-      delete "/api/logout"
-      expect(response.status).to eql 401 # authentication
-    end
-
-    it "deletes an existent device" do
-      http_login device.id, device.access_token
-      delete "/api/logout", nil, @env
-      expect(response.status).to eql 204
-      expect { device.reload }.to raise_error
-    end
-  end
 end

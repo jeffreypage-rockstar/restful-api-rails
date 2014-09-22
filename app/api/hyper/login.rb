@@ -17,13 +17,5 @@ module Hyper
       user = SignInService.new(env["REMOTE_ADDR"], permitted_params).call
       user || auth_error!
     end
-
-    # DELETE /logout
-    desc "logout the current user device"
-    delete :logout do
-      authenticate!
-      current_device.destroy!
-      empty_body!
-    end
   end
 end

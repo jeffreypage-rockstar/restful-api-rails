@@ -57,6 +57,34 @@ describe Hyper::Devices do
     end
   end
 
+  # ======== UNREGISTERING A DEVICE PUSH TOKEN ==================
+
+  describe "DELETE /api/devices/:id/push_token" do
+    it "requires authentication" do
+      delete "/api/devices/#{device.id}/push_token"
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "fails for an inexistent device" do
+      http_login device.id, device.access_token
+      delete "/api/devices/#{user.id}/push_token", nil, @env
+      expect(response.status).to eql 404
+    end
+
+    it "unregister an existent device" do
+      http_login device.id, device.access_token
+      delete "/api/devices/#{device.id}/push_token", nil, @env
+      expect(response.status).to eql 204
+    end
+
+    it "does not allow other user unregister the device" do
+      http_login device.id, device.access_token
+      other_device = create(:device)
+      delete "/api/devices/#{other_device.id}/push_token", nil, @env
+      expect(response.status).to eql 403 # forbidden
+    end
+  end
+
   # ======== DELETING A DEVICE ==================
 
   describe "DELETE /api/devices/:id" do

@@ -33,8 +33,12 @@ module Hyper
           end
 
           def current_user
-            @current_user ||= begin
-              Device.where(auth_credentials).includes(:user).first.try(:user)
+            @current_user ||= current_device.try(:user)
+          end
+
+          def current_device
+            @current_device ||= begin
+              Device.where(auth_credentials).includes(:user).first
             end
           end
 

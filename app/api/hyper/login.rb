@@ -13,7 +13,7 @@ module Hyper
       optional :device_type, type: String, desc: "Current device type."
       mutually_exclusive :password, :facebook_token
     end
-    post "/login" do
+    post :login do
       user = SignInService.new(env["REMOTE_ADDR"], permitted_params).call
       user || auth_error!
     end

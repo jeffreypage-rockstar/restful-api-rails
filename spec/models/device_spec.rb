@@ -42,6 +42,17 @@ describe Device do
     end
   end
 
+  describe "#clear_push_token!" do
+    it "triggers the sns worker and clear push_token and sns_arn fields" do
+      device = create(:device_with_arn)
+      expect(DeviceUnregisterWorker).to receive(:perform_async).
+                                        with(device.sns_arn)
+      expect(device.clear_push_token!).to be_truthy
+      expect(device.push_token).to be_nil
+      expect(device.sns_arn).to be_nil
+    end
+  end
+
   describe "sign_in!" do
     let(:device) { create(:device) }
 

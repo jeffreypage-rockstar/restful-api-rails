@@ -3,7 +3,6 @@
 --
 
 SET statement_timeout = 0;
-SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -178,7 +177,8 @@ CREATE TABLE cards (
     flags_count integer DEFAULT 0,
     comments_count integer DEFAULT 0,
     up_score integer DEFAULT 0,
-    down_score integer DEFAULT 0
+    down_score integer DEFAULT 0,
+    uploaded boolean DEFAULT false
 );
 
 
@@ -992,4 +992,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140901123045');
 INSERT INTO schema_migrations (version) VALUES ('20140901183704');
 
 INSERT INTO schema_migrations (version) VALUES ('20140911201247');
+
+INSERT INTO schema_migrations (version) VALUES ('20140922142702');
 

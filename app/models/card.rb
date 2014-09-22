@@ -16,6 +16,7 @@ class Card < ActiveRecord::Base
   accepts_nested_attributes_for :images
   has_many :comments
 
+  scope :uploaded, -> { where(uploaded: true) }
   scope :max_score, ->(score) { where("score <= ?", score) }
   scope :newest, -> { order("created_at DESC") }
   scope :best, -> { order("score DESC") }

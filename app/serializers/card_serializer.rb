@@ -3,7 +3,8 @@ require_relative "user_short_serializer"
 
 class CardSerializer < ActiveModel::Serializer
   attributes :id, :name, :user_id, :stack_id, :score, :flags_count, :my_vote,
-             :comments_count, :created_at, :public_url, :flagged_by_me
+             :uploaded, :comments_count, :created_at, :public_url,
+             :flagged_by_me
 
   has_many :images, serializer: CardImageSerializer
   has_one :user, serializer: UserShortSerializer

@@ -14,8 +14,9 @@ module Hyper
           requires :image_url, type: String, desc: "Image url"
           optional :caption, type: String, desc: "Image caption"
         end
-        optional :uploaded, type: Boolean, desc: "True if card image has been"\
-                                                 " uploaded from user device"
+        optional :source, type: String, values: Card::SOURCES,
+                          default: "device",
+                          desc: "Card images source (device, bing, ...)"
         optional :share, type: Array, desc: "List of social networks to share"\
                                             "the new card"
       end
@@ -123,8 +124,9 @@ module Hyper
           requires :image_url, type: String, desc: "Image url"
           optional :caption, type: String, desc: "Image caption"
         end
-        optional :uploaded, type: Boolean, desc: "True if card image has been"\
-                                                 " uploaded from user device"
+        optional :source, type: String, values: Card::SOURCES,
+                          default: "device",
+                          desc: "Card images source (device, bing, ...)"
       end
       route_param :id do
         put do

@@ -4,7 +4,10 @@ class Card < ActiveRecord::Base
   include PublicActivity::Model
   tracked owner: :user, recipient: :stack
 
+  SOURCES = %w(device bing)
+
   validates :name, :stack, :user, presence: true
+  validates :source, inclusion: SOURCES
   attr_readonly :score
 
   belongs_to :stack, touch: true

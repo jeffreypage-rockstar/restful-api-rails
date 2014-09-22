@@ -178,7 +178,7 @@ CREATE TABLE cards (
     comments_count integer DEFAULT 0,
     up_score integer DEFAULT 0,
     down_score integer DEFAULT 0,
-    uploaded boolean DEFAULT false
+    source character varying(255) NOT NULL
 );
 
 
@@ -993,5 +993,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140901183704');
 
 INSERT INTO schema_migrations (version) VALUES ('20140911201247');
 
-INSERT INTO schema_migrations (version) VALUES ('20140922142702');
+INSERT INTO schema_migrations (version) VALUES ('20140922185725');
 

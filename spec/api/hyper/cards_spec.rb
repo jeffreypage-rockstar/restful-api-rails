@@ -65,14 +65,14 @@ describe Hyper::Cards do
                              { image_url: "http://example.com/image2.jpg"
                              }
                            ],
-                           uploaded: true
+                           source: "bing"
                          },
            @env
       r = JSON.parse(response.body)
       expect(response.status).to eql 201 # created
       expect(r["name"]).to eql "My card with images"
       expect(r["images"].size).to eql 2
-      expect(r["uploaded"]).to be_truthy
+      expect(r["source"]).to eql "bing"
     end
 
     it "fails for an inexistent stack" do
@@ -294,13 +294,13 @@ describe Hyper::Cards do
         { image_url: image_url,
           caption: "New Image"
         }
-      ], uploaded: true
+      ], source: "device"
         }, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r["images"].last["image_url"]).to match \
       "http://example.com/new_image.jpg"
-      expect(r["uploaded"]).to be_truthy
+      expect(r["source"]).to eql "device"
       card.images.reload
       expect(card.images.size).to eql 2
     end

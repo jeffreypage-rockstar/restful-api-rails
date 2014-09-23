@@ -30,6 +30,7 @@ feature "Admin Card management", :devise do
       visit rails_admin.new_path(model_name: "card")
       fill_in "Name", with: new_card[:name]
       fill_in "Description", with: new_card[:description]
+      select new_card[:source], from: "card[source]"
       select new_stack.name, from: "card[stack_id]"
       select new_user.username, from: "card[user_id]"
       click_button "Save"

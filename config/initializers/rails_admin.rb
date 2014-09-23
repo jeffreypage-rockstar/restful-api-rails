@@ -258,11 +258,15 @@ if defined? RailsAdmin
 
     config.model "Card" do
       list do
-        scopes [nil, :flagged, :uploaded]
+        scopes [nil, :flagged]
         field :name
         field :stack
         field :user
-        field :uploaded, :boolean
+        field :source, :enum do
+          enum { Card::SOURCES }
+          searchable true
+          queryable false
+        end
         field :score, &score_field
         field :flags_count, &flags_count_field
         field :comments_count, &comments_count_field
@@ -282,7 +286,7 @@ if defined? RailsAdmin
         end
         field :description
         field :user
-        field :uploaded, :boolean
+        field :source
         field :score, &score_field
         field :stack
         field :images do
@@ -303,7 +307,9 @@ if defined? RailsAdmin
         field :description
         field :user
         field :stack
-        field :uploaded, :boolean
+        field :source, :enum do
+          enum { Card::SOURCES }
+        end
         field :score do
           read_only true
         end

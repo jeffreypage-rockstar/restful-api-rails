@@ -11,6 +11,7 @@ RSpec.describe Card, type: :model do
       {
         name: "My Card Title",
         description: "My card description",
+        source: "bing",
         stack: stack,
         user: user
       }
@@ -32,6 +33,16 @@ RSpec.describe Card, type: :model do
 
     it "requires a stack_id" do
       card = Card.new(attrs.merge(stack: nil))
+      expect(card).to_not be_valid
+    end
+
+    it "requires a source" do
+      card = Card.new(attrs.merge(source: nil))
+      expect(card).to_not be_valid
+    end
+
+    it "requires a valid source" do
+      card = Card.new(attrs.merge(source: "invalid"))
       expect(card).to_not be_valid
     end
 

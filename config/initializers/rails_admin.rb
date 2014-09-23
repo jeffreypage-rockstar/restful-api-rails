@@ -262,6 +262,11 @@ if defined? RailsAdmin
         field :name
         field :stack
         field :user
+        field :source, :enum do
+          enum { Card::SOURCES }
+          searchable true
+          queryable false
+        end
         field :score, &score_field
         field :flags_count, &flags_count_field
         field :comments_count, &comments_count_field
@@ -281,6 +286,7 @@ if defined? RailsAdmin
         end
         field :description
         field :user
+        field :source
         field :score, &score_field
         field :stack
         field :images do
@@ -301,6 +307,9 @@ if defined? RailsAdmin
         field :description
         field :user
         field :stack
+        field :source, :enum do
+          enum { Card::SOURCES }
+        end
         field :score do
           read_only true
         end

@@ -7,6 +7,7 @@ RSpec.describe Notifier::CardCreate, type: :worker do
 
   before do
     allow(Notifier::SubscriptionCreate).to receive(:perform_async)
+    # allow(NotificationPublishService
   end
 
   it "performs generating notifications for stack subscribers" do

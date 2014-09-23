@@ -38,6 +38,7 @@ class Device < ActiveRecord::Base
 
   def register_sns
     return unless previous_changes.has_key?(:push_token) && persisted?
+    return if push_token.blank?
     DeviceRegisterWorker.perform_async(id)
   end
 

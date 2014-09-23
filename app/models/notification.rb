@@ -15,7 +15,6 @@ class Notification < ActiveRecord::Base
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
-  MAX_DEVICES = 3
 
   def caption
     senders = self[:senders] || {}
@@ -67,14 +66,7 @@ class Notification < ActiveRecord::Base
     (self.senders || {}).keys.size
   end
 
-  def send!
-    if user.present? && require_push_notification?
-      sns = AWS::SNS.new.client
-      user.devices.with_arn.recent.limit(MAX_DEVICES).
-      pluck(:sns_arn).uniq.each do |arn|
-        sns.publish(message_attributes.merge(target_arn: arn))
-      end
-    end
+  def sent!
     self.sent_at = Time.now.utc
     self.seen_at = nil
     self.read_at = nil
@@ -115,16 +107,6 @@ class Notification < ActiveRecord::Base
   end
 
   private # =======================================
-
-  def message_attributes
-    @message_attributes ||= {
-      message: caption,
-      message_attributes: {
-        "subject_id" => { data_type: "String", string_value: subject_id },
-        "subject_type" => { data_type: "String", string_value: subject_type }
-      }
-    }
-  end
 
   def single_sender_image_url(sender_id)
     if shows_user_for_single_notification?

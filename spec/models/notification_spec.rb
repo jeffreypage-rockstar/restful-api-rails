@@ -102,10 +102,9 @@ RSpec.describe Notification, type: :model do
 
     it "returns true for up_votes in the interval" do
       notification = create(:notification, action: "card.up_vote")
-      # allow(notification.subject).to receive(:votes)
       allow(notification.subject.votes).to receive(:count).and_return(
-                                              Notification::PUSH_VOTES_INTERVAL
-                                            )
+                                             Notification::PUSH_VOTES_INTERVAL
+                                           )
       expect(notification.require_push_notification?).to be_truthy
     end
 
@@ -118,10 +117,10 @@ RSpec.describe Notification, type: :model do
     end
   end
 
-  describe "#send!" do
+  describe "#sent!" do
     it "marks the notification as sent" do
       notification = build(:notification)
-      notification.send!
+      notification.sent!
       expect(notification).to be_sent
     end
 
@@ -129,19 +128,9 @@ RSpec.describe Notification, type: :model do
       notification = create(:notification, seen_at: Time.now, read_at: Time.now)
       expect(notification).to be_seen
       expect(notification).to be_read
-      notification.send!
+      notification.sent!
       expect(notification).to_not be_seen
       expect(notification).to_not be_read
-    end
-
-    it "triggers amazon sns publish api" do
-      expect(DeviceRegisterWorker).to receive(:perform_async).once
-      VCR.use_cassette("sns_publish_message") do
-        create(:device_with_arn, user: user)
-        notification = create(:notification, user: user)
-        notification.send!
-        expect(notification).to be_sent
-      end
     end
   end
 

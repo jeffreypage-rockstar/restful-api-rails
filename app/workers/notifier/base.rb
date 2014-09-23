@@ -1,3 +1,5 @@
+require "notification_publish_service"
+
 module Notifier
   class Base
     include Sidekiq::Worker
@@ -16,9 +18,11 @@ module Notifier
     def perform(activity_id)
       @activity = PublicActivity::Activity.find_by(id: activity_id)
       return if @activity.nil? || @activity.notified?
+      publisher = NotificationPublishService.new
       result = notifications.map do |notification|
         notification.add_sender(@activity.owner)
-        notification.send!
+        publisher.publish(notification)
+        notification.sent!
         notification
       end
       @activity.update_column :notified, true

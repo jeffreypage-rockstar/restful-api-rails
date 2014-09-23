@@ -407,6 +407,31 @@ describe Hyper::Cards do
     end
   end
 
+  # ======== SHARING A CARD ==================
+
+  describe "POST /api/cards/:id/shares" do
+    it "requires authentication" do
+      post "/api/cards/#{card.id}/shares", share: ["facebook"]
+      expect(response.status).to eql 401 # authentication
+    end
+
+    it "requires a valid card id" do
+      http_login device.id, device.access_token
+      post "/api/cards/#{user.id}/shares", { share: ["facebook"] }, @env
+      expect(response.status).to eql 404 # not found
+    end
+
+    it "shares the card in registered networks" do
+      expect(ShareWorker).to receive(:perform_async).
+                             with(user.id, card.id, ["facebook", "twitter"])
+      http_login device.id, device.access_token
+      post "/api/cards/#{card.id}/shares", {
+        share: ["facebook", "twitter"]
+      }, @env
+      expect(response.status).to eql 201 # created
+    end
+  end
+
   private
 
   def mock_card_stream(cards, params = {})

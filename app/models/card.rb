@@ -4,7 +4,7 @@ class Card < ActiveRecord::Base
   include PublicActivity::Model
   tracked owner: :user, recipient: :stack
 
-  SOURCES = %w(device bing)
+  SOURCES = %w(device bing mixed)
 
   validates :name, :stack, :user, presence: true
   validates :source, inclusion: SOURCES

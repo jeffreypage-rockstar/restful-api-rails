@@ -1,5 +1,3 @@
-require "notification_publish_service"
-
 module Notifier
   class Base
     include Sidekiq::Worker

@@ -95,23 +95,6 @@ module Hyper
         end
       end
 
-      # POST /cards/:id/shares
-      desc "Post to share a card in user registered networks"
-      params do
-        requires :id, type: String, desc: "Card id.", uuid: true
-        requires :share, type: Array, desc: "List of social networks to share"\
-                                            "the card"
-      end
-      route_param :id do
-        post :shares do
-          authenticate!
-          card = Card.find(params[:id])
-          ShareWorker.perform_async(
-            current_user.id, card.id, Array(params[:share])
-          )
-        end
-      end
-
       # POST /cards/:id/votes
       desc "Cast a vote to the card"
       params do

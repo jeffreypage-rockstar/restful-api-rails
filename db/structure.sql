@@ -414,6 +414,24 @@ CREATE TABLE stacks (
 
 
 --
+-- Name: stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stats (
+    date date NOT NULL,
+    users integer DEFAULT 0,
+    deleted_users integer DEFAULT 0,
+    stacks integer DEFAULT 0,
+    subscriptions integer DEFAULT 0,
+    cards integer DEFAULT 0,
+    comments integer DEFAULT 0,
+    flagged_users integer DEFAULT 0,
+    flagged_cards integer DEFAULT 0,
+    flagged_comments integer DEFAULT 0
+);
+
+
+--
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -606,6 +624,14 @@ ALTER TABLE ONLY settings
 
 ALTER TABLE ONLY stacks
     ADD CONSTRAINT stacks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY stats
+    ADD CONSTRAINT stats_pkey PRIMARY KEY (date);
 
 
 --
@@ -994,4 +1020,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140901183704');
 INSERT INTO schema_migrations (version) VALUES ('20140911201247');
 
 INSERT INTO schema_migrations (version) VALUES ('20140922185725');
+
+INSERT INTO schema_migrations (version) VALUES ('20140924142303');
 

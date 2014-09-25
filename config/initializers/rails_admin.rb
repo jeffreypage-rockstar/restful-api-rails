@@ -29,7 +29,7 @@ if defined? RailsAdmin
       index                         # mandatory
       new do
         except ["User", "Setting", "Activity", "Notification", "Flag", "Vote",
-                "Device"]
+                "Device", "Stats"]
       end
       import do
         only ["Stack"]
@@ -39,7 +39,7 @@ if defined? RailsAdmin
       end
       show
       edit do
-        except ["Activity", "Notification", "Device"]
+        except ["Activity", "Notification", "Device", "Stats"]
       end
       delete do
         except ["DeletedUser", "Setting", "Activity", "Notification"]
@@ -53,7 +53,7 @@ if defined? RailsAdmin
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
-                                Notification Subscription Device)
+                                Notification Subscription Device Stats)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -600,6 +600,42 @@ if defined? RailsAdmin
         field :sent_at
         field :seen_at
         field :read_at
+      end
+    end
+
+    stats_field_count = Proc.new do
+      column_width 60
+    end
+    config.model "Stats" do
+      list do
+        scopes [:daily, :weekly, :monthly]
+        field :date do 
+          filterable true
+        end
+        field :users, &stats_field_count
+        field :deleted_users, &stats_field_count
+        field :stacks, &stats_field_count
+        field :subscriptions, &stats_field_count
+        field :cards, &stats_field_count
+        field :comments, &stats_field_count
+        field :flagged_users, &stats_field_count
+        field :flagged_cards, &stats_field_count
+        field :flagged_comments, &stats_field_count
+
+        sort_by :date
+      end
+
+      show do
+        field :date
+        field :users
+        field :deleted_users
+        field :stacks
+        field :subscriptions
+        field :cards
+        field :comments
+        field :flagged_users
+        field :flagged_cards
+        field :flagged_comments
       end
     end
   end

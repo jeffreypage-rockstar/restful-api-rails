@@ -22,6 +22,19 @@ class Stats < ActiveRecord::Base
   COUNTERS = %w(users deleted_users stacks subscriptions cards comments)
   FLAG_COUNTERS = %w(User Card Comment)
 
+  def self.daily
+    all
+  end
+
+  def self.weekly
+    all
+  end
+
+  def self.monthly
+    select("DATE_FORMAT(created_at, '%m%Y') as date, count(users) as users").
+    group("period")
+  end
+
   def self.generate(start_date, end_date)
     interval = start_date.beginning_of_day.utc..end_date.end_of_day.utc
     date_interval = interval.first.to_date..interval.last.to_date

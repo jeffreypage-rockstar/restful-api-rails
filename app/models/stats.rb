@@ -23,16 +23,31 @@ class Stats < ActiveRecord::Base
   FLAG_COUNTERS = %w(User Card Comment)
 
   def self.daily
-    all
+    group_by_period("MM/DD/YYYY")
   end
 
   def self.weekly
-    all
+    group_by_period("MM/YYYY (W)")
   end
 
   def self.monthly
-    select("DATE_FORMAT(created_at, '%m%Y') as date, count(users) as users").
-    group("period")
+    group_by_period("MM/YYYY")
+  end
+
+  def self.group_by_period(format)
+    select_sql = <<-SQL
+      to_char(date, '#{format}') as period,
+      sum(users) as users,
+      sum(deleted_users) as deleted_users,
+      sum(stacks) as stacks,
+      sum(subscriptions) as subscriptions,
+      sum(cards) as cards,
+      sum(comments) as comments,
+      sum(flagged_users) as flagged_users,
+      sum(flagged_cards) as flagged_cards,
+      sum(flagged_comments) as flagged_comments
+    SQL
+    select(select_sql).group("period")
   end
 
   def self.generate(start_date, end_date)

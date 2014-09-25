@@ -35,14 +35,16 @@ if defined? RailsAdmin
         only ["Stack"]
       end
       bulk_delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
       end
-      show
+      show do
+        except ["Stats"]
+      end
       edit do
         except ["Activity", "Notification", "Device", "Stats"]
       end
       delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
       end
       restore do
         only ["DeletedUser"]
@@ -609,7 +611,12 @@ if defined? RailsAdmin
     config.model "Stats" do
       list do
         scopes [:daily, :weekly, :monthly]
-        field :date do 
+        field :period do
+          sortable true
+          sort_reverse true
+        end
+        field :date do
+          visible false
           filterable true
         end
         field :users, &stats_field_count
@@ -622,20 +629,10 @@ if defined? RailsAdmin
         field :flagged_cards, &stats_field_count
         field :flagged_comments, &stats_field_count
 
-        sort_by :date
-      end
-
-      show do
-        field :date
-        field :users
-        field :deleted_users
-        field :stacks
-        field :subscriptions
-        field :cards
-        field :comments
-        field :flagged_users
-        field :flagged_cards
-        field :flagged_comments
+        sort_by :period
+        sort_without_tablename true
+        items_per_page 100
+        show_pagination false
       end
     end
   end

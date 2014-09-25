@@ -26,17 +26,19 @@ class NotificationPublishService
 
   def message_attributes(notification, target_arn)
     extra = notification.extra || {}
-    common_values = extra.merge(
-                                  "aps" => { "content-available" => true },
-                                  "message" => notification.caption,
-                                  "subject_id" => notification.subject_id,
-                                  "subject_type" => notification.subject_type
-                                ).to_json
+    common_values = {
+      "aps" => { "content-available" => 1,
+                 "alert" => notification.caption },
+      "data" => extra.merge(
+                        "notification_id" => notification.id,
+                        "subject_id" => notification.subject_id,
+                        "subject_type" => notification.subject_type
+                      )
+    }.to_json
 
     {
       message: {
-        "APNS" => common_values,
-        "APNS_SANDBOX" => common_values
+        "apns_sandbox" => common_values
       }.to_json,
       message_structure: "json",
       target_arn: target_arn

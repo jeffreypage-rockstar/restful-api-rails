@@ -11,7 +11,7 @@ class StatsUpdaterWorker
         Stats.generate(start_date + 1.day, Time.current)
       end
     elsif User.exists?
-      start_date = User.order(created_at: :desc).first.try(:created_at)
+      start_date = User.order(created_at: :asc).first.try(:created_at)
       Stats.generate(start_date, Time.current)
     end
   end

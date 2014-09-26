@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/inaka/rails_admin.git
-  revision: 7e00030232350f5bd9f673ceebdc3e74a083d468
+  revision: 7abc8f9d579b48be6ec0f908c635e8ce5d43b2f5
   specs:
     rails_admin (0.6.2)
       builder (~> 3.1)
@@ -106,7 +106,7 @@ GEM
     coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.7.1)
+    coffee-script-source (1.8.0)
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -178,7 +178,7 @@ GEM
     fog-softlayer (0.3.16)
       fog-core
       fog-json
-    font-awesome-rails (4.1.0.0)
+    font-awesome-rails (4.2.0.0)
       railties (>= 3.2, < 5.0)
     foreman (0.74.0)
       dotenv (~> 0.11.1)
@@ -293,9 +293,9 @@ GEM
       rack (>= 0.9.1)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
-    rack-pjax (0.7.0)
+    rack-pjax (0.8.0)
       nokogiri (~> 1.5)
-      rack (~> 1.3)
+      rack (~> 1.1)
     rack-protection (1.5.3)
       rack
     rack-respond_to (0.9.8)

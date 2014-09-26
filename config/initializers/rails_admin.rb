@@ -15,7 +15,6 @@ if defined? RailsAdmin
 
     ## == Cancan ==
     config.authorize_with :cancan, AdminAbility
-    # config.authorize_with :cancan
 
     ## == PaperTrail ==
     # config.audit_with :paper_trail, 'User',
@@ -30,20 +29,22 @@ if defined? RailsAdmin
       index                         # mandatory
       new do
         except ["User", "Setting", "Activity", "Notification", "Flag", "Vote",
-                "Device"]
+                "Device", "Stats"]
       end
       import do
         only ["Stack"]
       end
       bulk_delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
       end
-      show
+      show do
+        except ["Stats"]
+      end
       edit do
-        except ["Activity", "Notification"]
+        except ["Activity", "Notification", "Device", "Stats"]
       end
       delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
       end
       restore do
         only ["DeletedUser"]
@@ -54,7 +55,7 @@ if defined? RailsAdmin
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
-                                Notification Subscription Device)
+                                Notification Subscription Device Stats)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -62,7 +63,6 @@ if defined? RailsAdmin
     config.current_user_method(&:current_admin)
 
     flags_count_field = Proc.new do
-      label "Flags"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "flag",
@@ -72,17 +72,42 @@ if defined? RailsAdmin
       end
     end
 
+    devices_count_field = Proc.new do
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "device",
+          f: { user: { "0001" => { v: bindings[:object].username } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
+    networks_field = Proc.new do
+      pretty_value do
+        value.map do |network|
+          "<span class=\"label label-default\">#{network.provider}</span>"
+        end.join(" ").html_safe
+      end
+    end
+
     config.model "User" do
       object_label_method :username
       list do
-        scopes [nil, :flagged]
+        scopes [nil, :flagged, :signup_with_facebook]
         field :email
         field :username
         field :location
         field :score
+        field :fb_signup?, :boolean
+        field :last_sign_in_at do
+          filterable true
+        end
         field :flags_count, &flags_count_field
-        field :last_sign_in_at
         field :confirmed_at
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       edit do
         field :email
@@ -98,38 +123,71 @@ if defined? RailsAdmin
         field :location
         field :score
         field :bio
-        field :flags_count, &flags_count_field
-        field :last_sign_in_at
-        field :confirmed_at
-        field :networks do
+        field :stacks_count do
           pretty_value do
-            value.map do |network|
-              "<span class=\"label label-default\">#{network.provider}</span>"
-            end.join(" ").html_safe
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "stack",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to(value, path).html_safe
           end
         end
+        field :cards_count do
+          pretty_value do
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "card",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to(value, path).html_safe
+          end
+        end
+        field :comments_count do
+          pretty_value do
+            path = bindings[:view].rails_admin.index_path(
+              model_name: "comment",
+              f: { user: { "0001" => { v: bindings[:object].username } } }
+            )
+            bindings[:view].link_to(value, path).html_safe
+          end
+        end
+        field :flags_count, &flags_count_field
+        field :devices_count, &devices_count_field
+        field :last_sign_in_at
+        field :confirmed_at
+        field :networks, &networks_field
+        field :created_at
       end
     end
 
     config.model "DeletedUser" do
+      object_label_method :username
       list do
-        scopes [nil, :flagged]
+        scopes [nil, :flagged, :signup_with_facebook]
         field :email
         field :username
         field :location
         field :score
+        field :fb_signup?, :boolean
+        field :last_sign_in_at do
+          filterable true
+        end
         field :flags_count, &flags_count_field
-        field :last_sign_in_at
         field :confirmed_at
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       show do
         field :email
         field :username
         field :location
         field :score
+        field :bio
         field :flags_count, &flags_count_field
         field :last_sign_in_at
         field :confirmed_at
+        field :created_at
       end
       edit do
         field :email
@@ -142,13 +200,17 @@ if defined? RailsAdmin
 
     config.model "Device" do
       list do
-        scopes [nil, :with_arn]
+        scopes [nil, :accepting_notification]
         field :user
         field :device_type
         field :push_token
-        field :has_arn?, :boolean
-        field :last_sign_in_at
-        field :created_at
+        field :accept_notification?, :boolean
+        field :last_sign_in_at do
+          filterable true
+        end
+        field :created_at do
+          filterable true
+        end
         sort_by :last_sign_in_at
       end
       show do
@@ -168,7 +230,6 @@ if defined? RailsAdmin
     end
 
     stack_subscriptions_count_field = Proc.new do
-      label "Subscriptions"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "subscription",
@@ -182,7 +243,6 @@ if defined? RailsAdmin
       list do
         field :display_name
         field :name do
-          label "Stack Name"
           visible false
           searchable true
         end
@@ -191,6 +251,10 @@ if defined? RailsAdmin
         field :protected
         field :subscriptions_count, &stack_subscriptions_count_field
         field :cards
+        field :created_at do
+          filterable true
+        end
+        sort_by :created_at
       end
       show do
         field :display_name
@@ -213,7 +277,6 @@ if defined? RailsAdmin
         field :user
         field :stack
         field :stack_id, :enum do
-          label "For Stack"
           enum do
             Stack.recent.limit(10).map { |s| [s.name, s.id] }
           end
@@ -221,7 +284,9 @@ if defined? RailsAdmin
           searchable true
           queryable false
         end
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -236,7 +301,6 @@ if defined? RailsAdmin
     end
 
     comments_count_field = Proc.new do
-      label "Comments"
       pretty_value do
         path = bindings[:view].rails_admin.index_path(
           model_name: "comment",
@@ -271,7 +335,9 @@ if defined? RailsAdmin
         field :flags_count, &flags_count_field
         field :comments_count, &comments_count_field
         field :description
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -326,7 +392,6 @@ if defined? RailsAdmin
         field :replying
         field :card
         field :card_id, :enum do
-          label "For Card"
           enum do
             Card.newest.limit(10).map { |c| [c.name, c.id] }
           end
@@ -335,7 +400,9 @@ if defined? RailsAdmin
           queryable false
         end
         field :user
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
       show do
@@ -361,15 +428,14 @@ if defined? RailsAdmin
 
     config.model "Flag" do
       list do
-        field :flaggable do
-          label "Flagged Item"
-        end
-        field :flaggable_type do
-          label "Type"
+        field :flaggable
+        field :flaggable_type, :enum do
+          enum do
+            ["User", "Card", "Comment"]
+          end
           filterable true
         end
         field :flaggable_id, :enum do
-          label "Flags For"
           enum do
             []
           end
@@ -378,50 +444,31 @@ if defined? RailsAdmin
           queryable false
         end
         field :user do
-          label "Flagged by"
           filterable true
         end
         field :created_at do
-          label "Flagged at"
           filterable true
         end
         sort_by :created_at
       end
 
       show do
-        field :flaggable do
-          label "Flagged Item"
-        end
-        field :flaggable_type do
-          label "Type"
-          filterable true
-        end
-        field :user do
-          label "Flagged by"
-          filterable true
-        end
-        field :created_at do
-          label "Flagged at"
-          filterable true
-        end
+        field :flaggable
+        field :flaggable_type
+        field :user
+        field :created_at
       end
     end
 
     config.model "Vote" do
       list do
         scopes [nil, :up_votes, :down_votes]
-        field :votable do
-          label "Voted Item"
-        end
+        field :votable
         field :votable_type do
-          label "Type"
           filterable true
         end
-        field :flag do
-          label "Up/Down"
-        end
+        field :flag
         field :votable_id, :enum do
-          label "Votes For"
           enum do
             []
           end
@@ -430,48 +477,27 @@ if defined? RailsAdmin
           queryable false
         end
         field :user do
-          label "Voted by"
           filterable true
         end
         field :created_at do
-          label "Voted at"
           filterable true
         end
         sort_by :created_at
       end
 
       show do
-        field :votable do
-          label "Voted Item"
-        end
-        field :votable_type do
-          label "Type"
-          filterable true
-        end
-        field :flag do
-          label "Up/Down"
-        end
+        field :votable
+        field :votable_type
+        field :flag
         field :weight
-        field :user do
-          label "Voted by"
-          filterable true
-        end
-        field :created_at do
-          label "Voted at"
-          filterable true
-        end
+        field :user
+        field :created_at
       end
 
       edit do
-        field :votable do
-          label "Voted Item"
-        end
-        field :flag do
-          label "up?"
-        end
-        field :user do
-          label "Voted by"
-        end
+        field :votable
+        field :flag
+        field :user
         field :weight
       end
     end
@@ -485,16 +511,13 @@ if defined? RailsAdmin
 
     config.model "Setting" do
       list do
-        field :name do
-          label "Setting"
-        end
+        field :name
         field :value
         field :description
       end
 
       edit do
         field :name do
-          label "Setting"
           read_only true
         end
         field :value
@@ -520,7 +543,9 @@ if defined? RailsAdmin
         field :trackable
         field :owner
         field :notified
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         sort_by :created_at
       end
 
@@ -548,11 +573,15 @@ if defined? RailsAdmin
         field :caption
         field :user
         field :subject
-        field :created_at
+        field :created_at do
+          filterable true
+        end
         field :sent?, :boolean
         field :seen?, :boolean
         field :read?, :boolean
-        field :sent_at
+        field :sent_at do
+          filterable true
+        end
         sort_by :created_at
       end
 
@@ -573,6 +602,37 @@ if defined? RailsAdmin
         field :sent_at
         field :seen_at
         field :read_at
+      end
+    end
+
+    stats_field_count = Proc.new do
+      column_width 60
+    end
+    config.model "Stats" do
+      list do
+        scopes [:daily, :weekly, :monthly]
+        field :period do
+          sortable true
+          sort_reverse true
+        end
+        field :date do
+          visible false
+          filterable true
+        end
+        field :users, &stats_field_count
+        field :deleted_users, &stats_field_count
+        field :stacks, &stats_field_count
+        field :subscriptions, &stats_field_count
+        field :cards, &stats_field_count
+        field :comments, &stats_field_count
+        field :flagged_users, &stats_field_count
+        field :flagged_cards, &stats_field_count
+        field :flagged_comments, &stats_field_count
+
+        sort_by :period
+        sort_without_tablename true
+        items_per_page 100
+        show_pagination false
       end
     end
   end

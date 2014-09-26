@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   validates :facebook_id, uniqueness: true, allow_blank: true
   validate :check_facebook_token
 
+  scope :signup_with_facebook, -> { where.not(facebook_id: [nil, ""]) }
+
   has_many :devices, dependent: :destroy
   has_many :networks, dependent: :destroy
   has_many :stacks
@@ -33,8 +35,24 @@ class User < ActiveRecord::Base
     device.sign_in!
   end
 
-  def title
-    username
+  def fb_signup?
+    facebook_id.present?
+  end
+
+  def devices_count
+    @devices_count ||= devices.count
+  end
+
+  def stacks_count
+    @stacks_count ||= stacks.count
+  end
+
+  def cards_count
+    @cards_count ||= cards.count
+  end
+
+  def comments_count
+    @comments_count ||= comments.count
   end
 
   def add_facebook_network

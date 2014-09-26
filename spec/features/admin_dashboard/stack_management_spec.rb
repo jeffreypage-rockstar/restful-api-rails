@@ -27,7 +27,7 @@ feature "Admin Stack management", :devise do
     expect(current_path).to eq rails_admin.index_path(model_name: "stack")
     expect do
       visit rails_admin.new_path(model_name: "stack")
-      fill_in "Name", with: new_stack[:name]
+      fill_in "Hashtag", with: new_stack[:name]
       fill_in "Description", with: new_stack[:description]
       select new_user.username, from: "stack[user_id]"
       click_button "Save"
@@ -45,7 +45,7 @@ feature "Admin Stack management", :devise do
     stack = FactoryGirl.create(:stack)
 
     visit rails_admin.edit_path(model_name: "stack", id: stack.id)
-    fill_in "Name", with: "anothername"
+    fill_in "Hashtag", with: "anothername"
     fill_in "Description", with: "anotherdescription"
     click_button "Save"
 

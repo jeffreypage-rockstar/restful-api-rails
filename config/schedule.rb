@@ -24,3 +24,7 @@ job_type :rake, "cd :path && RAILS_ENV=:environment bundle exec foreman run "\
 every 5.minutes do
   rake "searchkick:reindex CLASS=Card"
 end
+
+every 1.hour do
+  runner "StatsUpdaterWorker.perform_async"
+end

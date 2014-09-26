@@ -36,7 +36,7 @@ describe Hyper::Stacks do
       r = JSON.parse(response.body)
       expect(response.status).to eql 409 # conflict
       expect(r["status_code"]).to eql "conflict"
-      expect(r["error"]).to match("name has already been taken")
+      expect(r["error"]).to match("hashtag has already been taken")
     end
 
     it "requires a confirmed user as owner" do

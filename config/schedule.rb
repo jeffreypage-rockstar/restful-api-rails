@@ -26,5 +26,5 @@ every 5.minutes do
 end
 
 every 1.hour do
-  runner "StatsUpdaterWorker.perform_async"
+  rake "hyper:update_stats"
 end

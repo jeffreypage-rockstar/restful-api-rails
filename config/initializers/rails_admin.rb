@@ -29,22 +29,24 @@ if defined? RailsAdmin
       index                         # mandatory
       new do
         except ["User", "Setting", "Activity", "Notification", "Flag", "Vote",
-                "Device", "Stats"]
+                "Device", "Stats", "StackStats"]
       end
       import do
         only ["Stack"]
       end
       bulk_delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats",
+                "StackStats"]
       end
       show do
         except ["Stats"]
       end
       edit do
-        except ["Activity", "Notification", "Device", "Stats"]
+        except ["Activity", "Notification", "Device", "Stats", "StackStats"]
       end
       delete do
-        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats"]
+        except ["DeletedUser", "Setting", "Activity", "Notification", "Stats",
+                "StackStats"]
       end
       restore do
         only ["DeletedUser"]
@@ -55,7 +57,8 @@ if defined? RailsAdmin
     end
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
-                                Notification Subscription Device Stats)
+                                Notification Subscription Device Stats
+                                StackStats)
 
     config.authenticate_with do
       warden.authenticate! scope: :admin
@@ -630,6 +633,28 @@ if defined? RailsAdmin
         field :flagged_comments, &stats_field_count
 
         sort_by :period
+        sort_without_tablename true
+        items_per_page 100
+        no_count_pagination true
+      end
+    end
+
+    config.model "StackStats" do
+      list do
+        # scopes [:daily, :weekly, :monthly]
+        # field :period do
+        #   sortable true
+        #   sort_reverse true
+        # end
+        field :date do
+          # visible false
+          filterable true
+        end
+        field :stack
+        field :subscriptions
+        field :unsubscriptions
+
+        sort_by :date
         sort_without_tablename true
         items_per_page 100
         no_count_pagination true

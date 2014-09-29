@@ -398,6 +398,19 @@ ALTER SEQUENCE settings_id_seq OWNED BY settings.id;
 
 
 --
+-- Name: stack_stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stack_stats (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    date date NOT NULL,
+    stack_id uuid NOT NULL,
+    subscriptions integer DEFAULT 0,
+    unsubscriptions integer DEFAULT 0
+);
+
+
+--
 -- Name: stacks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -616,6 +629,14 @@ ALTER TABLE ONLY reputations
 
 ALTER TABLE ONLY settings
     ADD CONSTRAINT settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stack_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY stack_stats
+    ADD CONSTRAINT stack_stats_pkey PRIMARY KEY (id);
 
 
 --
@@ -848,6 +869,13 @@ CREATE UNIQUE INDEX index_settings_on_key ON settings USING btree (key);
 
 
 --
+-- Name: index_stack_stats_on_date_and_stack_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_stack_stats_on_date_and_stack_id ON stack_stats USING btree (date, stack_id);
+
+
+--
 -- Name: index_stacks_on_lowercase_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1022,4 +1050,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140911201247');
 INSERT INTO schema_migrations (version) VALUES ('20140922185725');
 
 INSERT INTO schema_migrations (version) VALUES ('20140924142303');
+
+INSERT INTO schema_migrations (version) VALUES ('20140929195912');
 

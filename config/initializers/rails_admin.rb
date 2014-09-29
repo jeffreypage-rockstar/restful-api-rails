@@ -39,7 +39,7 @@ if defined? RailsAdmin
                 "StackStats"]
       end
       show do
-        except ["Stats"]
+        except ["Stats", "StackStats"]
       end
       edit do
         except ["Activity", "Notification", "Device", "Stats", "StackStats"]
@@ -641,20 +641,23 @@ if defined? RailsAdmin
 
     config.model "StackStats" do
       list do
-        # scopes [:daily, :weekly, :monthly]
-        # field :period do
-        #   sortable true
-        #   sort_reverse true
-        # end
+        scopes [:daily, :weekly, :monthly]
+        field :period do
+          sortable true
+          sort_reverse true
+        end
         field :date do
-          # visible false
+          visible false
           filterable true
         end
-        field :stack
+        field :stack do
+          filterable false
+          sortable false
+        end
         field :subscriptions
         field :unsubscriptions
 
-        sort_by :date
+        sort_by :period
         sort_without_tablename true
         items_per_page 100
         no_count_pagination true

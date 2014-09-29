@@ -632,7 +632,7 @@ if defined? RailsAdmin
         sort_by :period
         sort_without_tablename true
         items_per_page 100
-        show_pagination false
+        no_count_pagination true
       end
     end
   end

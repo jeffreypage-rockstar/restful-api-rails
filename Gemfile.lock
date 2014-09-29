@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/inaka/rails_admin.git
-  revision: 7abc8f9d579b48be6ec0f908c635e8ce5d43b2f5
+  revision: 70ec77ca42c3eda6dc7d5f98ac081ec7007aedd0
   specs:
     rails_admin (0.6.2)
       builder (~> 3.1)

@@ -29,6 +29,7 @@ en:
         cards: Posts
         name: Hashtag
         subscriptions_count: Subscriptions
+        stats_count: Daily Stats
       user:
         flags_count: Flags
         devices_count: Registered Devices
@@ -52,6 +53,9 @@ en:
         created_at: Voted at
       setting:
         name: Setting
+      stack_stats:
+        stack: Hashtag
+        stack_id: Hashtag
         
   admin:
     actions:

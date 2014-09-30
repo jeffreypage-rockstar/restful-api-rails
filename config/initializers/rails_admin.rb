@@ -242,6 +242,16 @@ if defined? RailsAdmin
       end
     end
 
+    stack_stats_count_field = Proc.new do
+      pretty_value do
+        path = bindings[:view].rails_admin.index_path(
+          model_name: "stack_stats",
+          f: { stack_id: { "0001" => { v: bindings[:object].id } } }
+        )
+        bindings[:view].link_to(value, path).html_safe
+      end
+    end
+
     config.model "Stack" do
       list do
         field :display_name
@@ -253,6 +263,7 @@ if defined? RailsAdmin
         field :user
         field :protected
         field :subscriptions_count, &stack_subscriptions_count_field
+        field :stats_count, &stack_stats_count_field
         field :cards
         field :created_at do
           filterable true
@@ -265,6 +276,7 @@ if defined? RailsAdmin
         field :user
         field :protected
         field :subscriptions_count, &stack_subscriptions_count_field
+        field :stats_count, &stack_stats_count_field
         field :cards
       end
       edit do
@@ -651,8 +663,16 @@ if defined? RailsAdmin
           filterable true
         end
         field :stack do
-          filterable false
           sortable false
+          filterable true
+        end
+        field :stack_id, :enum do
+          enum do
+            Stack.recent.limit(10).map { |s| [s.name, s.id] }
+          end
+          visible false
+          searchable true
+          queryable false
         end
         field :subscriptions
         field :unsubscriptions

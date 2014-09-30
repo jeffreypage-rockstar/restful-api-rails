@@ -27,7 +27,7 @@ class StackStats < ActiveRecord::Base
       sum(subscriptions) as subscriptions,
       sum(unsubscriptions) as unsubscriptions
     SQL
-    select(select_sql).group("period, stack_id")
+    select(select_sql).group(:period, :stack_id)
   end
 
   # GENERATING STACK STATS

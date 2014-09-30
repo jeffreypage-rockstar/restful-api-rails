@@ -52,7 +52,7 @@ module Hyper
       get do
         authenticate!
         header "TotalUnseen", current_user.notifications.unseen.count.to_s
-        paginate current_user.notifications.recent
+        paginate current_user.notifications.recently_sent
       end
     end
   end

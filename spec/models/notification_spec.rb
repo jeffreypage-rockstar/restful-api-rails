@@ -37,20 +37,40 @@ RSpec.describe Notification, type: :model do
   end
 
   describe ".mark_all_as_read" do
-    it "marks all user notifications as read" do
-      notifications = (1..5).map { create(:notification, user: user) }
+    it "does not mark as read a not sent notification" do
+      notification = create(:notification, user: user)
+      expect(user.notifications.unread.count).to eql 1
+      Notification.mark_all_as_read(user.id, notification)
+      expect(user.notifications.unread.count).to eql 1
+    end
+
+    it "marks all user sent notifications as read" do
+      notifications = (1..4).map { create(:sent_notification, user: user) }
+      travel_to 1.minute.from_now do
+        create(:notification, user: user, sent_at: Time.current)
+      end
       expect(user.notifications.unread.count).to eql 5
       Notification.mark_all_as_read(user.id, notifications.last)
-      expect(user.notifications.unread.count).to eql 0
+      expect(user.notifications.unread.count).to eql 1
     end
   end
 
   describe ".mark_all_as_seen" do
+    it "does not mark as seen a not sent notification" do
+      notification = create(:notification, user: user)
+      expect(user.notifications.unseen.count).to eql 1
+      Notification.mark_all_as_seen(user.id, notification)
+      expect(user.notifications.unseen.count).to eql 1
+    end
+
     it "marks all user notifications as seen" do
-      notifications = (1..5).map { create(:notification, user: user) }
+      notifications = (1..4).map { create(:sent_notification, user: user) }
+      travel_to 1.minute.from_now do
+        create(:notification, user: user, sent_at: Time.current)
+      end
       expect(user.notifications.unseen.count).to eql 5
       Notification.mark_all_as_seen(user.id, notifications.last)
-      expect(user.notifications.unseen.count).to eql 0
+      expect(user.notifications.unseen.count).to eql 1
     end
   end
 
@@ -354,7 +374,7 @@ RSpec.describe Notification, type: :model do
       :comment_mention_notification,
       :comment_up_vote_notification
     ].each do |notification_type|
-      it "returns user's avater for only one sender" \
+      it "returns user's avatar for only one sender" \
              " in #{notification_type.to_s.humanize}" do
         senders = { user.username => user.id }
         notification = create(notification_type, senders: senders)

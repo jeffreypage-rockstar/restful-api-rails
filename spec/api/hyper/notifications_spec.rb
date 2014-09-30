@@ -4,7 +4,7 @@ describe Hyper::Notifications do
   let(:device) { create(:device) }
   let(:user) { device.user }
   let(:card) { create(:card, user: user, name: "card_name") }
-  let(:notification) { create(:notification, user: user) }
+  let(:notification) { create(:sent_notification, user: user) }
 
   # ======== MARKING ALL AS SEEN ==================
   describe "DELETE /api/notifications" do

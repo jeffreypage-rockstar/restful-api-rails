@@ -28,7 +28,7 @@ en:
       user:
         flags_count: Flags
         devices_count: Registered Devices
-        stacks_count: Created Stacks
+        stacks_count: Created Hashtags
         cards_count: Created Cards
         comments_count: Created Comments
       deleted_user:

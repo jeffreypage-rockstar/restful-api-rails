@@ -11,7 +11,7 @@ class Notification < ActiveRecord::Base
   scope :seen, -> { where.not(seen_at: nil) }
   scope :not_sent, -> { where(sent_at: nil) }
   scope :sent, -> { where.not(sent_at: nil) }
-  scope :recent, -> { sent.order(sent_at: :desc) }
+  scope :recently_sent, -> { sent.order(sent_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
@@ -95,14 +95,16 @@ class Notification < ActiveRecord::Base
   # CLASS METHODS =======================
 
   def self.mark_all_as_read(user_id, before_notification)
+    return unless before_notification.sent?
     unread.where(user_id: user_id).
-           where("created_at <= ?", before_notification.created_at).
+           where("sent_at <= ?", before_notification.sent_at).
            update_all(read_at: Time.now.utc)
   end
 
   def self.mark_all_as_seen(user_id, before_notification)
+    return unless before_notification.sent?
     unseen.where(user_id: user_id).
-           where("created_at <= ?", before_notification.created_at).
+           where("sent_at <= ?", before_notification.sent_at).
            update_all(seen_at: Time.now.utc)
   end
 

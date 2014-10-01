@@ -2,6 +2,9 @@ require "sidekiq/web"
 
 Rails.application.routes.draw do
   devise_for :admins
+  namespace :admin do
+    get "/users_chart" => "charts#users", as: :users_chart
+  end
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   root to: "visitors#index"
   devise_for :users

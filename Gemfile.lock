@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/inaka/rails_admin.git
-  revision: 7abc8f9d579b48be6ec0f908c635e8ce5d43b2f5
+  revision: f62242ce3afc9f838464e20d901c62e0cbad4f84
   specs:
     rails_admin (0.6.2)
       builder (~> 3.1)
@@ -96,6 +96,7 @@ GEM
       mime-types (>= 1.16)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    chartkick (1.3.2)
     chronic (0.10.2)
     coderay (1.1.0)
     coercible (1.0.0)
@@ -447,6 +448,7 @@ DEPENDENCIES
   cancancan (~> 1.9)
   capybara
   carrierwave
+  chartkick
   database_cleaner
   devise
   devise-async

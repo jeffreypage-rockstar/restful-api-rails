@@ -12,6 +12,7 @@ class Stack < ActiveRecord::Base
   belongs_to :user
   has_many :cards, dependent: :restrict_with_error
   has_many :subscriptions, dependent: :destroy
+  has_many :stats, class_name: "StackStats"
 
   scope :recent, -> { order("created_at DESC") }
   scope :recent_active, -> { order("updated_at DESC") }
@@ -39,6 +40,10 @@ class Stack < ActiveRecord::Base
   def user
     return nil if user_id.blank?
     super
+  end
+
+  def stats_count
+    @stats_count ||= stats.count
   end
 
   def self.import_csv(csv_file)

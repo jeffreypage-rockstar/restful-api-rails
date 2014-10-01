@@ -17,6 +17,12 @@ module Hyper
     config.load_paths += Dir["app/**/*"]
     # config.base_path  = "http://localhost:9292"
     config.filter_parameters = []
+    if ENV["LOGSTASH_ENABLED"] == "1"
+      config.logger = LogStashLogger.new(type: :udp,
+                                         host: "127.0.0.1",
+                                         port: 9125)
+      puts "*** Using LogStashLogger ***"
+    end
   end
 end
 

@@ -1,4 +1,16 @@
 require_relative "validations/uuid"
+require_relative "hyper/base"
+
+# folders = %w(
+#   models/concerns uploaders models helpers services workers serializers
+#   workers api/validations api/helpers api/hyper
+# )
+# folders.each do |folder|
+#   Dir[File.expand_path("../../#{folder}/*.rb", __FILE__)].each do |f|
+#     puts f
+#     require f
+#   end
+# end
 
 class API < Grape::API
   format :json

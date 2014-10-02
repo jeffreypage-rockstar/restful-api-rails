@@ -18,6 +18,7 @@ if defined? RailsAdmin
   require "rails_admin/config/models/notifications"
   require "rails_admin/config/models/stats"
   require "rails_admin/config/models/stack_stats"
+  require "rails_admin/config/models/pages"
   require "admin_ability"
 
   RailsAdmin.config do |config|
@@ -72,7 +73,7 @@ if defined? RailsAdmin
     config.included_models = %w(Admin User DeletedUser Stack Card Comment
                                 Flag Vote Reputation Setting Activity
                                 Notification Subscription Device Stats
-                                StackStats)
+                                StackStats Page)
 
   end
 

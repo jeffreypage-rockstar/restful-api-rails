@@ -324,6 +324,20 @@ CREATE TABLE notifications (
 
 
 --
+-- Name: pages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pages (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    slug character varying(255) NOT NULL,
+    title character varying(255) NOT NULL,
+    content text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
 -- Name: reputations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -616,6 +630,14 @@ ALTER TABLE ONLY notifications
 
 
 --
+-- Name: pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: reputations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -848,6 +870,13 @@ CREATE INDEX index_notifications_on_user_id ON notifications USING btree (user_i
 
 
 --
+-- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_pages_on_slug ON pages USING btree (slug);
+
+
+--
 -- Name: index_reputations_on_min_score; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1052,4 +1081,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140922185725');
 INSERT INTO schema_migrations (version) VALUES ('20140924142303');
 
 INSERT INTO schema_migrations (version) VALUES ('20140929195912');
+
+INSERT INTO schema_migrations (version) VALUES ('20141002143354');
 

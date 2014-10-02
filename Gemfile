@@ -46,6 +46,7 @@ group :admin do
   gem "sinatra", ">= 1.3.0", require: nil # used by sidekiq monitoring
   gem "rails_admin", github: "inaka/rails_admin"
   gem "chartkick"
+  gem "bootstrap-wysihtml5-rails", "0.3.1.24"
 end
 
 group :development do

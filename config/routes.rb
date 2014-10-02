@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   root to: "visitors#index"
   devise_for :users
   get "/c/:id" => "visitors#card", as: :card
+  get "/s/:id" => "visitors#page", as: :static
 
   mount API => "/api"
   authenticate :admin do

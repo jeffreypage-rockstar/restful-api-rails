@@ -11,8 +11,22 @@ RailsAdmin.config do |config|
     end
     show do
       field :title
-      field :slug
-      field :content
+      field :slug do
+        pretty_value do
+          path = bindings[:view].main_app.static_url(bindings[:object])
+          [
+            bindings[:view].link_to(value, path, target: "_blank"),
+            '<span class="label label-default">link to public page</span>'
+          ].join(" ").html_safe
+        end
+      end
+      field :content do
+        pretty_value do
+          %{<div class="content">
+              #{value}
+            </div >}.html_safe
+        end
+      end
       field :created_at
     end
     edit do

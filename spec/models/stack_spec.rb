@@ -23,7 +23,7 @@ RSpec.describe Stack, type: :model do
     end
 
     it "requires a user" do
-      stack = Stack.new(attrs.merge(user_id: ""))
+      stack = Stack.new(attrs.merge(user: nil))
       expect(stack).to_not be_valid
     end
 

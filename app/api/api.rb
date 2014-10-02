@@ -1,6 +1,7 @@
 require_relative "validations/uuid"
 
 class API < Grape::API
+  VERSION = "1.0"
   format :json
   formatter :json, Grape::Formatter::ActiveModelSerializers
 
@@ -8,9 +9,9 @@ class API < Grape::API
     header["Access-Control-Allow-Origin"] = "*"
     header["Access-Control-Request-Method"] = "*"
     unless Rails.env.test?
-      log = request.env["rack.logger"] || logger
-      log.info [request.env["REQUEST_METHOD"], request.env["REQUEST_PATH"]]
-      log.info request.body.read
+      API.logger.info [request.env["REQUEST_METHOD"],
+                       request.env["REQUEST_PATH"]]
+      API.logger.info request.body.read
     end
   end
 
@@ -38,7 +39,7 @@ class API < Grape::API
     end
   end
   add_swagger_documentation mount_path: "api_docs",
-                            api_version: "v1",
+                            api_version: VERSION,
                             hide_documentation_path: true,
                             hide_format: true,
                             base_path: base_path_proc

@@ -1,23 +1,29 @@
-require File.expand_path("../environments/api", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../..", __FILE__)
 
-require "app/api/hyper/base"
+require "config/boot"
+Bundler.require :default, :api
+require "kaminari/grape"
+require "grape/application"
 
-folders = %w(
-  models/concerns uploaders models helpers services workers serializers
-  workers api/validations api/helpers api/hyper
-)
-folders.each do |folder|
-  Dir[File.expand_path("../../app/#{folder}/*.rb", __FILE__)].each do |f|
-    require f
+require "dotenv"
+Dotenv.load
+
+I18n.load_path << File.expand_path("../locales/en.yml", __FILE__)
+
+module Hyper
+  class Application < Grape::Application
+    config.root = File.expand_path("../..", __FILE__)
+    config.load_paths += Dir["app/**/*"]
+    # config.base_path  = "http://localhost:9292"
+    config.filter_parameters = []
+    if ENV["LOGSTASH_ENABLED"] == "1"
+      config.logger = LogStashLogger.new(type: :udp,
+                                         host: "127.0.0.1",
+                                         port: 9125)
+      puts "*** Using LogStashLogger ***"
+    end
   end
 end
 
-require "app/api/api"
-
-ApplicationServer = Rack::Builder.new do
-  use Rack::Static, urls: %w(/docs/), root: "public/api", index: "index.html"
-
-  map "/" do
-    run API
-  end
-end
+Hyper::Application.new

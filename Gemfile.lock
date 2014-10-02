@@ -79,6 +79,8 @@ GEM
       debug_inspector (>= 0.0.1)
     bootstrap-sass (3.2.0.0)
       sass (~> 3.2)
+    bootstrap-wysihtml5-rails (0.3.1.24)
+      railties (>= 3.0)
     bootstrap_form (2.1.1)
     buftok (0.2.0)
     builder (3.2.2)
@@ -444,6 +446,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass
+  bootstrap-wysihtml5-rails (= 0.3.1.24)
   bootstrap_form
   cancancan (~> 1.9)
   capybara

@@ -57,6 +57,9 @@ module Grape
       Grape::API.logger = config.logger if config.logger
       ActiveRecord::Base.logger = @logger = Grape::API.logger
       @logger.level = logger_level
+      @logger.formatter = proc do |severity, datetime, _progname, msg|
+        "[#{severity}] #{datetime.strftime("%Y-%m-%d %H:%M:%S")} :: #{msg}\n"
+      end
     end
 
     def logger

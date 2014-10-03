@@ -4,6 +4,7 @@ require "goliath"
 require "em-synchrony/activerecord"
 
 API_SERVER = Rack::Builder.new do
+  use Rack::Attack
   use Rack::Static, urls: %w(/docs/), root: "public/api", index: "index.html"
   use ActiveRecord::ConnectionAdapters::ConnectionManagement
 

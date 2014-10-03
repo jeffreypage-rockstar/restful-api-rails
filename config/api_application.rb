@@ -11,6 +11,8 @@ Dotenv.load
 
 I18n.load_path << File.expand_path("../locales/en.yml", __FILE__)
 
+ActiveSupport::Cache.lookup_store :redis_store
+
 module Hyper
   class Application < Grape::Application
     config.root = File.expand_path("../..", __FILE__)

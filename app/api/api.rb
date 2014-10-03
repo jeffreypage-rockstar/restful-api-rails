@@ -15,32 +15,5 @@ class API < Grape::API
     end
   end
 
-  mount Hyper::Status
-  mount Hyper::Login
-  mount Hyper::Auth
-  mount Hyper::Account
-  mount Hyper::Devices
-  mount Hyper::Stacks
-  mount Hyper::Subscriptions
-  mount Hyper::Cards
-  mount Hyper::Comments
-  mount Hyper::Flags
-  mount Hyper::SuggestedImages
-  mount Hyper::Networks
-  mount Hyper::Reputations
-  mount Hyper::Notifications
-  mount Hyper::Usernames
-
-  base_path_proc = Proc.new do |r|
-    if Rails.env.development?
-      "http#{r.base_url}"
-    else
-      "http://#{r.host}"
-    end
-  end
-  add_swagger_documentation mount_path: "api_docs",
-                            api_version: VERSION,
-                            hide_documentation_path: true,
-                            hide_format: true,
-                            base_path: base_path_proc
+  mount Hyper::V1::All
 end

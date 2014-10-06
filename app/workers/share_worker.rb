@@ -7,7 +7,7 @@ class ShareWorker
   def share_facebook(card, network)
     graph = Koala::Facebook::API.new(network.token)
     image_url = card.images.first.try(:image_url)
-    graph.put_wall_post("I've created a card on Hyper. Check this out!",
+    graph.put_wall_post("I've posted something on Hyper. Check this out!",
                         name: card.name,
                         link: h.card_url(card),
                         caption: card.description,
@@ -22,7 +22,7 @@ class ShareWorker
       config.access_token        = network.token
       config.access_token_secret = network.secret
     end
-    client.update("Check my new card on #Hyper: #{h.card_url(card)}")
+    client.update("Check my new post on #Hyper: #{h.card_url(card)}")
   end
 
   def share_tumblr(card, network)

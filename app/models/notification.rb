@@ -67,6 +67,7 @@ class Notification < ActiveRecord::Base
   end
 
   def sent!
+    return false if user.nil?
     self.sent_at = Time.now.utc
     self.seen_at = nil
     self.read_at = nil

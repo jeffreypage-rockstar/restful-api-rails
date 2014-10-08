@@ -152,6 +152,11 @@ RSpec.describe Notification, type: :model do
       expect(notification).to_not be_seen
       expect(notification).to_not be_read
     end
+
+    it "skips tasks if user is not present" do
+      notification = build(:notification, user: nil)
+      expect(notification.sent!).to be_falsey
+    end
   end
 
   describe "#caption" do

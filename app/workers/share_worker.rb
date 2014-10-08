@@ -22,7 +22,8 @@ class ShareWorker
       config.access_token        = network.token
       config.access_token_secret = network.secret
     end
-    client.update("Check my new post on #Hyper: #{h.card_url(card)}")
+    client.update("Just posted in #{card.stack.try(:display_name)} "\
+                  "#{h.card_url(card)}")
   end
 
   def share_tumblr(card, network)

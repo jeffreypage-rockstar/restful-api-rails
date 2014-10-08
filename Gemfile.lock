@@ -1,6 +1,14 @@
 GIT
-  remote: git://github.com/inaka/rails_admin.git
-  revision: f62242ce3afc9f838464e20d901c62e0cbad4f84
+  remote: https://github.com/getsentry/raven-ruby.git
+  revision: ff92e73b9f14070ab2a14fca58467e695617f558
+  specs:
+    sentry-raven (0.9.4)
+      faraday (>= 0.7.6)
+      hashie (>= 1.1.0)
+      uuidtools
+
+PATH
+  remote: /Users/flavio/Sites/inaka/rails_admin
   specs:
     rails_admin (0.6.2)
       builder (~> 3.1)
@@ -16,15 +24,6 @@ GIT
       remotipart (~> 1.0)
       safe_yaml (~> 1.0)
       sass-rails (~> 4.0)
-
-GIT
-  remote: https://github.com/getsentry/raven-ruby.git
-  revision: ff92e73b9f14070ab2a14fca58467e695617f558
-  specs:
-    sentry-raven (0.9.4)
-      faraday (>= 0.7.6)
-      hashie (>= 1.1.0)
-      uuidtools
 
 GEM
   remote: https://rubygems.org/

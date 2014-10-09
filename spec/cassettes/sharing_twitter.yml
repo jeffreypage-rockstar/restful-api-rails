@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.twitter.com/1.1/statuses/update.json
     body:
       encoding: UTF-8
-      string: status=Check+my+new+card+on+%23Hyper%3A+http%3A%2F%2Fhyper.test%2Fc%2F4z
+      string: status=Just+posted+in+%23Hyper%3A+http%3A%2F%2Fhyper.test%2Fc%2F4z
     headers:
       Accept:
       - application/json

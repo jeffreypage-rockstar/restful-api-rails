@@ -2,15 +2,10 @@ RailsAdmin.config do |config|
   config.model "Subscription" do
     list do
       field :user
-      field :stack
-      field :stack_id, :enum do
-        enum do
-          Stack.recent.limit(10).map { |s| [s.name, s.id] }
-        end
-        visible false
-        searchable true
-        queryable false
+      field :stack do
+        filterable false
       end
+      field :stack_id, :lookup
       field :created_at do
         filterable true
       end

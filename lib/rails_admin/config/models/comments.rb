@@ -1,4 +1,4 @@
-helper = RailsAdmin::ConfigHelper.new
+helper = RailsAdmin::ConfigHelper.instance
 
 RailsAdmin.config do |config|
   config.model "Comment" do
@@ -9,15 +9,10 @@ RailsAdmin.config do |config|
       field :score, &helper.score_field
       field :flags_count, &helper.flags_count_field
       field :replying
-      field :card
-      field :card_id, :enum do
-        enum do
-          Card.newest.limit(10).map { |c| [c.name, c.id] }
-        end
-        visible false
-        searchable true
-        queryable false
+      field :card do
+        filterable false
       end
+      field :card_id, :lookup
       field :user
       field :created_at do
         filterable true

@@ -14,7 +14,7 @@ RailsAdmin.config do |config|
         sortable false
         filterable false
       end
-      field :stack_id, :autocomplete_enum
+      field :stack_id, :lookup
       field :subscriptions
       field :unsubscriptions
 

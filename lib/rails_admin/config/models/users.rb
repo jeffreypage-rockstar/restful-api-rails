@@ -1,4 +1,4 @@
-helper = RailsAdmin::ConfigHelper.new
+helper = RailsAdmin::ConfigHelper.instance
 
 RailsAdmin.config do |config|
   config.model "User" do

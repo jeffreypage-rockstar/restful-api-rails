@@ -16,17 +16,19 @@ en:
     attributes:
       card:
         stack: Hashtag
+        stack_id: Hashtag
         flags_count: Flags
         comments_count: Comments
       subscription:
         stack: Hashtag
-        stack_id: For Hashtag
+        stack_id: Hashtag
       comment:
         card: Post
-        card_id: For Post
+        card_id: Post
         flags_count: Flags
       stack:
         cards: Posts
+        cards_count: Posts Count
         name: Hashtag
         subscriptions_count: Subscriptions
         stats_count: Daily Stats

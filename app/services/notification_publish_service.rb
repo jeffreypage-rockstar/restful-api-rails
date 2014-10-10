@@ -26,9 +26,14 @@ class NotificationPublishService
 
   def message_attributes(notification, target_arn)
     extra = notification.extra || {}
+    badge = 1
+    if user = notification.user
+      badge = user.notifications.unseen.count
+    end
     common_values = {
       "aps" => { "content-available" => 1,
-                 "alert" => notification.caption },
+                 "alert" => notification.caption,
+                 "badge" => badge },
       "data" => extra.merge(
                         "notification_id" => notification.id,
                         "subject_id" => notification.subject_id,

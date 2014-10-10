@@ -38,7 +38,8 @@ class NotificationPublishService
 
     {
       message: {
-        "apns_sandbox" => common_values
+        "apns_sandbox" => common_values,
+        "apns" => common_values
       }.to_json,
       message_structure: "json",
       target_arn: target_arn

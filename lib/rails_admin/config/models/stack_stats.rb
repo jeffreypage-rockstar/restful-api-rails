@@ -12,16 +12,9 @@ RailsAdmin.config do |config|
       end
       field :stack do
         sortable false
-        filterable true
+        filterable false
       end
-      field :stack_id, :enum do
-        enum do
-          Stack.recent.limit(10).map { |s| [s.name, s.id] }
-        end
-        visible false
-        searchable true
-        queryable false
-      end
+      field :stack_id, :lookup
       field :subscriptions
       field :unsubscriptions
 

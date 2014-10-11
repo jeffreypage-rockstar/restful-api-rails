@@ -1,39 +1,29 @@
 module RailsAdmin
   class ConfigHelper
-    def comments_count_field
+    include Singleton
+
+    def lookup_link(model_name, field_name)
       Proc.new do
         pretty_value do
           path = bindings[:view].rails_admin.index_path(
-            model_name: "comment",
-            f: { card_id: { "0001" => { v: bindings[:object].id } } }
+            model_name: model_name,
+            f: { field_name => { "0001" => { v: bindings[:object].id } } }
           )
           bindings[:view].link_to(value, path).html_safe
         end
       end
+    end
+
+    def comments_count_field
+      lookup_link("comment", :card_id)
     end
 
     def score_field
-      Proc.new do
-        pretty_value do
-          path = bindings[:view].rails_admin.index_path(
-            model_name: "vote",
-            f: { votable_id: { "0001" => { v: bindings[:object].id } } }
-          )
-          bindings[:view].link_to(value, path).html_safe
-        end
-      end
+      lookup_link("vote", :votable_id)
     end
 
     def flags_count_field
-      Proc.new do
-        pretty_value do
-          path = bindings[:view].rails_admin.index_path(
-            model_name: "flag",
-            f: { flaggable_id: { "0001" => { v: bindings[:object].id } } }
-          )
-          bindings[:view].link_to(value, path).html_safe
-        end
-      end
+      lookup_link("flag", :flaggable_id)
     end
 
     def devices_count_field

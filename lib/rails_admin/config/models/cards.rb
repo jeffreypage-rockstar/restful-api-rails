@@ -1,11 +1,14 @@
-helper = RailsAdmin::ConfigHelper.new
+helper = RailsAdmin::ConfigHelper.instance
 
 RailsAdmin.config do |config|
   config.model "Card" do
     list do
       scopes [nil, :flagged]
       field :name
-      field :stack
+      field :stack do
+        filterable false
+      end
+      field :stack_id, :lookup
       field :user
       field :source, :enum do
         enum { Card::SOURCES }
@@ -46,6 +49,7 @@ RailsAdmin.config do |config|
           end.join.html_safe
         end
       end
+      field :flags_count, &helper.flags_count_field
       field :comments_count, &helper.comments_count_field
       field :created_at
     end

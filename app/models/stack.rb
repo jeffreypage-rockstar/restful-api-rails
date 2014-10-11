@@ -46,6 +46,10 @@ class Stack < ActiveRecord::Base
     @stats_count ||= stats.count
   end
 
+  def cards_count
+    @cards_count ||= cards.count
+  end
+
   def self.import_csv(csv_file)
     SmarterCSV.process(csv_file).map do |stack_data|
       Stack.new(stack_data)

@@ -1,24 +1,6 @@
+helper = RailsAdmin::ConfigHelper.instance
+
 RailsAdmin.config do |config|
-  stack_subscriptions_count_field = Proc.new do
-    pretty_value do
-      path = bindings[:view].rails_admin.index_path(
-        model_name: "subscription",
-        f: { stack_id: { "0001" => { v: bindings[:object].id } } }
-      )
-      bindings[:view].link_to(value, path).html_safe
-    end
-  end
-
-  stack_stats_count_field = Proc.new do
-    pretty_value do
-      path = bindings[:view].rails_admin.index_path(
-        model_name: "stack_stats",
-        f: { stack_id: { "0001" => { v: bindings[:object].id } } }
-      )
-      bindings[:view].link_to(value, path).html_safe
-    end
-  end
-
   config.model "Stack" do
     list do
       field :display_name
@@ -29,9 +11,9 @@ RailsAdmin.config do |config|
       field :description
       field :user
       field :protected
-      field :subscriptions_count, &stack_subscriptions_count_field
-      field :stats_count, &stack_stats_count_field
-      field :cards
+      field :subscriptions_count, &helper.lookup_link("subscription", :stack_id)
+      field :stats_count, &helper.lookup_link("stack_stats", :stack_id)
+      field :cards_count, &helper.lookup_link("card", :stack_id)
       field :created_at do
         filterable true
       end
@@ -42,9 +24,9 @@ RailsAdmin.config do |config|
       field :description
       field :user
       field :protected
-      field :subscriptions_count, &stack_subscriptions_count_field
-      field :stats_count, &stack_stats_count_field
-      field :cards
+      field :subscriptions_count, &helper.lookup_link("subscription", :stack_id)
+      field :stats_count, &helper.lookup_link("stack_stats", :stack_id)
+      field :cards_count, &helper.lookup_link("card", :stack_id)
     end
     edit do
       field :name

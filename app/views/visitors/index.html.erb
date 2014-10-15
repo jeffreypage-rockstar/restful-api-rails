@@ -6,6 +6,7 @@
   <p><strong>Devices:</strong> <%= current_user.devices.count %></p> 
   <p><strong>Stacks:</strong> <%= current_user.stacks.count %></p> 
   <p><strong>Cards:</strong> <%= current_user.cards.count %></p> 
+  <p><%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %></p> 
 <% else %>
 <p class="label label-warning">You need to sign in or sign up to see your stats.</p>
 <% end %>

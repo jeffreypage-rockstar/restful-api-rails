@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     get "/users_chart" => "charts#users", as: :users_chart
   end
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
-  root to: redirect("http://hyper.is")
+  if Rails.env.production?
+    root to: redirect("http://hyper.is")
+  else
+    root to: "visitors#index"
+  end
   devise_for :users
   get "/c/:id" => "visitors#card", as: :card
   get "/s/:id" => "visitors#page", as: :static

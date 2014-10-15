@@ -18,12 +18,6 @@ class NotificationPublishService
     notified_devices
   end
 
-  private
-
-  def sns
-    @sns ||= AWS::SNS.new.client
-  end
-
   def message_attributes(notification, target_arn)
     extra = notification.extra || {}
     badge = 1
@@ -49,5 +43,11 @@ class NotificationPublishService
       message_structure: "json",
       target_arn: target_arn
     }
+  end
+
+  private
+
+  def sns
+    @sns ||= AWS::SNS.new.client
   end
 end

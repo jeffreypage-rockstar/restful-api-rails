@@ -39,4 +39,14 @@ RSpec.describe NotificationPublishService, type: :service do
     end
   end
 
+  describe "#message_attributes" do
+    it "contains the correct badge counter" do
+      create(:notification, user: device.user)
+      msg = publisher.message_attributes(notification, "")
+      message = JSON.parse msg[:message]
+      apns_message = JSON.parse message["apns"]
+      expect(apns_message["aps"]["badge"]).to eql 2
+    end
+  end
+
 end

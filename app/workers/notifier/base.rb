@@ -19,8 +19,8 @@ module Notifier
       publisher = NotificationPublishService.new
       result = notifications.map do |notification|
         notification.add_sender(@activity.owner)
-        publisher.publish(notification)
         notification.sent!
+        publisher.publish(notification) if notification.valid?
         notification
       end
       @activity.update_column :notified, true

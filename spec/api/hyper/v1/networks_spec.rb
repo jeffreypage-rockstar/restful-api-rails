@@ -28,6 +28,7 @@ describe Hyper::V1::Networks do
         expect(r["provider"]).to eql provider
         expect(r["uid"]).to eql fb_uid
         expect(r["token"]).to eql fb_token
+        expect(r["username"]).to eql attrs[:username]
         expect(r["user_id"]).to eql device.user_id
         expect(response.header["Location"]).to match "\/networks\/#{provider}"
       end
@@ -90,13 +91,13 @@ describe Hyper::V1::Networks do
       get "/api/networks/#{network.provider}", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
-      expect(r["id"]).to eql(network.id)
+      expect(r["username"]).to eql(network.username)
     end
   end
 
   # ======== UPDATING AN ASSOCIATED NETWORK ==================
 
-  describe "PUT /api/networks/:id" do
+  describe "PUT /api/networks/:provider" do
     it "requires authentication" do
       put "/api/networks/#{network.provider}", uid: "newuid"
       expect(response.status).to eql 401 # authentication
@@ -105,10 +106,13 @@ describe Hyper::V1::Networks do
     it "updates the network details" do
       VCR.use_cassette("fb_auth_valid") do
         http_login device.id, device.access_token
-        put "/api/networks/#{network.provider}", { secret: "newsecret" }, @env
+        put "/api/networks/#{network.provider}", { secret: "newsecret",
+                                                   username: "newusername" },
+            @env
         expect(response.status).to eql 200
         r = JSON.parse(response.body)
         expect(r["secret"]).to eql "newsecret"
+        expect(r["username"]).to eql "newusername"
       end
     end
 

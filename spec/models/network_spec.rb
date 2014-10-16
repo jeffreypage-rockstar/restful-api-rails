@@ -67,6 +67,14 @@ RSpec.describe Network, type: :model do
       expect(user.facebook_token).to eql network.token
     end
 
+    it "updates the user facebook credentials even after a fb signup" do
+      user = create(:user_with_valid_fb)
+      network = create(:network, provider: "facebook", user: user)
+      expect(network).to be_valid
+      expect(user.reload.facebook_id).to eql network.uid
+      expect(user.facebook_token).to eql network.token
+    end
+
     it "requires a unique facebook network uid" do
       other_user = create(:user)
       network = Network.new(attrs.merge(provider: "facebook",

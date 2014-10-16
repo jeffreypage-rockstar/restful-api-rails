@@ -15,7 +15,9 @@ module Hyper
         end
         post do
           authenticate!
-          network = current_user.networks.create!(permitted_params)
+          network = NetworkRegisterService.
+                      new(current_user, params[:provider]).
+                      register!(permitted_params)
           header "Location", "/networks/#{network.provider}"
           network
         end
@@ -60,11 +62,9 @@ module Hyper
         route_param :provider do
           put do
             authenticate!
-            provider = params[:provider].to_s.downcase
-            network = current_user.networks.find_by!(provider: provider)
-
-            network.update_attributes!(permitted_params)
-            network
+            NetworkRegisterService.
+              new(current_user, params[:provider]).
+              update!(permitted_params)
           end
         end
 

@@ -12,8 +12,6 @@ module Hyper
           requires :uid, type: String, desc: "User uid for this network"
           requires :token, type: String, desc: "User token for this network"
           optional :secret, type: String, desc: "User secret for this network"
-          optional :username, type: String, desc: "User's username for this "\
-                                                  "network"
         end
         post do
           authenticate!
@@ -60,8 +58,6 @@ module Hyper
           optional :uid, type: String, desc: "User uid for this network"
           optional :token, type: String, desc: "User token for this network"
           optional :secret, type: String, desc: "User secret for this network"
-          optional :username, type: String, desc: "User's username for this "\
-                                                  "network"
         end
         route_param :provider do
           put do

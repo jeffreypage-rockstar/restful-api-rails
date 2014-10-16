@@ -299,8 +299,7 @@ CREATE TABLE networks (
     user_id uuid NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    secret character varying(255),
-    username character varying(255)
+    secret character varying(255)
 );
 
 
@@ -1084,6 +1083,4 @@ INSERT INTO schema_migrations (version) VALUES ('20140924142303');
 INSERT INTO schema_migrations (version) VALUES ('20140929195912');
 
 INSERT INTO schema_migrations (version) VALUES ('20141002143354');
-
-INSERT INTO schema_migrations (version) VALUES ('20141016195713');
 

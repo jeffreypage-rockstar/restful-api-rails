@@ -33,7 +33,7 @@ class Network < ActiveRecord::Base
 
   def update_user_token
     return unless facebook?
-    return if user.nil?
+    return if user.nil? || user.facebook_id.present?
     user.update_columns(facebook_id: uid, facebook_token: token)
   end
 

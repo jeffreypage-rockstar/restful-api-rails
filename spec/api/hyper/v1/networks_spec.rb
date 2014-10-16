@@ -3,9 +3,7 @@ require "spec_helper"
 describe Hyper::V1::Networks do
   let(:device) { create(:device) }
   let(:user) { device.user }
-  let(:network) { create(:network, user: user, token: fb_token) }
-  let(:fb_token) { Rails.application.secrets.fb_valid_token }
-  let(:fb_uid) { Rails.application.secrets.fb_valid_user_id }
+  let(:network) { create(:network, user: user) }
 
   # ======== ASSOCIATING NETWORKS ==================
   describe "POST /api/networks" do
@@ -19,18 +17,16 @@ describe Hyper::V1::Networks do
     end
 
     it "associates a new valid network" do
-      VCR.use_cassette("fb_auth_valid") do
-        http_login device.id, device.access_token
-        post "/api/networks", attrs.merge(token: fb_token), @env
-        r = JSON.parse(response.body)
-        expect(response.status).to eql 201 # created
-        provider = attrs[:provider]
-        expect(r["provider"]).to eql provider
-        expect(r["uid"]).to eql fb_uid
-        expect(r["token"]).to eql fb_token
-        expect(r["user_id"]).to eql device.user_id
-        expect(response.header["Location"]).to match "\/networks\/#{provider}"
-      end
+      http_login device.id, device.access_token
+      post "/api/networks", attrs, @env
+      r = JSON.parse(response.body)
+      expect(response.status).to eql 201 # created
+      provider = attrs[:provider]
+      expect(r["provider"]).to eql provider
+      expect(r["uid"]).to eql attrs[:uid]
+      expect(r["token"]).to eql attrs[:token]
+      expect(r["user_id"]).to eql device.user_id
+      expect(response.header["Location"]).to match "\/networks\/#{provider}"
     end
 
     it "fails for an inexistent network provider" do
@@ -45,17 +41,6 @@ describe Hyper::V1::Networks do
       post "/api/networks", attrs.merge(provider: network.provider,
                                         uid: user_with_fb.facebook_id), @env
       expect(response.status).to eql 409 # conflict
-    end
-
-    it "fails when facebook authentication is not valid" do
-      VCR.use_cassette("fb_auth_invalid") do
-        http_login device.id, device.access_token
-        post "/api/networks", attrs.merge(token: "invalidfacebooktoken"), @env
-        r = JSON.parse(response.body)
-        expect(response.status).to eql 422
-        error = "token is invalid or does not allow publish_actions"
-        expect(r["error"]).to match error
-      end
     end
   end
 
@@ -103,25 +88,11 @@ describe Hyper::V1::Networks do
     end
 
     it "updates the network details" do
-      VCR.use_cassette("fb_auth_valid") do
-        http_login device.id, device.access_token
-        put "/api/networks/#{network.provider}", { secret: "newsecret" }, @env
-        expect(response.status).to eql 200
-        r = JSON.parse(response.body)
-        expect(r["secret"]).to eql "newsecret"
-      end
-    end
-
-    it "fails when facebook authentication is not valid" do
-      create(:network, provider: "facebook", user: user)
-      VCR.use_cassette("fb_auth_invalid") do
-        http_login device.id, device.access_token
-        put "/api/networks/facebook", { token: "invalidfacebooktoken" }, @env
-        expect(response.status).to eql 422
-        r = JSON.parse(response.body)
-        error = "token is invalid or does not allow publish_actions"
-        expect(r["error"]).to match error
-      end
+      http_login device.id, device.access_token
+      put "/api/networks/#{network.provider}", { uid: "newuid" }, @env
+      expect(response.status).to eql 200
+      r = JSON.parse(response.body)
+      expect(r["uid"]).to eql "newuid"
     end
   end
 

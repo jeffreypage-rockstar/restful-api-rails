@@ -140,13 +140,9 @@ describe User do
 
     it "updates the facebook network when facebook_token is updated" do
       network = user.add_facebook_network
-      network.save
-      expect(network.token).to_not eql "newfacebooktoken"
-      user.facebook_id = "newfacebookid"
       user.facebook_token = "newfacebooktoken"
       user.save
       expect(network.reload.token).to eql "newfacebooktoken"
-      expect(network.uid).to eql user.facebook_id
     end
   end
 

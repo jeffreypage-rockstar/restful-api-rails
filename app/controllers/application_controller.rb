@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(resource)
-    logger.info ">>>>#{resource.inspect}"
     if resource == :user
       home_path
     else

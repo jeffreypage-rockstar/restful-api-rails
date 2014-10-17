@@ -1,0 +1,657 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Hyper</title>
+
+<style>
+
+html, body { 
+	margin:0;
+	padding:0;
+	background:#fff;
+	color: #6c768d;
+	line-height:1;
+	font-family:"Helvetica Neue", Helvetica, sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+.phones	{
+	width: 738px;
+	height: 815px;
+	position: absolute;
+	margin-top: 50px;
+	z-index: 999;
+	background: url('img/phones.png');
+	overflow: visible;
+}
+
+.content_1	{
+	width: 540px;
+	position: absolute;
+	left: 650px;
+	top: 48px;
+	z-index: 9999;
+}
+
+.hyper	{
+	height: 60px;
+	background: url('img/logo.png') top left no-repeat;
+	font-weight: 600;
+	font-size: 38px;
+	padding-top: 19px;
+	padding-left: 91px;
+	letter-spacing: 1px;
+	margin-top: 68px;
+	margin-bottom: 28px;
+	color: #9299ab;
+}
+
+.title	{
+	font-weight: 300;
+	font-size: 60px;
+	line-height: 58px;
+	margin-top: 50px;
+	margin-bottom: 80px;
+	color: #464952;
+}
+
+.betaline	{
+	font-weight: 500;
+	font-size: 18px;
+	margin-top: 34px;
+	color: #9299ab;
+}
+
+.form_container	{
+    width:506px;
+    margin:0;
+}
+
+.form_field	{
+	padding: 20px;
+    font-family: Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+	font-size: 22px;
+	font-weight: normal;
+    color: #95a1b7;
+    border: 0;
+    background: #e2f3ff;
+    width: 230px;
+    float: left;
+    line-height: 34px;
+    margin:  0;
+    outline: none;
+}
+
+.button {
+	position: relative;
+    text-decoration: none;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+	background: #448cc2;
+	font-size: 22px;
+	padding: 20px 25px;
+    font-family: Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+	font-weight: bold;
+	border: 0;
+	color: #fff;
+    margin: -7px 0px 0 -12px;
+    top: 0px;
+    left: -21px;
+    outline: none;
+    cursor: pointer;
+	float: right;
+	line-height: 34px;
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.1);    
+	-webkit-box-shadow: 7px 7px 0px #25587f, 0px 7px 45px rgba(0,0,0,.2);
+    -moz-box-shadow: 7px 7px 0px #25587f, 0px 7px 45px rgba(0,0,0,.2);
+    box-shadow: 7px 7px 0px #25587f, 0px 7px 45px rgba(0,0,0,.2),
+	0px 0px 0px #25587f,
+	1px 1px 0px #25587f,
+	2px 2px 0px #25587f,
+	3px 3px 0px #25587f,
+	4px 4px 0px #25587f,
+	5px 5px 0px #25587f,
+	6px 6px 0px #25587f,
+	7px 7px 0px #25587f;
+	-webkit-transition: all .1s ease;
+	-moz-transition: all .1s ease;
+	-ms-transition: all .1s ease;
+	-o-transition: all .1s ease;
+	transition: all .1s ease;
+
+}
+
+.button:hover	{
+	text-shadow: 0px 0px 5px rgba(255,255,255,0.4);
+
+}
+
+.button:active {
+	border-right: 0 !important;
+    border-bottom: 0 !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+    border-left: 1px solid rgba(255,255,255,0.1) !important;
+    -webkit-box-shadow: 0px 0px 0px #fff, 0px 0px 0px #fff;
+    -moz-box-shadow: 0px 0px 0px #fff, 0px 0px 0px #fff;
+    box-shadow: 0px 0px 0px #fff, 0px 0px 0px #fff;
+    position: relative;
+    top: 6px;
+    left: -12px;
+}
+
+.content_2	{
+	width: 506px;
+	position: absolute;
+	left: 640px;
+	top: 4px;
+	z-index: 9999;
+}
+
+.paragraph	{
+	font-size: 34px;
+	font-weight: 500;
+	line-height: 49px;
+	color: #fff;
+}
+
+.country	{
+	width: 581px;
+	height: 479px;
+	position: absolute;
+	margin-top: 358px;
+	z-index: 999;
+	background: url('img/country.png');
+	overflow: visible;
+	left: 69px;
+}
+
+.slideshow	{
+	width: 332px;
+	height: 841px;
+	position: absolute;
+	margin-top: 343px;
+	z-index: 999;
+	background: url('img/slideshow.png');
+	overflow: visible;
+	left: 807px;
+}
+
+.bullets	{
+	font-weight: 500;
+	font-size: 23px;
+	margin: 0;
+	padding-top: 241px;
+	color: #fff;
+	line-height: 47px;
+}
+
+.row	{
+	width: 1350px;
+	height: 464px;
+	position: absolute;
+	margin-top: 100px;
+	z-index: 999;
+	background: url('img/row.jpg') repeat-x;
+	overflow: visible;
+	left: -150px;
+}
+
+.makeposts	{
+	width: 486px;
+	height: 579px;
+	position: absolute;
+	margin-top: 278px;
+	z-index: 999;
+	background: url('img/makeposts.jpg');
+	overflow: visible;
+	left: 106px;
+}
+
+.one_title	{
+	font-size: 36px;
+	font-weight: 500;
+	letter-spacing: 1px;
+	line-height: 35px;
+	color: #fff;
+	left: 560px;
+}
+
+.one_body	{
+	font-size: 19px;
+	font-weight: 500;
+	line-height: 30px;
+	color: #fff;
+	left: 560px;
+}
+
+.content_3	{
+	width: 414px;
+	position: absolute;
+	left: 754px;
+	top: 385px;
+	z-index: 9999;
+}
+
+.menu	{
+	width: 298px;
+	height: 614px;
+	position: absolute;
+	margin-top: 47px;
+	z-index: 999;
+	background: url('img/menu.jpg');
+	overflow: visible;
+	left: 886px;
+}
+
+
+.two_title	{
+	font-size: 36px;
+	letter-spacing: 1px;
+	font-weight: 500;
+	line-height: 35px;
+	color: #fff;
+	left: 60px;
+}
+
+.two_body	{
+	font-size: 19px;
+	font-weight: 500;
+	line-height: 30px;
+	color: #fff;
+	left: 60px;
+}
+
+.content_4	{
+	width: 656px;
+	position: absolute;
+	left: 160px;
+	top: 172px;
+	z-index: 9999;
+}
+
+
+.three_title	{
+	font-size: 36px;
+	font-weight: 500;
+	line-height: 35px;
+	letter-spacing: 1px;
+	color: #fff;
+	left: 560px;
+}
+
+.three_body	{
+	font-size: 19px;
+	font-weight: 500;
+	line-height: 30px;
+	color: #fff;
+	left: 560px;
+}
+
+
+.content_5	{
+	width: 450px;
+	position: absolute;
+	left: 742px;
+	top: 181px;
+	z-index: 9999;
+}
+
+.getthebest	{
+	width: 486px;
+	height: 579px;
+	position: absolute;
+	margin-top: 48px;
+	z-index: 999;
+	background: url('img/getthebest.jpg');
+	overflow: visible;
+	left: 106px;
+}
+
+.desktop	{
+	width: 658px;
+	height: 579px;
+	position: absolute;
+	margin-top: 47px;
+	z-index: 999;
+	background: url('img/desktop.jpg');
+	overflow: visible;
+	left: 606px;
+}
+
+.four_title	{
+	font-size: 36px;
+	font-weight: 500;
+	line-height: 35px;
+	color: #fff;
+	letter-spacing: 1px;
+	left: 60px;
+}
+
+.four_body	{
+	font-size: 19px;
+	font-weight: 500;
+	line-height: 30px;
+	color: #fff;
+	left: 60px;
+}
+
+.content_6	{
+	width: 340px;
+	position: absolute;
+	left: 160px;
+	top: 172px;
+	z-index: 9999;
+}
+
+.blue	{
+	padding-top: 70px;
+}
+
+.social_fb	{
+	width: 300px;
+	height: 200px;
+	margin-left: 160px;
+	float: left;
+}
+
+.social_tw	{
+	width: 300px;
+	height: 200px;
+	margin-left: 40px;
+	float: left;
+}
+
+.social_title	{
+	color: #fff;
+	font-size: 22px;
+	letter-spacing: 1px;
+	font-weight: 200;
+	padding-top: 40px;
+}
+
+.copyright	{
+	background: url("img/copyicon.jpg") no-repeat scroll 65px center rgba(0, 0, 0, 0);
+    color: #9DB0B3;
+    font-weight: 500;
+    height: 40px;
+    letter-spacing: 1px;
+    line-height: 38px;
+    margin-left: 971px;
+    margin-top: 82px;
+    position: absolute;
+    width: 440px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="fb-root"></div>
+
+    <div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1300px;">
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 0px; overflow: hidden;background:#fff;"><div style="position:relative !important;margin:0 auto !important; width:1100px !important;height:500px;"></div></div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 500px; overflow: visible;background:#fff;">
+           <div style="position:relative !important;margin:0 auto !important; width:1220px !important;height:500px;overflow: visible;">
+	             <div class="phones"></div>  
+	             <div class="content_1">
+		             <p class="hyper">Hyper</p>
+		             <p class="title">What are you into?</p>
+		             
+						<form action="http://hyperapp.createsend.com/t/d/s/jdudhk/" method="post">
+						
+							<div class="form_container">
+								<div class="mc-field-group">
+									<input id="fieldEmail" value="E-Mail Address" class="form_field" onfocus="javascript:if(this.value == 'E-Mail Address') this.value=''" onblur="javascript:if(this.value == '') this.value='E-Mail Address'" name="cm-jdudhk-jdudhk" type="email" required />
+								</div>
+								<div class="clear">
+									<button type="submit" class="button">Send Me The Link</button>
+								</div>
+								<div style="clear:both;"></div>
+							</div>
+								
+						</form> 
+
+	             </div>
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 657px; overflow: visible;background:#60baac;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1200px !important;overflow: visible;">
+           
+            	<div class="country"></div>
+            	<div class="slideshow"></div>
+          		
+          		<div class="content_2">
+           			<p class="paragraph">Hyper is a fun, fast interest-based photo-sharing app where people capture and share photos directly to user-generated tags.</p>
+           		</div>
+           		
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 803px; overflow: visible;background:#9c8bae;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !important;overflow: visible;">
+
+	           	<p class="bullets">
+			        Browse and follow trending #hashtags for any topic<br>
+					Post directly to the one that suits your content<br>
+					Scroll horizontally to browse posts, vote the best posts to the top<br>
+					Follow content, not users<br>
+					Tell your story to the right audience
+				</p>
+
+				<div class="row"></div>
+
+           </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 900px; overflow: visible;background:#f08585;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !importantoverflow: visible;">
+
+            	<div class="makeposts"></div>
+          		
+          		<div class="content_3">
+           			<p class="one_title">Create Amazing Posts</p>
+           			<p class="one_body">Capture photos, share existing ones, or use Bing Image Search and search through millions of pictures to find the perfect visuals for your story.</p>
+           			<p class="one_body">Share a discovery, an object, a moment; ask a question, tell a joke, showcase a finding, spread your knowledge, express yourself.</p>
+           		</div>	           
+
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 600px; overflow: hidden;background:#9dcf75;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !importantoverflow: visible;">
+
+            	<div class="menu"></div>
+          		
+          		<div class="content_4">
+           			<p class="two_title">Create and follow #hashtag buckets</p>
+           			<p class="two_body">A new way to look at hashtags.</p>
+           			<p class="two_body">Each #hashtag is a bucket that users can post to.  Easily find and follow the ones that interest you, discover trending content, or create your own and find your community.</p>
+           		</div>	           
+
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 600px; overflow: hidden;background:#f5b457;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !importantoverflow: visible;">
+
+           	<div class="getthebest"></div>
+          		
+          		<div class="content_5">
+           			<p class="three_title">You always get the best</p>
+           			<p class="three_body">Posts and comments are socially curated. The better your post does on Hyper, the further towards the front of the feed it will go, and more people will see it.  The better your comment does, the further up in the list it will go.</p>
+           		</div>	           
+
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 671px; overflow: visible;background:#a66f86;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !importantoverflow: visible;">
+
+             	<div class="desktop"></div>
+          		
+          		<div class="content_6">
+           			<p class="four_title">Published online</p>
+           			<p class="four_body">Not only is sharing posts to Facebook, Twitter, or Tumblr just a tap away, but every post can be accessed via a unique URL, to make for super easy sharing.</p>
+           			<p class="four_body">We’ll host what you post, free of charge.</p>
+           		</div>	           
+
+          </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 372px; overflow: hidden;background:#5ab3c0;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; text-align:center; width:1100px !importantoverflow: visible;">
+
+	           <img src="img/blue.jpg" class="blue">
+
+            </div>
+        </div>
+        
+        <div u="slides" style="position: relative; width: 1300px; height: 200px; overflow: hidden;background:#5e7f87;margin-top:-1px;">
+           <div style="position:relative !important;margin:0 auto !important; width:1100px !importantoverflow: visible;">
+
+	           <div class="social_fb">
+		           <p class="social_title">Like Us On Facebook</p>
+		           
+		           <div class="fb-like" style="margin-left:84px;margin-top:13px;" data-href="https://www.facebook.com/HyperNow" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+	           </div>
+
+	           <div class="social_tw">
+		           <p class="social_title">Follow Us On Twitter</p>
+		           
+		           <div style="margin-left:36px;margin-top:35px;"><a href="https://twitter.com/hyper_tweets" class="twitter-follow-button" data-show-count="false">Follow @hyper_tweets</a>
+		           
+		           <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></div>
+	           </div>
+	           
+	           <div class="copyright">&copy; 2014&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hyper, LLC</div>
+
+            </div>
+        </div>
+        
+    </div>
+    <!-- Jssor Slider End -->
+    
+
+
+
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-51288835-1', 'auto');
+	  ga('send', 'pageview');
+	
+	</script>
+
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=138787392877357&version=v2.0";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jssor.core.js"></script>
+    <script type="text/javascript" src="js/jssor.utils.js"></script>
+    <script type="text/javascript" src="js/jssor.slider.js"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+
+            var _CaptionTransitions = [];
+            _CaptionTransitions["L"] = { $Duration: 900, x: 0.6, $Easing: { $Left: $JssorEasing$.$EaseInOutSine }, $Opacity: 2 };
+            _CaptionTransitions["R"] = { $Duration: 900, x: -0.6, $Easing: { $Left: $JssorEasing$.$EaseInOutSine }, $Opacity: 2 };
+            _CaptionTransitions["T"] = { $Duration: 900, y: 0.6, $Easing: { $Top: $JssorEasing$.$EaseInOutSine }, $Opacity: 2 };
+            _CaptionTransitions["B"] = { $Duration: 900, y: -0.6, $Easing: { $Top: $JssorEasing$.$EaseInOutSine }, $Opacity: 2 };
+            _CaptionTransitions["ZMF|10"] = { $Duration: 900, $Zoom: 11, $Easing: { $Zoom: $JssorEasing$.$EaseOutQuad, $Opacity: $JssorEasing$.$EaseLinear }, $Opacity: 2 };
+            _CaptionTransitions["RTT|10"] = { $Duration: 900, $Zoom: 11, $Rotate: 1, $Easing: { $Zoom: $JssorEasing$.$EaseOutQuad, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInExpo }, $Opacity: 2, $Round: { $Rotate: 0.8} };
+            _CaptionTransitions["RTT|2"] = { $Duration: 900, $Zoom: 3, $Rotate: 1, $Easing: { $Zoom: $JssorEasing$.$EaseInQuad, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInQuad }, $Opacity: 2, $Round: { $Rotate: 0.5} };
+            _CaptionTransitions["RTTL|BR"] = { $Duration: 900, x: -0.6, y: -0.6, $Zoom: 11, $Rotate: 1, $Easing: { $Left: $JssorEasing$.$EaseInCubic, $Top: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInCubic }, $Opacity: 2, $Round: { $Rotate: 0.8} };
+            _CaptionTransitions["CLIP|LR"] = { $Duration: 900, $Clip: 15, $Easing: { $Clip: $JssorEasing$.$EaseInOutCubic }, $Opacity: 2 };
+            _CaptionTransitions["MCLIP|L"] = { $Duration: 900, $Clip: 1, $Move: true, $Easing: { $Clip: $JssorEasing$.$EaseInOutCubic} };
+            _CaptionTransitions["MCLIP|R"] = { $Duration: 900, $Clip: 2, $Move: true, $Easing: { $Clip: $JssorEasing$.$EaseInOutCubic} };
+
+            var options = {
+                $FillMode: 2,                                       //[Optional] The way to fill image in slide, 0 stretch, 1 contain (keep aspect ratio and put all inside slide), 2 cover (keep aspect ratio and cover whole slide), 4 actual size, 5 contain for large image, actual size for small image, default value is 0
+                $AutoPlay: true,                                    //[Optional] Whether to auto play, to enable slideshow, this option must be set to true, default value is false
+                $AutoPlayInterval: 4000,                            //[Optional] Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing, default value is 3000
+                $PauseOnHover: 1,                                   //[Optional] Whether to pause when mouse over if a slider is auto playing, 0 no pause, 1 pause for desktop, 2 pause for touch device, 3 pause for desktop and touch device, 4 freeze for desktop, 8 freeze for touch device, 12 freeze for desktop and touch device, default value is 1
+
+                $ArrowKeyNavigation: true,   			            //[Optional] Allows keyboard (arrow key) navigation or not, default value is false
+                $SlideEasing: $JssorEasing$.$EaseOutQuint,          //[Optional] Specifies easing for right to left animation, default value is $JssorEasing$.$EaseOutQuad
+                $SlideDuration: 800,                               //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
+                $MinDragOffsetToSlide: 20,                          //[Optional] Minimum drag offset to trigger slide , default value is 20
+                //$SlideWidth: 600,                                 //[Optional] Width of every slide in pixels, default value is width of 'slides' container
+                //$SlideHeight: 300,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
+                $SlideSpacing: 0, 					                //[Optional] Space between each slide in pixels, default value is 0
+                $DisplayPieces: 1,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
+                $ParkingPosition: 0,                                //[Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
+                $UISearchMode: 1,                                   //[Optional] The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).
+                $PlayOrientation: 1,                                //[Optional] Orientation to play slide (for auto play, navigation), 1 horizental, 2 vertical, 5 horizental reverse, 6 vertical reverse, default value is 1
+                $DragOrientation: 1,                                //[Optional] Orientation to drag slide, 0 no drag, 1 horizental, 2 vertical, 3 either, default value is 1 (Note that the $DragOrientation should be the same as $PlayOrientation when $DisplayPieces is greater than 1, or parking position is not 0)
+
+                $CaptionSliderOptions: {                            //[Optional] Options which specifies how to animate caption
+                    $Class: $JssorCaptionSlider$,                   //[Required] Class to create instance to animate caption
+                    $CaptionTransitions: _CaptionTransitions,       //[Required] An array of caption transitions to play caption, see caption transition section at jssor slideshow transition builder
+                    $PlayInMode: 1,                                 //[Optional] 0 None (no play), 1 Chain (goes after main slide), 3 Chain Flatten (goes after main slide and flatten all caption animations), default value is 1
+                    $PlayOutMode: 3                                 //[Optional] 0 None (no play), 1 Chain (goes before main slide), 3 Chain Flatten (goes before main slide and flatten all caption animations), default value is 1
+                },
+
+                $BulletNavigatorOptions: {                          //[Optional] Options to specify and enable navigator or not
+                    $Class: $JssorBulletNavigator$,                 //[Required] Class to create navigator instance
+                    $ChanceToShow: 2,                               //[Required] 0 Never, 1 Mouse Over, 2 Always
+                    $AutoCenter: 1,                                 //[Optional] Auto center navigator in parent container, 0 None, 1 Horizontal, 2 Vertical, 3 Both, default value is 0
+                    $Steps: 1,                                      //[Optional] Steps to go for each navigation request, default value is 1
+                    $Lanes: 1,                                      //[Optional] Specify lanes to arrange items, default value is 1
+                    $SpacingX: 8,                                   //[Optional] Horizontal space between each item in pixel, default value is 0
+                    $SpacingY: 8,                                   //[Optional] Vertical space between each item in pixel, default value is 0
+                    $Orientation: 1                                 //[Optional] The orientation of the navigator, 1 horizontal, 2 vertical, default value is 1
+                },
+
+                $ArrowNavigatorOptions: {                           //[Optional] Options to specify and enable arrow navigator or not
+                    $Class: $JssorArrowNavigator$,                  //[Requried] Class to create arrow navigator instance
+                    $ChanceToShow: 1,                               //[Required] 0 Never, 1 Mouse Over, 2 Always
+                    $AutoCenter: 2,                                 //[Optional] Auto center arrows in parent container, 0 No, 1 Horizontal, 2 Vertical, 3 Both, default value is 0
+                    $Steps: 1                                       //[Optional] Steps to go for each navigation request, default value is 1
+                }
+            };
+
+            var jssor_slider1 = new $JssorSlider$("slider1_container", options);
+
+            //responsive code begin
+            //you can remove responsive code if you don't want the slider scales while window resizes
+            function ScaleSlider() {
+                var bodyWidth = document.body.clientWidth;
+                if (bodyWidth)
+                    jssor_slider1.$SetScaleWidth(Math.min(bodyWidth, 1920));
+                else
+                    window.setTimeout(ScaleSlider, 30);
+            }
+
+            ScaleSlider();
+
+            if (!navigator.userAgent.match(/(iPhone|iPod|iPad|BlackBerry|IEMobile)/)) {
+                $(window).bind('resize', ScaleSlider);
+            }
+
+
+            //if (navigator.userAgent.match(/(iPhone|iPod|iPad)/)) {
+            //    $(window).bind("orientationchange", ScaleSlider);
+            //}
+            //responsive code end
+        });
+    </script>
+
+</body>
+</html>

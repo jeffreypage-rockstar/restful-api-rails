@@ -1,3 +1,10 @@
+<% content_for(:og) do %>
+  <meta property="og:title" content="<%= @card.name %>" />
+  <meta property="og:description" content="<%= @card.description %>" />
+  <meta property="og:type" content="hyper:post" />
+  <meta property="og:image" content="<%= @card.images.first.try(:image_url) %>" />
+  <meta property="og:url" content="<%= card_url(@card) %>" />
+<% end %>
 <div class="container-fluid main card-container">
 
   <div class="row">
@@ -20,7 +27,7 @@
   <hr>
 
   <div class="row">
-    <% if @card.user.avatar_url.present? %>
+    <% if @card.user.try(:avatar_url).present? %>
       <div class="col-sm-6 col-md-2 col-lg-4">
         <p class="pull-left">
           <img class="img-circle avatar" src="<%= @card.user.avatar_url %>"/>
@@ -29,8 +36,8 @@
     <% end %>
     <div class="col-sm-6 col-md-10 col-lg-6 pull-right">
       <p class="text-right">
-        <strong><%= @card.user.username %></strong>
-        <%= "of #{@card.user.location}" if @card.user.location.present? %>
+        <strong><%= @card.user.try(:username) %></strong>
+        <%= "of #{@card.user.location}" if @card.user.try(:location).present? %>
       </p>
       <span class="light-grey pull-right">
         posted
@@ -40,7 +47,7 @@
         </span>
         in
         <span class="text-primary">
-          <strong><%= "##{@card.stack.name}" %></strong>
+          <strong><%= "#{@card.stack.try(:display_name)}" %></strong>
         </span>
       </span>
     </div>

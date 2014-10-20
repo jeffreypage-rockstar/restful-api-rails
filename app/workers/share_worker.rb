@@ -7,12 +7,12 @@ class ShareWorker
   def share_facebook(card, network)
     graph = Koala::Facebook::API.new(network.token)
     image_url = card.images.first.try(:image_url)
-    graph.put_wall_post("I've posted something on Hyper. Check this out!",
-                        name: card.name,
-                        link: h.card_url(card),
-                        caption: card.description,
-                        picture: image_url
-                        )
+    graph.put_connections("me", "links",
+                          name: card.name,
+                          link: h.card_url(card),
+                          description: card.description,
+                          picture: image_url
+                          )
   end
 
   def share_twitter(card, network)

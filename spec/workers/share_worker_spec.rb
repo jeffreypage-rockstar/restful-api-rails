@@ -12,7 +12,7 @@ RSpec.describe ShareWorker, type: :worker do
   it "performs a facebook share" do
     network = create(:network, provider: "facebook", user: user)
     graph = double("graph")
-    expect(graph).to receive(:put_wall_post)
+    expect(graph).to receive(:put_connections)
     expect(Koala::Facebook::API).to receive(:new).
                                     with(network.token).
                                     and_return(graph)

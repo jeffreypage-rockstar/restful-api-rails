@@ -1,7 +1,7 @@
 <% content_for(:og) do %>
   <meta property="og:title" content="<%= @card.name %>" />
   <meta property="og:description" content="<%= @card.description %>" />
-  <meta property="og:type" content="hyper:post" />
+  <meta property="og:type" content="website" />
   <meta property="og:image" content="<%= @card.images.first.try(:image_url) %>" />
   <meta property="og:url" content="<%= card_url(@card) %>" />
 <% end %>

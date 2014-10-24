@@ -78,7 +78,7 @@ html, body {
     color: #95a1b7;
     border: 0;
     background: #e2f3ff;
-    width: 230px;
+    width: 250px;
     float: left;
     line-height: 34px;
     margin:  0;
@@ -100,7 +100,7 @@ html, body {
 	color: #fff;
     margin: -7px 0px 0 -12px;
     top: 0px;
-    left: -21px;
+    left: -41px;
     outline: none;
     cursor: pointer;
 	float: right;
@@ -141,7 +141,7 @@ html, body {
     box-shadow: 0px 0px 0px #fff, 0px 0px 0px #fff;
     position: relative;
     top: 6px;
-    left: -12px;
+    left: -32px;
 }
 
 .content_2	{
@@ -387,10 +387,19 @@ html, body {
     width: 440px;
 }
 
+.app_icon	{
+	position: absolute;
+	z-index: 999;
+	right:0;
+	padding: 10px;
+	}
+
 </style>
 
 </head>
 <body>
+
+<div class="app_icon"><a href="https://itunes.apple.com/us/app/hyper/id928505941?ls=1&mt=8" target="_blank"><img src="img/app_store.png"</a></div>
 
 <div id="fb-root"></div>
 
@@ -408,13 +417,24 @@ html, body {
 						<form action="http://hyperapp.createsend.com/t/d/s/jdudhk/" method="post">
 						
 							<div class="form_container">
-								<div class="mc-field-group">
-									<input id="fieldEmail" value="E-Mail Address" class="form_field" onfocus="javascript:if(this.value == 'E-Mail Address') this.value=''" onblur="javascript:if(this.value == '') this.value='E-Mail Address'" name="cm-jdudhk-jdudhk" type="email" required />
-								</div>
-								<div class="clear">
-									<button type="submit" class="button">Send Me The Link</button>
-								</div>
-								<div style="clear:both;"></div>
+
+<link rel="stylesheet" href="//d3q6uu7asevdsg.cloudfront.net/1.1/css/link_texting.min.css">
+<div class="linkTexting_oq3j39q0">
+  <div class="linkTextingInner_oq3j39q0">
+  
+    <input class="linkTextingInput_oq3j39q0 form_field" type="tel" id="numberToText_linkTexting_oq3j39q0_4eed39fc-7474-4620-b6fe-25cf4032b2b0"></input>
+    
+    <button class="linkTextingButton_oq3j39q0 button" type="button" onclick="sendLink_linkTexting_oq3j39q0('4eed39fc-7474-4620-b6fe-25cf4032b2b0')" id="sendButton_linkTexting_oq3j39q0_4eed39fc-7474-4620-b6fe-25cf4032b2b0">Text me a link</button>
+    
+    <div class="linkTextingError_oq3j39q0" id="linkTextingError_oq3j39q0_4eed39fc-7474-4620-b6fe-25cf4032b2b0" style="display:none;"></div>
+    
+  </div>
+</div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="//d3q6uu7asevdsg.cloudfront.net/1.1/js/link_texting.min.js"></script>
+
+  
+
 							</div>
 								
 						</form> 

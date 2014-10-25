@@ -26,6 +26,13 @@ img {
 	margin-bottom: 40px;
 }
 
+.app_icon	{
+	position: absolute;
+	z-index: 999;
+	right:0;
+	padding: 10px;
+}
+
 @media (max-width: 480px) {
 
   .card-container {

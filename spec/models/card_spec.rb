@@ -181,4 +181,11 @@ RSpec.describe Card, type: :model do
       expect(Card.popularity.all.map(&:id)).to eql [card2.id, card.id]
     end
   end
+
+  describe "#search_data" do
+    it "returns hot_score value to update index" do
+      data = card.search_data
+      expect(data[:hot_score]).to be_between(6200.0, 7000.0).inclusive
+    end
+  end
 end

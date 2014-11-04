@@ -5,6 +5,7 @@
   <meta property="og:image" content="<%= @card.images.first.try(:image_url) %>" />
   <meta property="og:url" content="<%= card_url(@card) %>" />
 <% end %>
+<% content_for(:title, "Hyper :: #{@card.name}") %>
 <div class="container-fluid main card-container">
 
   <div class="row">

@@ -4,6 +4,8 @@
 <%= yield :og %>
 <title><%= content_for?(:title) ? yield(:title) : "Hyper" %></title>
 <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Hyper" %>">
+<meta name="apple-itunes-app" content="app-id=928505941">
+
 <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 <%= csrf_meta_tags %>

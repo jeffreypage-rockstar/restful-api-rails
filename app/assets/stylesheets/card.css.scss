@@ -31,6 +31,7 @@ img {
 	z-index: 999;
 	right:0;
 	padding: 10px;
+  img{ margin: 10px 0px; }
 }
 
 @media (max-width: 480px) {
@@ -49,6 +50,10 @@ img {
 
   .messages {
     margin-top:40px;
+  }
+
+  img {
+    margin: 0px auto;
   }
 }
 

@@ -88,6 +88,8 @@ class Notification < ActiveRecord::Base
     if action =~ /up_vote/ && subject.respond_to?(:votes)
       first_notification = !similar_notifications.exists?
       first_notification || subject.votes.count % PUSH_VOTES_INTERVAL == 0
+    elsif action =~ /card\.create/
+      subject.try(:stack).present?
     else
       true
     end

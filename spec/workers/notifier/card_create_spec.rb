@@ -49,4 +49,19 @@ RSpec.describe Notifier::CardCreate, type: :worker do
     expect(worker.perform(act.id)).to be_empty
     expect(act.reload).to be_notified
   end
+
+  it "does not notify an invalid notification" do
+    expect(Notifier::CardCreate).to receive(:perform_async).and_return("0001")
+    valid_notification = build(:card_create_notification)
+    invalid_notification = build(:card_create_notification, subject: nil)
+    expect(worker).to receive(:notifications).and_return([valid_notification,
+                                                          invalid_notification
+                                                         ])
+    act = create(:activity)
+    notifications = worker.perform(act.id)
+    expect(notifications.size).to eql 1
+    act.reload
+    expected_error = "Validation failed: Subject can't be blank"
+    expect(act.notification_error).to eql expected_error
+  end
 end

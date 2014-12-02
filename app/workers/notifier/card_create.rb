@@ -15,7 +15,7 @@ module Notifier
 
     def subscribers_notifications
       card = @activity.trackable
-      return [] unless card
+      return [] if card.nil?
       Subscription.where(stack_id: card.stack_id).
                    where.not(user_id: @activity.owner_id).
                    map do |s|

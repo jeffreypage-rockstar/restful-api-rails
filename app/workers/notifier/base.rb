@@ -17,13 +17,20 @@ module Notifier
       @activity = PublicActivity::Activity.find_by(id: activity_id)
       return if @activity.nil? || @activity.notified?
       publisher = NotificationPublishService.new
+      error_message = ""
       result = notifications.map do |notification|
-        notification.add_sender(@activity.owner)
-        notification.sent!
-        publisher.publish(notification) if notification.valid?
-        notification
-      end
-      @activity.update_column :notified, true
+        begin
+          notification.add_sender(@activity.owner)
+          notification.sent!
+          publisher.publish(notification)
+          notification
+        rescue ActiveRecord::RecordInvalid => e
+          error_message = e.message
+          nil
+        end
+      end.compact
+      @activity.update_columns notified: true,
+                               notification_error: error_message
       result
     end
   end

@@ -15,6 +15,7 @@ RailsAdmin.config do |config|
       field :trackable
       field :owner
       field :notified
+      field :notification_error
       field :created_at do
         filterable true
       end
@@ -26,6 +27,7 @@ RailsAdmin.config do |config|
       field :trackable
       field :owner
       field :notified
+      field :notification_error
       field :created_at
     end
   end

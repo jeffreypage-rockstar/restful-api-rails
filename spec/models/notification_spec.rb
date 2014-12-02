@@ -163,6 +163,14 @@ RSpec.describe Notification, type: :model do
       notification = build(:notification, user: nil)
       expect(notification.sent!).to be_falsey
     end
+
+    it "raises an error when subject has been removed" do
+      notification = create(:notification)
+      notification.subject.destroy
+      expect do
+        notification.sent!
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe "#caption" do

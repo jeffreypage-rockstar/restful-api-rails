@@ -37,7 +37,7 @@ class Notification < ActiveRecord::Base
     if senders.empty?
       nil
     elsif senders.one?
-      single_sender_image_url(senders.values.first)
+      single_sender_image_url
     else
       multiple_senders_image_url
     end
@@ -114,9 +114,9 @@ class Notification < ActiveRecord::Base
 
   private # =======================================
 
-  def single_sender_image_url(sender_id)
+  def single_sender_image_url
     if shows_user_for_single_notification?
-      User.find_by_id(sender_id).avatar_url
+      User.where(id: senders.values).first.try(:avatar_url)
     else
       multiple_senders_image_url
     end

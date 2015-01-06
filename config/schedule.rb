@@ -28,3 +28,7 @@ end
 every 1.hour do
   rake "hyper:update_stats"
 end
+
+every 1.day do
+  rake "hyper:clear_notifications"
+end

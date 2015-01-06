@@ -49,6 +49,9 @@ if defined? RailsAdmin
       import do
         only ["Stack"]
       end
+      export do
+        only ["User"]
+      end
       bulk_delete do
         except ["DeletedUser", "Setting", "Activity", "Notification", "Stats",
                 "StackStats"]

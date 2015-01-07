@@ -71,6 +71,10 @@ class User < ActiveRecord::Base
     self.score = cards.sum(:score) + comments.sum(:score)
   end
 
+  def reset_unseen_notifications_count!
+    update_column :unseen_notifications_count, notifications.unseen.count
+  end
+
   protected # ================================================
 
   def move_to_deleted

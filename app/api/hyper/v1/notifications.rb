@@ -9,13 +9,12 @@ module Hyper
         desc "Mark all user notifications as seen"
         params do
           requires :before_id, type: String,
-                               desc: "Latest notification id.",
+                               desc: "Latest notification id. (deprecated)",
                                uuid: true
         end
         delete :seen do
           authenticate!
-          last_notification = Notification.find(params[:before_id])
-          Notification.mark_all_as_seen(current_user.id, last_notification)
+          Notification.mark_all_as_seen(current_user.id)
           empty_body!
         end
 
@@ -52,7 +51,7 @@ module Hyper
         paginate per_page: PAGE_SIZE
         get do
           authenticate!
-          header "TotalUnseen", current_user.notifications.unseen.count.to_s
+          header "TotalUnseen", current_user.unseen_notifications_count.to_s
           paginate current_user.notifications.recently_sent
         end
       end

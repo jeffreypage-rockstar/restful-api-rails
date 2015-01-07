@@ -25,7 +25,7 @@ gem "oj"
 gem "oj_mimic_json"
 gem "smarter_csv"
 gem "whenever", require: false
-gem 'newrelic_rpm'
+gem "newrelic_rpm"
 
 group :api do
   gem "activerecord", "~>4.1.4", require: "active_record"

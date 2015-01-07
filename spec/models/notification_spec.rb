@@ -56,21 +56,14 @@ RSpec.describe Notification, type: :model do
   end
 
   describe ".mark_all_as_seen" do
-    it "does not mark as seen a not sent notification" do
-      notification = create(:notification, user: user)
-      expect(user.notifications.unseen.count).to eql 1
-      Notification.mark_all_as_seen(user.id, notification)
-      expect(user.notifications.unseen.count).to eql 1
-    end
-
     it "marks all user notifications as seen" do
-      notifications = (1..4).map { create(:sent_notification, user: user) }
-      travel_to 1.minute.from_now do
-        create(:notification, user: user, sent_at: Time.current)
-      end
+      (1..5).map { create(:sent_notification, user: user) }
+      user.reset_unseen_notifications_count!
       expect(user.notifications.unseen.count).to eql 5
-      Notification.mark_all_as_seen(user.id, notifications.last)
-      expect(user.notifications.unseen.count).to eql 1
+      expect(user.reload.unseen_notifications_count).to eql 5
+      Notification.mark_all_as_seen(user.id)
+      expect(user.notifications.unseen.count).to eql 0
+      expect(user.reload.unseen_notifications_count).to eql 0
     end
   end
 
@@ -157,6 +150,13 @@ RSpec.describe Notification, type: :model do
       notification.sent!
       expect(notification).to_not be_seen
       expect(notification).to_not be_read
+    end
+
+    it "updates the user unseen_notifications_count" do
+      notification = build(:notification)
+      expect(notification.user.unseen_notifications_count).to eql 0
+      notification.sent!
+      expect(notification.user.reload.unseen_notifications_count).to eql 1
     end
 
     it "skips tasks if user is not present" do

@@ -24,7 +24,7 @@ describe Hyper::V1::Notifications do
     it "marks all notifications as read" do
       http_login device.id, device.access_token
       delete "/api/notifications/seen", { before_id: notification.id }, @env
-      expect(user.notifications.unseen.count).to eql 0
+      expect(user.unseen_notifications_count).to eql 0
       expect(response.status).to eql 204 # empty body
     end
   end
@@ -139,8 +139,9 @@ describe Hyper::V1::Notifications do
 
     it "sends counts in header" do
       senders = { "john" => 1, "peter" => 2 }
-      create(:sent_notification, user: user, subject: card,
-             senders: senders)
+      notification = build(:notification, user: user, subject: card,
+                            senders: senders)
+      notification.sent!
       create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env

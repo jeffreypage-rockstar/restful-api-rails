@@ -253,7 +253,8 @@ CREATE TABLE deleted_users (
     flags_count integer,
     score integer,
     deleted_at timestamp without time zone,
-    bio text
+    bio text,
+    unseen_notifications_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -504,7 +505,8 @@ CREATE TABLE users (
     flags_count integer DEFAULT 0,
     score integer DEFAULT 0,
     deleted_at timestamp without time zone,
-    bio text
+    bio text,
+    unseen_notifications_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1090,4 +1092,6 @@ INSERT INTO schema_migrations (version) VALUES ('20141002143354');
 INSERT INTO schema_migrations (version) VALUES ('20141016195713');
 
 INSERT INTO schema_migrations (version) VALUES ('20141202120442');
+
+INSERT INTO schema_migrations (version) VALUES ('20150106202113');
 

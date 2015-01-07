@@ -6,7 +6,7 @@ class Notification < ActiveRecord::Base
   belongs_to :user
   belongs_to :subject, polymorphic: true
 
-  scope :unread, -> { where(read_at: nil).order(created_at: :desc) }
+  scope :unread, -> { where(read_at: nil) }
   scope :unseen, -> { where(seen_at: nil) }
   scope :seen, -> { where.not(seen_at: nil) }
   scope :not_sent, -> { where(sent_at: nil) }
@@ -73,6 +73,7 @@ class Notification < ActiveRecord::Base
     self.seen_at = nil
     self.read_at = nil
     self.save!
+    User.increment_counter(:unseen_notifications_count, user_id) && user.reload
   end
 
   def sent?
@@ -105,11 +106,9 @@ class Notification < ActiveRecord::Base
            update_all(read_at: Time.now.utc)
   end
 
-  def self.mark_all_as_seen(user_id, before_notification)
-    return unless before_notification.sent?
-    unseen.where(user_id: user_id).
-           where("sent_at <= ?", before_notification.sent_at).
-           update_all(seen_at: Time.now.utc)
+  def self.mark_all_as_seen(user_id)
+    unseen.where(user_id: user_id).update_all(seen_at: Time.now.utc)
+    User.update user_id, unseen_notifications_count: 0
   end
 
   private # =======================================

@@ -22,7 +22,7 @@ class NotificationPublishService
     extra = notification.extra || {}
     badge = 1
     if user = notification.user
-      badge = user.notifications.unseen.count
+      badge = user.unseen_notifications_count
     end
     common_values = {
       "aps" => { "content-available" => 1,

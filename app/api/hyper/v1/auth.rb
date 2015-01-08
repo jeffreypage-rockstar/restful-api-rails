@@ -20,7 +20,7 @@ module Hyper
       params do
         requires :email,
                  type: String,
-                 desc: "Password reset token."
+                 desc: "User email to receive the reset link."
       end
       post "/auth/password-reset" do
         user = User.send_reset_password_instructions(email: params[:email])

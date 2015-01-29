@@ -23,15 +23,15 @@ class Stats < ActiveRecord::Base
   FLAG_COUNTERS = %w(User Card Comment)
 
   def self.daily
-    group_by_period("MM/DD/YYYY")
+    group_by_period("YYYY/MM/DD")
   end
 
   def self.weekly
-    group_by_period("MM/YYYY (W)")
+    group_by_period("YYYY/MM (W)")
   end
 
   def self.monthly
-    group_by_period("MM/YYYY")
+    group_by_period("YYYY/MM")
   end
 
   def self.group_by_period(format)

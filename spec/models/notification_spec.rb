@@ -128,12 +128,6 @@ RSpec.describe Notification, type: :model do
       allow(notification.subject.votes).to receive(:count).and_return(2)
       expect(notification.require_push_notification?).to be_falsey
     end
-
-    it "return false for a card.create without a stack" do
-      notification = create(:card_create_notification)
-      notification.subject.stack_id = nil
-      expect(notification.require_push_notification?).to be_falsey
-    end
   end
 
   describe "#sent!" do
@@ -191,7 +185,7 @@ RSpec.describe Notification, type: :model do
     describe "card.create" do
       let(:notification) do
         build :card_create_notification, senders: senders,
-                                         subject: card
+                                         subject: stack
       end
 
       context "single sender" do

@@ -6,20 +6,22 @@ module Notifier
   class CardCreate < Base
     def owner_notification
       card = @activity.trackable
-      return nil if card.nil? || @activity.owner_id == card.stack.try(:user_id)
-      load_notification subject: card,
-                        user_id: card.stack.try(:user_id),
+      stack = @activity.recipient
+      return if card.nil? || stack.nil? || @activity.owner_id == stack.user_id
+      load_notification subject: stack,
+                        user_id: stack.user_id,
                         action: @activity.key,
                         extra: extra_for(card)
     end
 
     def subscribers_notifications
       card = @activity.trackable
-      return [] if card.nil?
-      Subscription.where(stack_id: card.stack_id).
+      stack = @activity.recipient
+      return [] if card.nil? || stack.nil?
+      Subscription.where(stack_id: stack.id).
                    where.not(user_id: @activity.owner_id).
                    map do |s|
-        load_notification subject: card,
+        load_notification subject: stack,
                           user_id: s.user_id,
                           action: @activity.key,
                           extra: extra_for(card)

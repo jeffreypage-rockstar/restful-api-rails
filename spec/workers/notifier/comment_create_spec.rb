@@ -15,7 +15,10 @@ RSpec.describe Notifier::CommentCreate, type: :worker do
       comment = create(:comment, card: card,
                                  body: "a comment for @#{other_user.username}")
       act = comment.activities.where(key: "comment.create").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(
+                        action: ["comment.create", "comment.mention"]
+                      ).all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 2
       notifications.each { |n| expect(n).to be_persisted }
@@ -33,7 +36,8 @@ RSpec.describe Notifier::CommentCreate, type: :worker do
     PublicActivity.with_tracking do
       reply = create(:comment, replying: comment, card: card)
       act = reply.activities.where(key: "comment.create").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "comment.reply").all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 1
       expect(notifications.first.action).to eql "comment.reply"

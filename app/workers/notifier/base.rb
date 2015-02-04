@@ -6,6 +6,10 @@ module Notifier
       raise "notifications method needs to be overwritten"
     end
 
+    def each_notification(&block)
+      notifications.each(&block) if block_given?
+    end
+
     def load_notification(attrs)
       extra = attrs.delete(:extra)
       Notification.unread.find_or_initialize_by(attrs).tap do |notification|
@@ -18,20 +22,17 @@ module Notifier
       return if @activity.nil? || @activity.notified?
       publisher = NotificationPublishService.new
       error_message = ""
-      result = notifications.map do |notification|
+      each_notification do |notification|
         begin
           notification.add_sender(@activity.owner)
           notification.sent!
           publisher.publish(notification)
-          notification
         rescue ActiveRecord::RecordInvalid => e
           error_message = e.message
-          nil
         end
-      end.compact
+      end
       @activity.update_columns notified: true,
                                notification_error: error_message
-      result
     end
   end
 end

@@ -16,7 +16,8 @@ RSpec.describe Notifier::CardCreate, type: :worker do
       subscription = create(:subscription, stack: stack)
       new_card = create(:card, stack: stack)
       act = new_card.activities.where(key: "card.create").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.create").all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 2
       notifications.each { |n| expect(n).to be_persisted }
@@ -34,7 +35,8 @@ RSpec.describe Notifier::CardCreate, type: :worker do
       create(:subscription, stack: stack, user: user)
       new_card = create(:card, stack: stack, user: user)
       act = new_card.activities.where(key: "card.create").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.create").all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 1
       expect(user.notifications.unread.count).to eql 0
@@ -46,7 +48,8 @@ RSpec.describe Notifier::CardCreate, type: :worker do
                                       and_return("00001")
     user = create(:user)
     act = create(:activity, trackable_id: user.id)
-    expect(worker.perform(act.id)).to be_empty
+    worker.perform(act.id)
+    expect(Notification.where(action: "card.create")).to be_empty
     expect(act.reload).to be_notified
   end
 
@@ -54,11 +57,12 @@ RSpec.describe Notifier::CardCreate, type: :worker do
     expect(Notifier::CardCreate).to receive(:perform_async).and_return("0001")
     valid_notification = build(:card_create_notification)
     invalid_notification = build(:card_create_notification, subject: nil)
-    expect(worker).to receive(:notifications).and_return([valid_notification,
-                                                          invalid_notification
-                                                         ])
+    expect(worker).to receive(:each_notification).
+                      and_yield(valid_notification).
+                      and_yield(invalid_notification)
     act = create(:activity)
-    notifications = worker.perform(act.id)
+    worker.perform(act.id)
+    notifications = Notification.where(action: "card.create").all
     expect(notifications.size).to eql 1
     act.reload
     expected_error = "Validation failed: Subject can't be blank"

@@ -15,7 +15,8 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
     PublicActivity.with_tracking do
       card.vote_by!(other_user)
       act = card.activities.where(key: "card.up_vote").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.up_vote").all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 1
       notifications.each { |n| expect(n).to be_persisted }
@@ -37,13 +38,14 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
     PublicActivity.with_tracking do
       card.vote_by!(user2)
       act = card.activities.where(key: "card.up_vote").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.up_vote").all
       expect(notifications.size).to eql 1
       expect(notifications.first.id).to eql up_notification.id
       expect(notifications.first.senders_count).to eql 2
       expect(notifications.first.senders.keys).to match([user1.username,
                                                          user2.username])
-      expect(notifications.first.extra.keys).to match(["stack_id", "card_id"])
+      expect(notifications.first.extra.keys).to match(["card_id", "stack_id"])
     end
   end
 end

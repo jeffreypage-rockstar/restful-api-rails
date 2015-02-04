@@ -13,7 +13,8 @@ RSpec.describe Notifier::SubscriptionCreate, type: :worker do
     PublicActivity.with_tracking do
       subscription = create(:subscription, stack: stack)
       act = subscription.activities.where(key: "subscription.create").last
-      notifications = worker.perform(act.id)
+      worker.perform(act.id)
+      notifications = Notification.where(action: "subscription.create").all
       expect(act.reload).to be_notified
       expect(notifications.size).to eql 1
       expect(notifications.first).to be_persisted

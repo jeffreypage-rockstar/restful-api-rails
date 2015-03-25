@@ -57,7 +57,7 @@ class Stack < ActiveRecord::Base
   end
 
   def notification_image_url
-    cards.best.first.try(:notification_image_url)
+    cards.newest.first.try(:notification_image_url)
   end
 
   private # ================================

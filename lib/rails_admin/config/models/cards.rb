@@ -64,6 +64,7 @@ RailsAdmin.config do |config|
       field :score do
         read_only true
       end
+      field :created_at
     end
   end
 end

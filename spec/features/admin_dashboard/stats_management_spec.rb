@@ -25,7 +25,7 @@ feature "Admin Stats management", :devise do
     page.find("[data-model=stats] a").click
     expect(current_path).to eq rails_admin.
                                index_path(model_name: "stats")
-    expect(page).to have_content stats.date.strftime("%m/%d/%Y")
+    expect(page).to have_content stats.date.strftime("%Y/%m/%d")
     expect(page).to have_content stats.users
     expect(page).to have_content stats.deleted_users
   end
@@ -41,7 +41,7 @@ feature "Admin Stats management", :devise do
     page.find("a", text: "Weekly").click
     expect(current_path).to eq rails_admin.
                                index_path(model_name: "stats")
-    expect(page).to have_content stats.date.strftime("%m/%Y (4)")
+    expect(page).to have_content stats.date.strftime("%Y/%m (4)")
     expect(page).to have_content stats.users
     expect(page).to have_content stats.deleted_users
   end
@@ -57,7 +57,7 @@ feature "Admin Stats management", :devise do
     page.find("a", text: "Monthly").click
     expect(current_path).to eq rails_admin.
                                index_path(model_name: "stats")
-    expect(page).to have_content stats.date.strftime("%m/%Y")
+    expect(page).to have_content stats.date.strftime("%Y/%m")
     expect(page).to have_content stats.users
     expect(page).to have_content stats.deleted_users
   end

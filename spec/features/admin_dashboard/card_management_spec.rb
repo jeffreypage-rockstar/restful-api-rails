@@ -47,15 +47,18 @@ feature "Admin Card management", :devise do
   #   Then the card gets edited
   scenario "admin can edit an Card" do
     card = FactoryGirl.create(:card)
+    new_date = 20.days.ago.to_date
 
     visit rails_admin.edit_path(model_name: "card", id: card.id)
     fill_in "Name", with: "anothername"
     fill_in "Description", with: "anotherdescription"
+    fill_in "Created at", with: new_date.to_s
     click_button "Save"
 
     card.reload
     expect(card.name).to eq "anothername"
     expect(card.description).to eq "anotherdescription"
+    expect(card.created_at.to_date).to eq new_date
   end
 
   # Scenario: Admin can delete an card

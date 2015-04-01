@@ -33,6 +33,7 @@ RailsAdmin.config do |config|
       field :description
       field :user
       field :protected
+      field :subscriptions_count
     end
   end
 end

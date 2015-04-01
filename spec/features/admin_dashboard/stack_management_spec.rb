@@ -47,11 +47,13 @@ feature "Admin Stack management", :devise do
     visit rails_admin.edit_path(model_name: "stack", id: stack.id)
     fill_in "Hashtag", with: "anothername"
     fill_in "Description", with: "anotherdescription"
+    fill_in "Subscriptions", with: "10"
     click_button "Save"
 
     stack.reload
     expect(stack.name).to eq "anothername"
     expect(stack.description).to eq "anotherdescription"
+    expect(stack.subscriptions_count).to eq 10
   end
 
   # Scenario: Admin can delete an stack

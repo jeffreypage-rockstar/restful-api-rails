@@ -34,6 +34,12 @@ RSpec.describe Stack, type: :model do
       expect(other.errors[:name].first).to match("taken")
     end
 
+    it "requires a numeric subscriptions_count" do
+      stack = Stack.new(attrs.merge(subscriptions_count: "aaa"))
+      expect(stack).to_not be_valid
+      expect(stack.errors[:subscriptions_count].first).to match("number")
+    end
+
     it "does allow special chars to stack names" do
       stack = Stack.new(attrs.merge(name: "Stack name with spaces"))
       expect(stack).to_not be_valid
@@ -73,6 +79,13 @@ RSpec.describe Stack, type: :model do
       expect(stack.subscriptions_count).to eql 0
       create(:subscription, stack: stack)
       expect(stack.reload.subscriptions_count).to eql 1
+    end
+
+    it "stores a new value when updating" do
+      stack = create(:stack)
+      expect(stack.subscriptions_count).to eql 0
+      stack.update subscriptions_count: 10
+      expect(stack.reload.subscriptions_count).to eql 10
     end
   end
 

@@ -9,6 +9,8 @@ class Stack < ActiveRecord::Base
   validates :name, uniqueness: { case_sensitive: false },
                    format: { with: /\A[a-zA-Z0-9_]*\z/ }
 
+  validates :subscriptions_count, numericality: { only_integer: true }
+
   belongs_to :user
   has_many :cards, dependent: :restrict_with_error
   has_many :subscriptions, dependent: :destroy
@@ -19,6 +21,12 @@ class Stack < ActiveRecord::Base
   scope :most_popular, -> { order("subscriptions_count DESC") }
 
   before_validation :remove_hashtag
+  after_save :save_subscritions_count
+
+  def subscriptions_count=(value)
+    self[:subscriptions_count] = value
+    @updated_subscriptions_count = value.to_i
+  end
 
   def display_name
     "##{name}"
@@ -64,5 +72,11 @@ class Stack < ActiveRecord::Base
 
   def remove_hashtag
     self.name = name.to_s.gsub(/^\#/, "")
+  end
+
+  def save_subscritions_count
+    return unless @updated_subscriptions_count
+    Stack.where(id: id).
+      update_all(subscriptions_count: @updated_subscriptions_count)
   end
 end

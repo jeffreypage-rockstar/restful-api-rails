@@ -323,7 +323,7 @@ CREATE TABLE notifications (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     seen_at timestamp without time zone,
-    extra hstore
+    extra character varying(255)
 );
 
 
@@ -1094,4 +1094,6 @@ INSERT INTO schema_migrations (version) VALUES ('20141016195713');
 INSERT INTO schema_migrations (version) VALUES ('20141202120442');
 
 INSERT INTO schema_migrations (version) VALUES ('20150106202113');
+
+INSERT INTO schema_migrations (version) VALUES ('20150407215135');
 

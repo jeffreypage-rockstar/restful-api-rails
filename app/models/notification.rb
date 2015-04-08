@@ -1,7 +1,6 @@
 class Notification < ActiveRecord::Base
   validates :user, :subject, :action, presence: true
   store_accessor :senders
-  store_accessor :extra
 
   belongs_to :user
   belongs_to :subject, polymorphic: true
@@ -15,6 +14,22 @@ class Notification < ActiveRecord::Base
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
+
+  def extra=(extra_hash)
+    extra_hash.symbolize_keys!
+    values = extra_hash.values_at(:stack_id, :card_id, :comment_id)
+    self[:extra] = values.join(",")
+  end
+
+  def extra
+    if self[:extra]
+      stack, card, comment = self[:extra].split(',')
+      extra_hash = {"card_id" => card, "stack_id" => stack, "comment_id" => comment}
+      extra_hash.delete_if {|k, v| v.blank?}
+    else
+      {}
+    end
+  end
 
   def caption
     senders = self[:senders] || {}

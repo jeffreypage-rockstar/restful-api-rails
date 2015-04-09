@@ -308,6 +308,37 @@ CREATE TABLE networks (
 
 
 --
+-- Name: notification_senders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE notification_senders (
+    id integer NOT NULL,
+    notification_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    username text NOT NULL
+);
+
+
+--
+-- Name: notification_senders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE notification_senders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notification_senders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE notification_senders_id_seq OWNED BY notification_senders.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -317,13 +348,13 @@ CREATE TABLE notifications (
     subject_id uuid NOT NULL,
     subject_type character varying(255) NOT NULL,
     action character varying(255) NOT NULL,
-    senders hstore,
     read_at timestamp without time zone,
     sent_at timestamp without time zone,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     seen_at timestamp without time zone,
-    extra character varying(255)
+    extra character varying(255),
+    senders_count integer DEFAULT 0
 );
 
 
@@ -544,6 +575,13 @@ ALTER TABLE ONLY cards ALTER COLUMN short_id SET DEFAULT nextval('cards_short_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY notification_senders ALTER COLUMN id SET DEFAULT nextval('notification_senders_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY reputations ALTER COLUMN id SET DEFAULT nextval('reputations_id_seq'::regclass);
 
 
@@ -624,6 +662,14 @@ ALTER TABLE ONLY flags
 
 ALTER TABLE ONLY networks
     ADD CONSTRAINT networks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notification_senders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY notification_senders
+    ADD CONSTRAINT notification_senders_pkey PRIMARY KEY (id);
 
 
 --
@@ -844,6 +890,20 @@ CREATE UNIQUE INDEX index_networks_on_provider_and_user_id ON networks USING btr
 --
 
 CREATE INDEX index_networks_on_uid ON networks USING btree (uid);
+
+
+--
+-- Name: index_notification_senders_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_notification_senders_on_notification_id ON notification_senders USING btree (notification_id);
+
+
+--
+-- Name: index_notification_senders_on_notification_id_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notification_senders_on_notification_id_and_user_id ON notification_senders USING btree (notification_id, user_id);
 
 
 --
@@ -1096,4 +1156,6 @@ INSERT INTO schema_migrations (version) VALUES ('20141202120442');
 INSERT INTO schema_migrations (version) VALUES ('20150106202113');
 
 INSERT INTO schema_migrations (version) VALUES ('20150407215135');
+
+INSERT INTO schema_migrations (version) VALUES ('20150409140756');
 

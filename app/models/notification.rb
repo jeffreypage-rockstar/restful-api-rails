@@ -1,9 +1,10 @@
 class Notification < ActiveRecord::Base
   validates :user, :subject, :action, presence: true
-  store_accessor :senders
 
   belongs_to :user
   belongs_to :subject, polymorphic: true
+
+  has_many :senders, class_name: "NotificationSender", dependent: :destroy
 
   scope :unread, -> { where(read_at: nil) }
   scope :unseen, -> { where(seen_at: nil) }
@@ -32,10 +33,9 @@ class Notification < ActiveRecord::Base
   end
 
   def caption
-    senders = self[:senders] || {}
     subject_name = subject.try(:name)
     if senders_count <= SENDERS_CAPTION_LIMIT
-      user_names = senders.keys.to_sentence(last_word_connector: " and ")
+      user_names = senders.collect(&:username).to_sentence(last_word_connector: " and ")
       I18n.t("#{action}.with_user_names", scope: "notifications",
                    count: senders_count, user_names: user_names,
                    subject_name: subject_name)
@@ -46,7 +46,6 @@ class Notification < ActiveRecord::Base
   end
 
   def image_url
-    senders = self[:senders] || {}
     if senders.empty?
       nil
     elsif senders.one?
@@ -71,13 +70,7 @@ class Notification < ActiveRecord::Base
 
   def add_sender(sender_user)
     return unless sender_user
-    senders_will_change!
-    self.senders ||= {}
-    self.senders[sender_user.username] = sender_user.id
-  end
-
-  def senders_count
-    (self.senders || {}).keys.size
+    senders.create(username: sender_user.username, user_id: sender_user.id)
   end
 
   def sent!
@@ -127,7 +120,7 @@ class Notification < ActiveRecord::Base
 
   def single_sender_image_url
     if shows_user_for_single_notification?
-      User.where(id: senders.values).first.try(:avatar_url)
+      User.where(id: senders.collect(&:user_id)).first.try(:avatar_url)
     else
       multiple_senders_image_url
     end

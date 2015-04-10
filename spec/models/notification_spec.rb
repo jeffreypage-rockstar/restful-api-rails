@@ -68,20 +68,20 @@ RSpec.describe Notification, type: :model do
   end
 
   describe "#add_sender" do
+    let(:notification) { create(:notification) }
     it "adds a user as a notification sender" do
-      notification = build(:notification)
       notification.add_sender(user)
       notification.add_sender(user)
-      notification.save
+      expect(notification.senders.size).to eql 1
       notification.reload
       expect(notification.senders_count).to eql 1
-      expect(notification.senders[user.username]).to eql user.id
+      expect(notification.senders[user.username].user_id).to eql user.id
     end
 
     it "does not add a nil user" do
-      notification = build(:notification)
       notification.add_sender(nil)
       expect(notification.save).to be_truthy
+      expect(notification.reload.senders_count).to eql 0
     end
   end
 
@@ -171,33 +171,29 @@ RSpec.describe Notification, type: :model do
     let(:stack) { build :stack, name: "stack_name" }
     let(:card) { build :card, name: "card_name", stack: stack }
     let(:sender_user) { create :user }
-    let(:one_sender) { { "user_name" => sender_user.id } }
-    let(:three_senders) do
-      { "user_name_1" => 1, "user_name_2" => 2,
-                           "user_name_3" => 3 }
-    end
-    let(:four_senders) do
-      { "user_name_1" => 1, "user_name_2" => 2,
-                           "user_name_3" => 3, "user_name_4" => 4 }
-    end
+    let(:one_sender) { build_list(:sender, 1, notification: nil) }
+    let(:three_senders) { build_list(:sender, 3, notification: nil) }
+    let(:four_senders) { build_list(:sender, 4, notification: nil) }
     subject(:caption) { notification.caption }
+    let(:usernames)do
+      senders.map(&:username).
+                             to_sentence(last_word_connector: " and ")
+    end
 
     describe "card.create" do
       let(:notification) do
-        build :card_create_notification, senders: senders,
-                                         subject: stack
+        build(:card_create_notification, subject: stack, senders: senders)
       end
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name posted in #stack_name" }
+        it { is_expected.to match "#{usernames} posted in #stack_name" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "posted in #stack_name"
+          is_expected.to eql "#{usernames} posted in #stack_name"
         end
       end
 
@@ -215,14 +211,13 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name upvoted your post \"card_name\"" }
+        it { is_expected.to eql "#{usernames} upvoted your post \"card_name\"" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "upvoted your post \"card_name\""
+          is_expected.to eql "#{usernames} upvoted your post \"card_name\""
         end
       end
 
@@ -240,14 +235,13 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name started following #card_name" }
+        it { is_expected.to eql "#{usernames} started following #card_name" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "started following #card_name"
+          is_expected.to eql "#{usernames} started following #card_name"
         end
       end
 
@@ -266,16 +260,14 @@ RSpec.describe Notification, type: :model do
       context "single sender" do
         let(:senders) { one_sender }
         it do
-          is_expected.to eql "user_name commented on your "\
-        "post \"card_name\""
+          is_expected.to eql "#{usernames} commented on your post \"card_name\""
         end
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "commented on your post \"card_name\""
+          is_expected.to eql "#{usernames} commented on your post \"card_name\""
         end
       end
 
@@ -296,14 +288,13 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name upvoted your comment" }
+        it { is_expected.to eql "#{usernames} upvoted your comment" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "upvoted your comment"
+          is_expected.to eql "#{usernames} upvoted your comment"
         end
       end
 
@@ -321,14 +312,13 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name replied to your comment" }
+        it { is_expected.to eql "#{usernames} replied to your comment" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "replied to your comment"
+          is_expected.to eql "#{usernames} replied to your comment"
         end
       end
 
@@ -346,14 +336,13 @@ RSpec.describe Notification, type: :model do
 
       context "single sender" do
         let(:senders) { one_sender }
-        it { is_expected.to eql "user_name tagged you in a comment" }
+        it { is_expected.to eql "#{usernames} tagged you in a comment" }
       end
 
       context "three senders" do
         let(:senders) { three_senders }
         it do
-          is_expected.to eql "user_name_1, user_name_2 and user_name_3 "\
-        "tagged you in a comment"
+          is_expected.to eql "#{usernames} tagged you in a comment"
         end
       end
 
@@ -373,9 +362,8 @@ RSpec.describe Notification, type: :model do
              " in #{notification_type.to_s.humanize}" do
         card_image = create :card_image
         card = card_image.card
-        senders = { user.username => user.id }
-        notification = create(notification_type, senders: senders,
-                                                 subject: card)
+        notification = create(notification_type, subject: card)
+        notification.add_sender(user)
         expect(notification.image_url).to eql card_image.image_url
       end
     end
@@ -389,8 +377,8 @@ RSpec.describe Notification, type: :model do
     ].each do |notification_type|
       it "returns user's avatar for only one sender" \
              " in #{notification_type.to_s.humanize}" do
-        senders = { user.username => user.id }
-        notification = create(notification_type, senders: senders)
+        notification = create(notification_type)
+        notification.add_sender(user)
         expect(notification.image_url).to eql user.avatar_url
       end
     end
@@ -398,8 +386,8 @@ RSpec.describe Notification, type: :model do
     it "returns notification image_url por more than one sender" do
       card_image = create :card_image
       card = card_image.card
-      senders = { "john" => 1, "peter" => 2 }
-      notification = create(:notification, senders: senders, subject: card)
+      senders = build_list(:sender, 2, notification: nil)
+      notification = build(:notification, senders: senders, subject: card)
       expect(notification.image_url).to eql card_image.image_url
     end
   end

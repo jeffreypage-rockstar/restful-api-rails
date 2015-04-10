@@ -29,11 +29,10 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
     card = create(:card)
     user1 = create(:user)
     # adding notification for user1 up_vote card
-    up_notification = build(:notification, user: card.user,
-                                           subject: card,
-                                           action: "card.up_vote")
+    up_notification = create(:notification, user: card.user,
+                                            subject: card,
+                                            action: "card.up_vote")
     up_notification.add_sender(user1)
-    up_notification.save
     user2 = create(:user)
     PublicActivity.with_tracking do
       card.vote_by!(user2)
@@ -43,9 +42,9 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
       expect(notifications.size).to eql 1
       expect(notifications.first.id).to eql up_notification.id
       expect(notifications.first.senders_count).to eql 2
-      expect(notifications.first.senders.keys).to match([user1.username,
-                                                         user2.username])
-      expect(notifications.first.extra.keys).to match(["card_id", "stack_id"])
+      usernames = notifications.first.senders.map(&:username)
+      expect(usernames).to match([user1.username, user2.username])
+      expect(notifications.first.extra.keys).to match([:stack_id, :card_id])
     end
   end
 end

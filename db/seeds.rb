@@ -13,10 +13,17 @@
 users = []
 
 10.times do |n|
-  user = User.create(email: "user#{n}@hyper.com", username: "user_#{n}", password: "hyper123")
+  user = User.create(email: "user#{n}@hyper.com",
+                     username: "user_#{n}",
+                     password: "hyper123")
   users << user
-  stack = user.stacks.create(name: "#StackTitle#{n}", description: "Stack description")
-  card = user.cards.create(stack: stack, name: "#CardTitle#{n}", description: "Card description", source: "device", short_id: n)
+  stack = user.stacks.create(name: "#StackTitle#{n}",
+                             description: "Stack description")
+  card = user.cards.create(stack: stack,
+                           name: "#CardTitle#{n}",
+                           description: "Card description",
+                           source: "device",
+                           short_id: n)
   user.notifications.create(subject: card, action: "card.up_vote")
 end
 

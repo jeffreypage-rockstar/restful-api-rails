@@ -24,9 +24,12 @@ class Notification < ActiveRecord::Base
 
   def extra
     if self[:extra]
-      stack, card, comment = self[:extra].split(',')
-      extra_hash = {"card_id" => card, "stack_id" => stack, "comment_id" => comment}
-      extra_hash.delete_if {|k, v| v.blank?}
+      stack, card, comment = self[:extra].split(",")
+      {
+        stack_id: stack,
+        card_id: card,
+        comment_id: comment
+      }.delete_if { |_k, v| v.blank? }
     else
       {}
     end
@@ -34,14 +37,15 @@ class Notification < ActiveRecord::Base
 
   def caption
     subject_name = subject.try(:name)
-    if senders_count <= SENDERS_CAPTION_LIMIT
-      user_names = senders.collect(&:username).to_sentence(last_word_connector: " and ")
+    sender_names = senders.map(&:username).uniq
+    if sender_names.size <= SENDERS_CAPTION_LIMIT
+      user_names = sender_names.to_sentence(last_word_connector: " and ")
       I18n.t("#{action}.with_user_names", scope: "notifications",
-                   count: senders_count, user_names: user_names,
+                   count: sender_names.size, user_names: user_names,
                    subject_name: subject_name)
     else
       I18n.t("#{action}.with_numbers", scope: "notifications",
-                   count: senders_count, subject_name: subject_name)
+                   count: sender_names.size, subject_name: subject_name)
     end
   end
 
@@ -120,7 +124,7 @@ class Notification < ActiveRecord::Base
 
   def single_sender_image_url
     if shows_user_for_single_notification?
-      User.where(id: senders.collect(&:user_id)).first.try(:avatar_url)
+      User.where(id: senders.map(&:user_id)).first.try(:avatar_url)
     else
       multiple_senders_image_url
     end

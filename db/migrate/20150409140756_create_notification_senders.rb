@@ -15,7 +15,7 @@ class CreateNotificationSenders < ActiveRecord::Migration
       if notification[:senders]
         senders = []
         notification[:senders].each do |username, user_id|
-          senders << {username: username, user_id: user_id}
+          senders << { username: username, user_id: user_id }
         end
         notification.senders.create(senders)
       end

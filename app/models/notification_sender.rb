@@ -3,5 +3,8 @@ class NotificationSender < ActiveRecord::Base
   validates :user_id, uniqueness: { scope: :notification_id }
 
   belongs_to :notification, counter_cache: :senders_count
-  
+
+  def self.[](username)
+    where(username: username).first
+  end
 end

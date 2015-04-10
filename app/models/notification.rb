@@ -30,9 +30,9 @@ class Notification < ActiveRecord::Base
     if self[:extra]
       stack, card, comment = self[:extra].split(",")
       {
-        stack_id: stack,
-        card_id: card,
-        comment_id: comment
+        "stack_id" => stack,
+        "card_id" => card,
+        "comment_id" => comment
       }.delete_if { |_k, v| v.blank? }
     else
       {}

@@ -49,6 +49,7 @@ group :admin do
   gem "rails_admin", github: "inaka/rails_admin"
   gem "chartkick"
   gem "bootstrap-wysihtml5-rails", "0.3.1.24"
+  gem "activerecord-import"
 end
 
 group :development do

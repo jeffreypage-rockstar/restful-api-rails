@@ -80,7 +80,7 @@ describe Hyper::V1::Notifications do
       (1..10).map do |i|
         create(:sent_notification,  user: user,
                                     subject: card,
-                                    read_at: i.odd? ? Time.now.utc : nil,
+                                    read: i.odd?,
                                     action: "card.up_vote",
                                     extra: {
                                       card_id: card.id,

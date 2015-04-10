@@ -6,15 +6,19 @@ class Notification < ActiveRecord::Base
 
   has_many :senders, class_name: "NotificationSender", dependent: :destroy
 
-  scope :unread, -> { where(read_at: nil) }
-  scope :unseen, -> { where(seen_at: nil) }
-  scope :seen, -> { where.not(seen_at: nil) }
+  scope :unread, -> { where(read: false) }
+  scope :unseen, -> { where(seen: false) }
+  scope :seen, -> { where(seen: true) }
   scope :not_sent, -> { where(sent_at: nil) }
   scope :sent, -> { where.not(sent_at: nil) }
   scope :recently_sent, -> { sent.order(sent_at: :desc) }
 
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
+
+  def extra_raw=(value)
+    self[:extra] = value
+  end
 
   def extra=(extra_hash)
     extra_hash.symbolize_keys!
@@ -60,16 +64,8 @@ class Notification < ActiveRecord::Base
   end
 
   def mask_as_read!
-    self.read_at = Time.now.utc
+    self.read = true
     save
-  end
-
-  def read?
-    read_at.present?
-  end
-
-  def seen?
-    seen_at.present?
   end
 
   def add_sender(sender_user)
@@ -81,8 +77,8 @@ class Notification < ActiveRecord::Base
     return false if user.nil?
     clear_association_cache
     self.sent_at = Time.now.utc
-    self.seen_at = nil
-    self.read_at = nil
+    self.seen = false
+    self.read = false
     self.save!
     User.increment_counter(:unseen_notifications_count, user_id) && user.reload
   end
@@ -112,11 +108,11 @@ class Notification < ActiveRecord::Base
     return unless before_notification.sent?
     unread.where(user_id: user_id).
            where("sent_at <= ?", before_notification.sent_at).
-           update_all(read_at: Time.now.utc)
+           update_all(read: true)
   end
 
   def self.mark_all_as_seen(user_id)
-    unseen.where(user_id: user_id).update_all(seen_at: Time.now.utc)
+    unseen.where(user_id: user_id).update_all(seen: true)
     User.update user_id, unseen_notifications_count: 0
   end
 

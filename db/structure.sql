@@ -315,7 +315,7 @@ CREATE TABLE notification_senders (
     id integer NOT NULL,
     notification_id uuid NOT NULL,
     user_id uuid NOT NULL,
-    username text NOT NULL
+    username character varying(255) NOT NULL
 );
 
 
@@ -348,13 +348,33 @@ CREATE TABLE notifications (
     subject_id uuid NOT NULL,
     subject_type character varying(255) NOT NULL,
     action character varying(255) NOT NULL,
+    seen boolean DEFAULT false,
+    read boolean DEFAULT false,
+    sent_at timestamp without time zone,
+    extra character varying(255),
+    senders_count integer DEFAULT 0,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: old_notifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE old_notifications (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    user_id uuid NOT NULL,
+    subject_id uuid NOT NULL,
+    subject_type character varying(255) NOT NULL,
+    action character varying(255) NOT NULL,
+    senders hstore,
     read_at timestamp without time zone,
     sent_at timestamp without time zone,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     seen_at timestamp without time zone,
-    extra character varying(255),
-    senders_count integer DEFAULT 0
+    extra hstore
 );
 
 
@@ -676,8 +696,16 @@ ALTER TABLE ONLY notification_senders
 -- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY notifications
+ALTER TABLE ONLY old_notifications
     ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notifications_pkey1; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT notifications_pkey1 PRIMARY KEY (id);
 
 
 --
@@ -907,17 +935,10 @@ CREATE UNIQUE INDEX index_notification_senders_on_notification_id_and_user_id ON
 
 
 --
--- Name: index_notifications_on_read_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_notifications_on_read_at ON notifications USING btree (read_at);
-
-
---
--- Name: index_notifications_on_seen_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_notifications_on_seen_at ON notifications USING btree (seen_at);
+CREATE INDEX index_notifications_on_action ON notifications USING btree (action);
 
 
 --
@@ -932,6 +953,34 @@ CREATE INDEX index_notifications_on_subject_id_and_subject_type ON notifications
 --
 
 CREATE INDEX index_notifications_on_user_id ON notifications USING btree (user_id);
+
+
+--
+-- Name: index_old_notifications_on_read_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_old_notifications_on_read_at ON old_notifications USING btree (read_at);
+
+
+--
+-- Name: index_old_notifications_on_seen_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_old_notifications_on_seen_at ON old_notifications USING btree (seen_at);
+
+
+--
+-- Name: index_old_notifications_on_subject_id_and_subject_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_old_notifications_on_subject_id_and_subject_type ON old_notifications USING btree (subject_id, subject_type);
+
+
+--
+-- Name: index_old_notifications_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_old_notifications_on_user_id ON old_notifications USING btree (user_id);
 
 
 --
@@ -1157,5 +1206,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150106202113');
 
 INSERT INTO schema_migrations (version) VALUES ('20150407215135');
 
-INSERT INTO schema_migrations (version) VALUES ('20150409140756');
+INSERT INTO schema_migrations (version) VALUES ('20150410175644');
 

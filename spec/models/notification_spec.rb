@@ -138,7 +138,7 @@ RSpec.describe Notification, type: :model do
     end
 
     it "resets the notification state to unseen and unread" do
-      notification = create(:notification, seen_at: Time.now, read_at: Time.now)
+      notification = create(:notification, seen: true, read: true)
       expect(notification).to be_seen
       expect(notification).to be_read
       notification.sent!

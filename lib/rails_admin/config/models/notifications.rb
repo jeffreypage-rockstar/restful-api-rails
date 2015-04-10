@@ -25,8 +25,8 @@ RailsAdmin.config do |config|
       field :senders_count
       field :created_at
       field :sent_at
-      field :seen_at
-      field :read_at
+      field :seen?
+      field :read?
     end
   end
 end

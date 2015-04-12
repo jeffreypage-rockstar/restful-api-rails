@@ -7,6 +7,8 @@ namespace :hyper do
     OldNotification.find_in_batches(batch_size: 1000) do |group|
       notifications = []
       notification_senders = []
+      current += group.size
+      puts "moving #{current}/#{total}"
       group.each do |o|
         attrs = o.attributes
         senders = attrs.delete("senders")
@@ -29,8 +31,6 @@ namespace :hyper do
         puts e.message
         puts e.backtrace
       end
-      current += 1000
-      puts "moved #{current}/#{total}"
     end
     puts "done."
   end

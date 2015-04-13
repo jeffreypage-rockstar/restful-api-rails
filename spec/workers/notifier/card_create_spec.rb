@@ -13,7 +13,7 @@ RSpec.describe Notifier::CardCreate, type: :worker do
     expect(Notifier::CardCreate).to receive(:perform_async).twice.
                                     and_return("0001")
     PublicActivity.with_tracking do
-      subscription = create(:subscription, stack: stack)
+      subs = create_list(:subscription, 2, stack: stack)
       new_card = create(:card, stack: stack)
       act = new_card.activities.where(key: "card.create").last
       worker.perform(act.id)
@@ -22,8 +22,37 @@ RSpec.describe Notifier::CardCreate, type: :worker do
       expect(notifications.size).to eql 2
       notifications.each { |n| expect(n).to be_persisted }
       notifications.each { |n| expect(n).to be_sent }
-      expect(stack.user.notifications.unread.count).to eql 1
-      expect(subscription.user.notifications.unread.count).to eql 1
+      subs.each do |s|
+        s.reload
+        expect(s.user.notifications.unread.count).to eql 1
+        expect(s.user.unseen_notifications_count).to eql 1
+      end
+    end
+  end
+
+  it "updates an existent unread notification" do
+    expect(Notifier::CardCreate).to receive(:perform_async).twice.
+                                    and_return("0001")
+    PublicActivity.with_tracking do
+      subs = create_list(:subscription, 2, stack: stack)
+      new_card = create(:card, stack: stack)
+      existent_notification = create(:card_create_notification,
+                                     read: false,
+                                     subject: stack,
+                                     user_id: subs.first.user_id)
+      act = new_card.activities.where(key: "card.create").last
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.create").all
+      expect(act.reload).to be_notified
+      expect(notifications.size).to eql 2
+      expect(notifications.map(&:id)).to be_include(existent_notification.id)
+      notifications.each { |n| expect(n).to be_persisted }
+      notifications.each { |n| expect(n).to be_sent }
+      subs.each do |s|
+        s.reload
+        expect(s.user.notifications.unread.count).to eql 1
+        expect(s.user.unseen_notifications_count).to eql 1
+      end
     end
   end
 
@@ -38,7 +67,7 @@ RSpec.describe Notifier::CardCreate, type: :worker do
       worker.perform(act.id)
       notifications = Notification.where(action: "card.create").all
       expect(act.reload).to be_notified
-      expect(notifications.size).to eql 1
+      expect(notifications.size).to eql 0
       expect(user.notifications.unread.count).to eql 0
     end
   end
@@ -51,21 +80,5 @@ RSpec.describe Notifier::CardCreate, type: :worker do
     worker.perform(act.id)
     expect(Notification.where(action: "card.create")).to be_empty
     expect(act.reload).to be_notified
-  end
-
-  it "does not notify an invalid notification" do
-    expect(Notifier::CardCreate).to receive(:perform_async).and_return("0001")
-    valid_notification = build(:card_create_notification)
-    invalid_notification = build(:card_create_notification, subject: nil)
-    expect(worker).to receive(:each_notification).
-                      and_yield(valid_notification).
-                      and_yield(invalid_notification)
-    act = create(:activity)
-    worker.perform(act.id)
-    notifications = Notification.where(action: "card.create").all
-    expect(notifications.size).to eql 1
-    act.reload
-    expected_error = "Validation failed: Subject can't be blank"
-    expect(act.notification_error).to eql expected_error
   end
 end

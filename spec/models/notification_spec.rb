@@ -67,6 +67,21 @@ RSpec.describe Notification, type: :model do
     end
   end
 
+  describe ".mark_all_as_sent" do
+    it "marks all user notifications as sent" do
+      notifications = create_list(:notification, 5)
+      notifications.map { |n| expect(n).to_not be_sent }
+
+      Notification.mark_all_as_sent(notifications.map(&:id))
+      notifications.each do |n|
+        n.reload
+        expect(n.seen?).to be_falsey
+        expect(n.read?).to be_falsey
+        expect(n.sent_at).to within(1.second).of(Time.current)
+      end
+    end
+  end
+
   describe "#add_sender" do
     let(:notification) { create(:notification) }
     it "adds a user as a notification sender" do
@@ -176,8 +191,7 @@ RSpec.describe Notification, type: :model do
     let(:four_senders) { build_list(:sender, 4, notification: nil) }
     subject(:caption) { notification.caption }
     let(:usernames)do
-      senders.map(&:username).
-                             to_sentence(last_word_connector: " and ")
+      senders.map(&:username).to_sentence(last_word_connector: " and ")
     end
 
     describe "card.create" do
@@ -364,7 +378,7 @@ RSpec.describe Notification, type: :model do
         card = card_image.card
         notification = create(notification_type, subject: card)
         notification.add_sender(user)
-        expect(notification.image_url).to eql card_image.image_url
+        expect(notification.reload.image_url).to eql card_image.image_url
       end
     end
 
@@ -379,16 +393,18 @@ RSpec.describe Notification, type: :model do
              " in #{notification_type.to_s.humanize}" do
         notification = create(notification_type)
         notification.add_sender(user)
-        expect(notification.image_url).to eql user.avatar_url
+        expect(notification.reload.image_url).to eql user.avatar_url
       end
     end
 
     it "returns notification image_url por more than one sender" do
       card_image = create :card_image
       card = card_image.card
-      senders = build_list(:sender, 2, notification: nil)
-      notification = build(:notification, senders: senders, subject: card)
-      expect(notification.image_url).to eql card_image.image_url
+      notification = create(:notification, subject: card)
+      create_list(:user, 2).each do |u|
+        notification.add_sender(u)
+      end
+      expect(notification.reload.image_url).to eql card_image.image_url
     end
   end
 end

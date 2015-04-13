@@ -24,12 +24,4 @@ users = []
                            description: "Card description",
                            source: "device",
                            short_id: n)
-  user.notifications.create(subject: card, action: "card.up_vote")
-end
-
-Notification.find_each do |notification|
-  users.each do |user|
-    notification.add_sender(user)
-  end
-  notification.save
 end

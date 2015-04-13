@@ -1,10 +1,10 @@
 namespace :hyper do
   desc "Update Stats table with latest data"
   task clear_notifications: [:environment] do
-    klass = Notification.where(["created_at < ?", 1.days.ago])
-    total = klass.count
+    notifications = Notification.where(["created_at < ?", 1.days.ago])
+    total = notifications.count
     current = 0
-    klass.find_in_batches(batch_size: 1000) do |group|
+    notifications.find_in_batches(batch_size: 1000) do |group|
       ids = group.map(&:id)
       current += ids.size
       puts "removing #{current}/#{total}"

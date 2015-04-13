@@ -24,8 +24,8 @@ module Notifier
       error_message = ""
       each_notification do |notification|
         begin
-          notification.add_sender(@activity.owner)
           notification.sent!
+          notification.add_sender(@activity.owner)
           publisher.publish(notification)
         rescue ActiveRecord::RecordInvalid => e
           error_message = e.message

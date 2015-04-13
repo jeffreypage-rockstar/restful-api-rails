@@ -80,7 +80,7 @@ describe Hyper::V1::Notifications do
       (1..10).map do |i|
         create(:sent_notification,  user: user,
                                     subject: card,
-                                    read_at: i.odd? ? Time.now.utc : nil,
+                                    read: i.odd?,
                                     action: "card.up_vote",
                                     extra: {
                                       card_id: card.id,
@@ -109,24 +109,23 @@ describe Hyper::V1::Notifications do
     end
 
     it "returns notifications with few senders" do
-      senders = { "john" => 1, "peter" => 2, "michael" => 3 }
-      create(:sent_notification, user: user, subject: card,
-             senders: senders)
+      notification = create(:sent_notification, user: user, subject: card)
+      senders = create_list(:sender, 3, notification: notification)
       create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
       expect(response.status).to eql 200
       r = JSON.parse(response.body)
       expect(r.size).to eql(1)
-      expected_caption = "john, peter and michael upvoted "\
+      expected_caption = "user_name_1, user_name_2 and user_name_3 upvoted "\
       "your post \"card_name\""
       expect(r.first["caption"]).to eql expected_caption
+      expect(r.first["senders"].values).to eql senders.map(&:username)
     end
 
     it "returns notifications with many senders" do
-      senders = { "john" => 1, "peter" => 2, "michael" => 3, "wendy" => 4 }
-      create(:sent_notification, user: user, subject: card,
-             senders: senders)
+      notification = create(:sent_notification, user: user, subject: card)
+      create_list(:sender, 4, notification: notification)
       create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env
@@ -138,10 +137,9 @@ describe Hyper::V1::Notifications do
     end
 
     it "sends counts in header" do
-      senders = { "john" => 1, "peter" => 2 }
-      notification = build(:notification, user: user, subject: card,
-                            senders: senders)
+      notification = build(:notification, user: user, subject: card)
       notification.sent!
+      notification.add_sender(create(:user))
       create :card_image, card: card
       http_login device.id, device.access_token
       get "/api/notifications", nil, @env

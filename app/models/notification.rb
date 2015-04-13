@@ -1,14 +1,14 @@
 class Notification < ActiveRecord::Base
   validates :user, :subject, :action, presence: true
-  store_accessor :senders
-  store_accessor :extra
 
   belongs_to :user
   belongs_to :subject, polymorphic: true
 
-  scope :unread, -> { where(read_at: nil) }
-  scope :unseen, -> { where(seen_at: nil) }
-  scope :seen, -> { where.not(seen_at: nil) }
+  has_many :senders, class_name: "NotificationSender", dependent: :destroy
+
+  scope :unread, -> { where(read: false) }
+  scope :unseen, -> { where(seen: false) }
+  scope :seen, -> { where(seen: true) }
   scope :not_sent, -> { where(sent_at: nil) }
   scope :sent, -> { where.not(sent_at: nil) }
   scope :recently_sent, -> { sent.order(sent_at: :desc) }
@@ -16,22 +16,44 @@ class Notification < ActiveRecord::Base
   PUSH_VOTES_INTERVAL = 50
   SENDERS_CAPTION_LIMIT = 3
 
+  def extra_raw=(value)
+    self[:extra] = value
+  end
+
+  def extra=(extra_hash)
+    extra_hash.symbolize_keys!
+    values = extra_hash.values_at(:stack_id, :card_id, :comment_id)
+    self[:extra] = values.join(",")
+  end
+
+  def extra
+    if self[:extra]
+      stack, card, comment = self[:extra].split(",")
+      {
+        "stack_id" => stack,
+        "card_id" => card,
+        "comment_id" => comment
+      }.delete_if { |_k, v| v.blank? }
+    else
+      {}
+    end
+  end
+
   def caption
-    senders = self[:senders] || {}
     subject_name = subject.try(:name)
-    if senders_count <= SENDERS_CAPTION_LIMIT
-      user_names = senders.keys.to_sentence(last_word_connector: " and ")
+    sender_names = senders.map(&:username).uniq
+    if sender_names.size <= SENDERS_CAPTION_LIMIT
+      user_names = sender_names.to_sentence(last_word_connector: " and ")
       I18n.t("#{action}.with_user_names", scope: "notifications",
-                   count: senders_count, user_names: user_names,
+                   count: sender_names.size, user_names: user_names,
                    subject_name: subject_name)
     else
       I18n.t("#{action}.with_numbers", scope: "notifications",
-                   count: senders_count, subject_name: subject_name)
+                   count: sender_names.size, subject_name: subject_name)
     end
   end
 
   def image_url
-    senders = self[:senders] || {}
     if senders.empty?
       nil
     elsif senders.one?
@@ -42,35 +64,21 @@ class Notification < ActiveRecord::Base
   end
 
   def mask_as_read!
-    self.read_at = Time.now.utc
+    self.read = true
     save
-  end
-
-  def read?
-    read_at.present?
-  end
-
-  def seen?
-    seen_at.present?
   end
 
   def add_sender(sender_user)
     return unless sender_user
-    senders_will_change!
-    self.senders ||= {}
-    self.senders[sender_user.username] = sender_user.id
-  end
-
-  def senders_count
-    (self.senders || {}).keys.size
+    senders.create(username: sender_user.username, user_id: sender_user.id)
   end
 
   def sent!
     return false if user.nil?
     clear_association_cache
     self.sent_at = Time.now.utc
-    self.seen_at = nil
-    self.read_at = nil
+    self.seen = false
+    self.read = false
     self.save!
     User.increment_counter(:unseen_notifications_count, user_id) && user.reload
   end
@@ -100,11 +108,11 @@ class Notification < ActiveRecord::Base
     return unless before_notification.sent?
     unread.where(user_id: user_id).
            where("sent_at <= ?", before_notification.sent_at).
-           update_all(read_at: Time.now.utc)
+           update_all(read: true)
   end
 
   def self.mark_all_as_seen(user_id)
-    unseen.where(user_id: user_id).update_all(seen_at: Time.now.utc)
+    unseen.where(user_id: user_id).update_all(seen: true)
     User.update user_id, unseen_notifications_count: 0
   end
 
@@ -112,7 +120,7 @@ class Notification < ActiveRecord::Base
 
   def single_sender_image_url
     if shows_user_for_single_notification?
-      User.where(id: senders.values).first.try(:avatar_url)
+      User.where(id: senders.map(&:user_id)).first.try(:avatar_url)
     else
       multiple_senders_image_url
     end

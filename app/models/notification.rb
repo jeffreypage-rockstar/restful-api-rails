@@ -136,7 +136,7 @@ class Notification < ActiveRecord::Base
 
   def single_sender_image_url
     if shows_user_for_single_notification?
-      User.where(id: senders.map(&:user_id)).first.try(:avatar_url)
+      senders.first.user.try(:avatar_url)
     else
       multiple_senders_image_url
     end

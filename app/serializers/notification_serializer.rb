@@ -4,7 +4,7 @@ class NotificationSerializer < ActiveModel::Serializer
 
   def senders
     object.senders.limit(Notification::SENDERS_CAPTION_LIMIT).
-                   pluck(:user_id, :username).to_h
+                   pluck(:username, :user_id).to_h
   end
 
   def attributes

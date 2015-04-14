@@ -120,7 +120,7 @@ describe Hyper::V1::Notifications do
       expected_caption = "user_name_1, user_name_2 and user_name_3 upvoted "\
       "your post \"card_name\""
       expect(r.first["caption"]).to eql expected_caption
-      expect(r.first["senders"].values).to eql senders.map(&:username)
+      expect(r.first["senders"].keys).to eql senders.map(&:username)
     end
 
     it "returns notifications with many senders" do

@@ -54,9 +54,10 @@ class Notification < ActiveRecord::Base
   end
 
   def image_url
-    if senders.empty?
+    case senders_count
+    when 0
       nil
-    elsif senders.one?
+    when 1
       single_sender_image_url
     else
       multiple_senders_image_url
@@ -114,6 +115,21 @@ class Notification < ActiveRecord::Base
   def self.mark_all_as_seen(user_id)
     unseen.where(user_id: user_id).update_all(seen: true)
     User.update user_id, unseen_notifications_count: 0
+  end
+
+  def self.mark_all_as_sent(notification_ids)
+    where(id: notification_ids).update_all(
+      sent_at: Time.now.utc,
+      seen: false,
+      read: false
+    )
+  end
+
+  def self.single_sender_caption(subject, action, sender_user)
+    subject_name = subject.try(:name)
+    I18n.t("#{action}.with_user_names", scope: "notifications",
+                   count: 1, user_names: sender_user.username,
+                   subject_name: subject_name)
   end
 
   private # =======================================

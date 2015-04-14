@@ -1,0 +1,105 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=Publish&Message=%7B%22apns_sandbox%22%3A%22%7B%5C%22aps%5C%22%3A%7B%5C%22content-available%5C%22%3A1%2C%5C%22alert%5C%22%3A%5C%22A%20person%20upvoted%20your%20post%20%5C%5C%5C%22A%20Card%204%5C%5C%5C%22%5C%22%2C%5C%22badge%5C%22%3A0%7D%2C%5C%22data%5C%22%3A%7B%5C%22notification_id%5C%22%3A%5C%2222646627-ec6b-4d63-99f5-0f33df0f8c90%5C%22%2C%5C%22subject_id%5C%22%3A%5C%22ba3ecf8b-3304-450d-9023-27f088fac726%5C%22%2C%5C%22subject_type%5C%22%3A%5C%22Card%5C%22%7D%7D%22%2C%22apns%22%3A%22%7B%5C%22aps%5C%22%3A%7B%5C%22content-available%5C%22%3A1%2C%5C%22alert%5C%22%3A%5C%22A%20person%20upvoted%20your%20post%20%5C%5C%5C%22A%20Card%204%5C%5C%5C%22%5C%22%2C%5C%22badge%5C%22%3A0%7D%2C%5C%22data%5C%22%3A%7B%5C%22notification_id%5C%22%3A%5C%2222646627-ec6b-4d63-99f5-0f33df0f8c90%5C%22%2C%5C%22subject_id%5C%22%3A%5C%22ba3ecf8b-3304-450d-9023-27f088fac726%5C%22%2C%5C%22subject_type%5C%22%3A%5C%22Card%5C%22%7D%7D%22%7D&MessageStructure=json&TargetArn=%3C%3Capp_arn%3E%3E%2F8fb4f9e0-298a-38a3-9cf2-47614468d37e&Timestamp=2015-04-13T18%3A42%3A04Z&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '1069'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      X-Amz-Date:
+      - 20150413T184204Z
+      X-Amz-Content-Sha256:
+      - 0685b385282ee1d9f860df3c42197b41035ba254affe495a92f8bc30f35359fe
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAIXCWFVTN7HWXUDIA/20150413/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=72cc09e52ee4da47922051c32d638af277230c6776c94723fc9453f1363d9dac
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 219dd589-1b7b-5d10-887e-99f88ce19a1b
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '294'
+      Date:
+      - Fri, 22 Aug 2014 19:09:14 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <PublishResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <PublishResult>
+            <MessageId>7d2f207b-0ba2-5239-ab96-6c0a9c38d532</MessageId>
+          </PublishResult>
+          <ResponseMetadata>
+            <RequestId>219dd589-1b7b-5d10-887e-99f88ce19a1b</RequestId>
+          </ResponseMetadata>
+        </PublishResponse>
+    http_version: 
+  recorded_at: Mon, 13 Apr 2015 18:42:06 GMT
+- request:
+    method: post
+    uri: https://sns.us-east-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=Publish&Message=%7B%22apns_sandbox%22%3A%22%7B%5C%22aps%5C%22%3A%7B%5C%22content-available%5C%22%3A1%2C%5C%22alert%5C%22%3A%5C%22A%20person%20upvoted%20your%20post%20%5C%5C%5C%22A%20Card%204%5C%5C%5C%22%5C%22%2C%5C%22badge%5C%22%3A0%7D%2C%5C%22data%5C%22%3A%7B%5C%22notification_id%5C%22%3A%5C%22b8fddf85-d2ca-422d-85d4-f22888970a54%5C%22%2C%5C%22subject_id%5C%22%3A%5C%22633c26be-7deb-442e-b552-159045c1c16f%5C%22%2C%5C%22subject_type%5C%22%3A%5C%22Card%5C%22%7D%7D%22%2C%22apns%22%3A%22%7B%5C%22aps%5C%22%3A%7B%5C%22content-available%5C%22%3A1%2C%5C%22alert%5C%22%3A%5C%22A%20person%20upvoted%20your%20post%20%5C%5C%5C%22A%20Card%204%5C%5C%5C%22%5C%22%2C%5C%22badge%5C%22%3A0%7D%2C%5C%22data%5C%22%3A%7B%5C%22notification_id%5C%22%3A%5C%22b8fddf85-d2ca-422d-85d4-f22888970a54%5C%22%2C%5C%22subject_id%5C%22%3A%5C%22633c26be-7deb-442e-b552-159045c1c16f%5C%22%2C%5C%22subject_type%5C%22%3A%5C%22Card%5C%22%7D%7D%22%7D&MessageStructure=json&TargetArn=%3C%3Capp_arn%3E%3E%2F8fb4f9e0-298a-38a3-9cf2-47614468d37e&Timestamp=2015-04-13T18%3A46%3A04Z&Version=2010-03-31
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '1069'
+      User-Agent:
+      - aws-sdk-ruby/1.48.1 ruby/2.1.2 x86_64-darwin13.0
+      X-Amz-Date:
+      - 20150413T184604Z
+      X-Amz-Content-Sha256:
+      - 64b8737920506cd3ee4f83796c4bdd790296eb9c33418f680b19c35e54327d8d
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAIXCWFVTN7HWXUDIA/20150413/us-east-1/sns/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=e537dbaa7aec9d1135a07e89a98502e5a18ecd3cb38f743792efd792e1814c98
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 219dd589-1b7b-5d10-887e-99f88ce19a1b
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '294'
+      Date:
+      - Fri, 22 Aug 2014 19:09:14 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <PublishResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <PublishResult>
+            <MessageId>7d2f207b-0ba2-5239-ab96-6c0a9c38d532</MessageId>
+          </PublishResult>
+          <ResponseMetadata>
+            <RequestId>219dd589-1b7b-5d10-887e-99f88ce19a1b</RequestId>
+          </ResponseMetadata>
+        </PublishResponse>
+    http_version: 
+  recorded_at: Mon, 13 Apr 2015 18:46:13 GMT
+recorded_with: VCR 2.9.2

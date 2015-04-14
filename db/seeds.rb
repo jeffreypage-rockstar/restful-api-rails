@@ -19,9 +19,9 @@ users = []
   users << user
   stack = user.stacks.create(name: "#StackTitle#{n}",
                              description: "Stack description")
-  card = user.cards.create(stack: stack,
-                           name: "#CardTitle#{n}",
-                           description: "Card description",
-                           source: "device",
-                           short_id: n)
+  user.cards.create(stack: stack,
+                    name: "#CardTitle#{n}",
+                    description: "Card description",
+                    source: "device",
+                    short_id: n)
 end

@@ -18,10 +18,26 @@ class NotificationPublishService
     notified_devices
   end
 
-  def message_attributes(notification, target_arn)
+  def publish_to_users(notification, user_ids)
+    notified_devices = []
+    Device.includes(:user).with_arn.recent.where(user_id: user_ids).
+      each do |device|
+        begin
+          sns.publish(message_attributes(notification, device.sns_arn,
+                                         user: device.user))
+          notified_devices << device
+        rescue AWS::SNS::Errors::EndpointDisabled,
+               AWS::SNS::Errors::InvalidParameter
+          device.clear_push_token!
+        end
+      end
+    notified_devices
+  end
+
+  def message_attributes(notification, target_arn, options = {})
     extra = notification.extra || {}
     badge = 1
-    if user = notification.user
+    if user = options[:user] || notification.user
       badge = user.unseen_notifications_count
     end
     common_values = {

@@ -25,6 +25,22 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
     end
   end
 
+  it "does not notify if card owner has been removed" do
+    card = create(:card)
+    other_user = create(:user)
+
+    PublicActivity.with_tracking do
+      card.vote_by!(other_user)
+      card.user.destroy
+      act = card.activities.where(key: "card.up_vote").last
+      worker.perform(act.id)
+      notifications = Notification.where(action: "card.up_vote").all
+      expect(act.reload).to be_notified
+      expect(act.notification_error).to match "User can't be blank"
+      expect(notifications.size).to eql 0
+    end
+  end
+
   it "updates existent unread notification for the same user" do
     card = create(:card)
     user1 = create(:user)
@@ -43,7 +59,8 @@ RSpec.describe Notifier::CardUpVote, type: :worker do
       expect(notifications.first.id).to eql up_notification.id
       expect(notifications.first.senders_count).to eql 2
       usernames = notifications.first.senders.map(&:username).sort
-      expect(usernames).to match([user1.username, user2.username])
+      expect(usernames).to include(user1.username)
+      expect(usernames).to include(user2.username)
       expect(notifications.first.extra.keys).to match(["stack_id", "card_id"])
     end
   end

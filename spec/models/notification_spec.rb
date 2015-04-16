@@ -170,7 +170,9 @@ RSpec.describe Notification, type: :model do
 
     it "skips tasks if user is not present" do
       notification = build(:notification, user: nil)
-      expect(notification.sent!).to be_falsey
+      expect do
+        notification.sent!
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "raises an error when subject has been removed" do

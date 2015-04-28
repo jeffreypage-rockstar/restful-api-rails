@@ -81,7 +81,8 @@ module Notifier
           # update user counters
           User.increment_counter(:unseen_notifications_count, user_ids)
           # send a push notification to all users
-          publisher.publish_to_users(base_notification, user_ids)
+          # publisher.publish_to_users(base_notification, user_ids)
+          # -> temporary disabling push notifications
         end
       end
       @activity.update_columns notified: true,

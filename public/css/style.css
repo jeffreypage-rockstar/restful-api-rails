@@ -1,3 +1,9 @@
+.press	{
+	height: 200px;
+}
+
+
+
 .product-1	{
 	height: 509px;
 	background-size: 1500px;
@@ -146,7 +152,7 @@ h1	{
   margin: 260px 0 0 0;
 }
 .appstore	{
-	margin-top: 150px;
+	margin-top: 100px;
 }
 
 .howitworks	{

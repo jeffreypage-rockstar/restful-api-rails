@@ -26,7 +26,7 @@ module Notifier
         begin
           notification.sent!
           notification.add_sender(@activity.owner)
-          # publisher.publish(notification) -> temporary disabling push not.
+          publisher.publish(notification)
         rescue ActiveRecord::RecordInvalid => e
           error_message = e.message
         end

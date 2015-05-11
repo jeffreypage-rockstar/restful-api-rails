@@ -143,6 +143,11 @@ RSpec.describe Notification, type: :model do
       allow(notification.subject.votes).to receive(:count).and_return(2)
       expect(notification.require_push_notification?).to be_falsey
     end
+
+    it "return false for subscription create" do
+      notification = create(:notification, action: "subscription.create")
+      expect(notification.require_push_notification?).to be_falsey
+    end
   end
 
   describe "#sent!" do

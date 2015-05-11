@@ -66,7 +66,7 @@ module Notifier
       @activity = PublicActivity::Activity.find_by(id: activity_id)
       return if @activity.nil? || @activity.notified?
       if error_messages.empty?
-        publisher = NotificationPublishService.new
+        # publisher = NotificationPublishService.new
         base_notification = Notification.new(notification_atts)
         base_notification.senders.build(user_id: @activity.owner.id,
                                         username: @activity.owner.username)
